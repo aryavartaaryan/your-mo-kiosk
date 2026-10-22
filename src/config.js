@@ -149,5 +149,10 @@ export const CONFIG = {
         { name: 'Falafel Ball',      price: 0.75, unit: 'per pc' },
       ],
     },
+    holicBucket: {
+      label: 'HolicBucket — The Shareable Star',
+      description: 'Chicken tenders, boneless wings, seasoned fries, mozzarella sticks, and mac bites',
+      note: 'The go-to pick for friends, study groups, and squads',
+    },
   },
 };
