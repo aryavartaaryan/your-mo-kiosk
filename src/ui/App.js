@@ -1,31 +1,25 @@
 // src/ui/App.js
 // ─────────────────────────────────────────────────────────────────────────────
-// App – builds and manages the kiosk UI shell.
-//
-// Responsibilities:
-//   • Render the full-screen layout (header, character stage, caption, button)
-//   • Expose setCaption(), setUserCaption(), setStatus(), onTalkPress() callback
-//   • Render the hidden debug panel (toggle with the "D" key)
-//   • updateLatency(ms) for the debug panel latency readout
+// Halalholic kiosk UI shell.
+// Halalholic brand: dark green background, orange accents, cream text.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { CONFIG } from '../config.js';
 
-// ── Inject global CSS ─────────────────────────────────────────────────────────
 function injectStyles(colors) {
   const css = /* css */`
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --c-primary:    ${colors.primary};
-      --c-secondary:  ${colors.secondary};
-      --c-bg:         ${colors.background};
-      --c-surface:    ${colors.surface};
-      --c-text:       ${colors.text};
-      --c-muted:      ${colors.textMuted};
-      --c-glow:       ${colors.glow};
-      --radius-lg:    24px;
-      --radius-xl:    40px;
+      --c-primary:   ${colors.primary};
+      --c-secondary: ${colors.secondary};
+      --c-accent:    ${colors.accent};
+      --c-bg:        ${colors.background};
+      --c-surface:   ${colors.surface};
+      --c-surface2:  ${colors.surfaceAlt};
+      --c-text:      ${colors.text};
+      --c-muted:     ${colors.textMuted};
+      --c-glow:      ${colors.glow};
     }
 
     html, body {
@@ -42,93 +36,119 @@ function injectStyles(colors) {
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 100vw;
-      height: 100vh;
+      width: 100vw; height: 100vh;
       position: relative;
       overflow: hidden;
     }
 
-    /* ── Animated background gradient ── */
+    /* ── Background layers ── */
     #bg-gradient {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background: radial-gradient(
-        ellipse 70% 55% at 50% 60%,
-        color-mix(in srgb, var(--c-glow) 18%, transparent) 0%,
+        ellipse 65% 55% at 50% 58%,
+        color-mix(in srgb, var(--c-glow) 14%, transparent) 0%,
         transparent 70%
       );
-      pointer-events: none;
-      z-index: 0;
+      pointer-events: none; z-index: 0;
     }
 
-    /* Subtle grid overlay */
     #bg-grid {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background-image:
-        linear-gradient(color-mix(in srgb, var(--c-primary) 4%, transparent) 1px, transparent 1px),
-        linear-gradient(90deg, color-mix(in srgb, var(--c-primary) 4%, transparent) 1px, transparent 1px);
-      background-size: 48px 48px;
+        linear-gradient(color-mix(in srgb, var(--c-primary) 5%, transparent) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in srgb, var(--c-primary) 5%, transparent) 1px, transparent 1px);
+      background-size: 52px 52px;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── Floating embers (CSS-only animation) ── */
+    .ember {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--c-primary);
       pointer-events: none;
       z-index: 0;
+      animation: ember-float linear infinite;
+    }
+    @keyframes ember-float {
+      0%   { transform: translateY(0)   scale(1);    opacity: 0.7; }
+      40%  { opacity: 0.5; }
+      100% { transform: translateY(-90vh) scale(0.4); opacity: 0;   }
     }
 
     /* ── Header ── */
     #header {
-      position: relative;
-      z-index: 10;
+      position: relative; z-index: 10;
       width: 100%;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 14px;
-      padding: 20px 32px 0;
+      gap: 12px;
+      padding: 18px 28px 0;
       flex-shrink: 0;
     }
 
-    #logo-placeholder {
-      width: 46px;
-      height: 46px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--c-primary), var(--c-secondary));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      font-size: 18px;
-      color: white;
-      letter-spacing: -1px;
+    #logo-icon {
+      width: 48px; height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--c-primary), #C84400);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
       flex-shrink: 0;
-      box-shadow: 0 4px 20px color-mix(in srgb, var(--c-primary) 50%, transparent);
+      box-shadow: 0 4px 22px color-mix(in srgb, var(--c-primary) 55%, transparent);
+    }
+
+    #header-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
     }
 
     #restaurant-name {
-      font-size: clamp(18px, 2.5vw, 26px);
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      background: linear-gradient(90deg, var(--c-text), var(--c-secondary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      font-size: clamp(18px, 2.4vw, 26px);
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      color: var(--c-primary);
+      line-height: 1;
+      font-family: 'Arial Black', Impact, sans-serif;
+    }
+
+    #tagline {
+      font-size: clamp(10px, 1.2vw, 13px);
+      color: var(--c-secondary);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      font-style: italic;
     }
 
     #status-badge {
       margin-left: auto;
-      padding: 6px 16px;
+      padding: 6px 18px;
       border-radius: 99px;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      background: var(--c-surface);
-      border: 1px solid color-mix(in srgb, var(--c-primary) 30%, transparent);
-      color: var(--c-muted);
-      transition: color 0.3s, border-color 0.3s, background 0.3s;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
       text-transform: uppercase;
+      background: var(--c-surface);
+      border: 1px solid transparent;
+      color: var(--c-muted);
+      transition: all 0.3s ease;
     }
-    #status-badge.state-idle      { color: var(--c-muted);     border-color: transparent; }
-    #status-badge.state-listening { color: var(--c-primary);   border-color: var(--c-primary);   background: color-mix(in srgb, var(--c-primary) 12%, var(--c-surface)); }
-    #status-badge.state-thinking  { color: var(--c-secondary); border-color: var(--c-secondary); background: color-mix(in srgb, var(--c-secondary) 10%, var(--c-surface)); }
-    #status-badge.state-talking   { color: #7ECFFF;            border-color: #7ECFFF;            background: color-mix(in srgb, #7ECFFF 10%, var(--c-surface)); }
+    #status-badge.state-idle      { color: var(--c-muted); }
+    #status-badge.state-listening {
+      color: var(--c-primary);
+      border-color: var(--c-primary);
+      background: color-mix(in srgb, var(--c-primary) 12%, var(--c-surface));
+    }
+    #status-badge.state-thinking  {
+      color: #FFD060;
+      border-color: #FFD060;
+      background: color-mix(in srgb, #FFD060 10%, var(--c-surface));
+    }
+    #status-badge.state-talking   {
+      color: var(--c-secondary);
+      border-color: var(--c-secondary);
+      background: color-mix(in srgb, var(--c-secondary) 12%, var(--c-surface));
+    }
 
     /* Pulsing dot for active states */
     #status-badge::before {
@@ -150,13 +170,12 @@ function injectStyles(colors) {
     }
     @keyframes pulse-dot {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: 0.4; transform: scale(0.6); }
+      50%       { opacity: 0.35; transform: scale(0.55); }
     }
 
     /* ── Character stage ── */
     #stage {
-      position: relative;
-      z-index: 10;
+      position: relative; z-index: 10;
       flex: 1;
       display: flex;
       align-items: center;
@@ -165,86 +184,83 @@ function injectStyles(colors) {
       min-height: 0;
     }
 
-    /* Glow ring behind Mo */
+    /* Glow behind Mo */
     #stage-glow {
       position: absolute;
-      width: min(56vh, 480px);
-      height: min(56vh, 480px);
+      width: min(58vh, 500px);
+      height: min(58vh, 500px);
       border-radius: 50%;
       background: radial-gradient(
         circle,
-        color-mix(in srgb, var(--c-glow) 22%, transparent) 0%,
+        color-mix(in srgb, var(--c-glow) 18%, transparent) 0%,
         transparent 70%
       );
       pointer-events: none;
-      animation: glow-pulse 3s ease-in-out infinite;
+      animation: glow-pulse 3.2s ease-in-out infinite;
     }
     @keyframes glow-pulse {
-      0%, 100% { opacity: 0.8; transform: scale(1); }
-      50%       { opacity: 1;   transform: scale(1.08); }
+      0%, 100% { opacity: 0.85; transform: scale(1);    }
+      50%       { opacity: 1;    transform: scale(1.07); }
     }
 
     #mo-container {
-      width: min(60vh, 500px);
-      height: min(60vh, 500px);
-      position: relative;
-      z-index: 2;
-      filter: drop-shadow(0 16px 40px rgba(0,0,0,0.5));
+      width: min(62vh, 520px);
+      height: min(62vh, 520px);
+      position: relative; z-index: 2;
+      filter: drop-shadow(0 18px 45px rgba(0,0,0,0.55));
     }
 
     /* ── Caption area ── */
     #caption-area {
-      position: relative;
-      z-index: 10;
-      width: min(640px, 92vw);
+      position: relative; z-index: 10;
+      width: min(650px, 93vw);
       display: flex;
       flex-direction: column;
       align-items: center;
       flex-shrink: 0;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       gap: 0;
     }
 
     #caption-bubble {
       background: var(--c-surface);
-      border: 1px solid color-mix(in srgb, var(--c-primary) 20%, transparent);
+      border: 1px solid color-mix(in srgb, var(--c-primary) 28%, transparent);
+      border-left: 3px solid var(--c-primary);
       border-radius: 20px;
       padding: 14px 24px;
       text-align: center;
-      font-size: clamp(15px, 2vw, 18px);
+      font-size: clamp(15px, 1.9vw, 18px);
       line-height: 1.5;
       color: var(--c-text);
-      transition: opacity 0.35s ease;
-      position: relative;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+      transition: opacity 0.3s ease;
       width: 100%;
+      box-shadow: 0 4px 28px rgba(0,0,0,0.4),
+                  inset 0 0 0 1px color-mix(in srgb, white 4%, transparent);
     }
 
     /* Triangle pointer */
     #caption-bubble::before {
       content: '';
       position: absolute;
-      bottom: 100%;
-      left: 50%;
+      bottom: 100%; left: 50%;
       transform: translateX(-50%);
-      border: 10px solid transparent;
-      border-bottom-color: color-mix(in srgb, var(--c-primary) 20%, transparent);
+      border: 9px solid transparent;
+      border-bottom-color: color-mix(in srgb, var(--c-primary) 28%, transparent);
       margin-bottom: -1px;
     }
     #caption-bubble::after {
       content: '';
       position: absolute;
-      bottom: calc(100% - 1px);
-      left: 50%;
+      bottom: calc(100% - 2px); left: 50%;
       transform: translateX(-50%);
-      border: 9px solid transparent;
+      border: 8px solid transparent;
       border-bottom-color: var(--c-surface);
     }
 
     #caption-bubble.fade-out { opacity: 0; }
     #caption-bubble.fade-in  { opacity: 1; }
 
-    /* ── User caption (what the customer said) ── */
+    /* ── User caption ── */
     #user-caption {
       font-size: 12px;
       color: var(--c-muted);
@@ -260,125 +276,120 @@ function injectStyles(colors) {
     }
     #user-caption.visible { opacity: 1; }
 
-    /* ── CTA button ── */
+    /* ── Bottom bar ── */
     #bottom-bar {
-      position: relative;
-      z-index: 10;
+      position: relative; z-index: 10;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
-      padding: 0 24px 28px;
+      gap: 14px;
+      padding: 0 24px 26px;
       flex-shrink: 0;
     }
 
+    /* ── Talk button ── */
     #talk-btn {
-      padding: 18px 52px;
-      border-radius: var(--radius-xl);
+      padding: 18px 56px;
+      border-radius: 99px;
       border: none;
-      background: linear-gradient(135deg, var(--c-primary), color-mix(in srgb, var(--c-primary) 70%, var(--c-secondary)));
+      background: linear-gradient(135deg, var(--c-primary) 0%, #C84000 100%);
       color: white;
       font-size: clamp(17px, 2.2vw, 21px);
       font-weight: 800;
-      letter-spacing: 0.2px;
+      letter-spacing: 0.3px;
       cursor: pointer;
       outline: none;
       box-shadow:
-        0 6px 30px color-mix(in srgb, var(--c-primary) 50%, transparent),
-        0 2px 8px rgba(0,0,0,0.3);
-      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.3s;
+        0 6px 32px color-mix(in srgb, var(--c-primary) 52%, transparent),
+        0 2px 8px rgba(0,0,0,0.4);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
       position: relative;
       overflow: hidden;
+      font-family: 'Arial Black', 'Segoe UI', sans-serif;
     }
 
-    /* Shimmer sweep */
     #talk-btn::after {
       content: '';
       position: absolute;
       top: 0; left: -100%;
-      width: 60%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+      width: 55%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.16), transparent);
       transform: skewX(-20deg);
-      animation: btn-shimmer 3s ease-in-out infinite;
+      animation: btn-shimmer 3.5s ease-in-out infinite;
     }
     @keyframes btn-shimmer {
       0%   { left: -100%; }
-      50%  { left: 160%; }
-      100% { left: 160%; }
+      45%  { left: 160%;  }
+      100% { left: 160%;  }
     }
 
-    #talk-btn:hover  { transform: translateY(-2px); box-shadow: 0 10px 40px color-mix(in srgb, var(--c-primary) 55%, transparent), 0 4px 12px rgba(0,0,0,0.3); }
-    #talk-btn:active { transform: translateY(1px) scale(0.98); box-shadow: 0 3px 16px color-mix(in srgb, var(--c-primary) 40%, transparent); }
+    #talk-btn:hover  { transform: translateY(-2px); box-shadow: 0 10px 44px color-mix(in srgb, var(--c-primary) 58%, transparent), 0 4px 12px rgba(0,0,0,0.4); }
+    #talk-btn:active { transform: translateY(1px) scale(0.98); }
 
     #talk-btn.listening {
-      background: linear-gradient(135deg, #E53935, #C62828);
-      box-shadow: 0 6px 30px rgba(229, 57, 53, 0.5);
+      background: linear-gradient(135deg, #DC3030, #A81818);
+      box-shadow: 0 6px 32px rgba(220, 48, 48, 0.55);
       animation: listening-pulse 1.4s ease-in-out infinite;
     }
     @keyframes listening-pulse {
-      0%, 100% { box-shadow: 0 6px 30px rgba(229, 57, 53, 0.5); }
-      50%       { box-shadow: 0 6px 50px rgba(229, 57, 53, 0.8); }
+      0%, 100% { box-shadow: 0 6px 32px rgba(220, 48, 48, 0.5);  }
+      50%       { box-shadow: 0 6px 55px rgba(220, 48, 48, 0.85); }
     }
 
     /* ── Debug panel ── */
     #debug-panel {
-      position: fixed;
-      top: 16px;
-      right: 16px;
+      position: fixed; top: 14px; right: 14px;
       z-index: 1000;
-      background: rgba(10, 10, 18, 0.92);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 16px;
+      background: rgba(8, 22, 10, 0.94);
+      backdrop-filter: blur(14px);
+      border: 1px solid color-mix(in srgb, var(--c-primary) 25%, transparent);
+      border-radius: 18px;
       padding: 20px;
-      width: 260px;
+      width: 268px;
       display: none;
       flex-direction: column;
       gap: 10px;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+      box-shadow: 0 8px 44px rgba(0,0,0,0.7);
     }
     #debug-panel.open { display: flex; }
 
     #debug-panel h3 {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 1px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
       text-transform: uppercase;
-      color: var(--c-muted);
-      margin-bottom: 4px;
+      color: var(--c-primary);
     }
 
-    .debug-row {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
+    .debug-row { display: flex; gap: 6px; flex-wrap: wrap; }
 
     .dbg-btn {
-      flex: 1;
-      min-width: 0;
+      flex: 1; min-width: 0;
       padding: 8px 10px;
       border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
       color: var(--c-text);
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 12px; font-weight: 600;
       cursor: pointer;
       transition: background 0.15s, border-color 0.15s;
-      white-space: nowrap;
-      text-align: center;
+      white-space: nowrap; text-align: center;
     }
-    .dbg-btn:hover  { background: rgba(255,255,255,0.13); border-color: rgba(255,255,255,0.25); }
-    .dbg-btn.active { background: color-mix(in srgb, var(--c-primary) 25%, transparent); border-color: var(--c-primary); color: var(--c-primary); }
+    .dbg-btn:hover  { background: rgba(255,255,255,0.1); }
+    .dbg-btn.active {
+      background: color-mix(in srgb, var(--c-primary) 22%, transparent);
+      border-color: var(--c-primary);
+      color: var(--c-primary);
+    }
 
     .debug-label {
       font-size: 11px;
       color: var(--c-muted);
-      font-weight: 600;
-      letter-spacing: 0.5px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
       margin-top: 4px;
     }
 
@@ -388,27 +399,25 @@ function injectStyles(colors) {
       cursor: pointer;
     }
 
-    /* Latency readout */
     #debug-latency-val {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--c-secondary);
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--c-primary);
       text-align: center;
       letter-spacing: -1px;
+      font-family: 'Arial Black', monospace;
     }
 
     #debug-hint {
       position: fixed;
-      bottom: 16px;
-      right: 20px;
+      bottom: 14px; right: 18px;
       font-size: 11px;
-      color: rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.18);
       pointer-events: none;
       z-index: 999;
       letter-spacing: 0.5px;
     }
   `;
-
   const style = document.createElement('style');
   style.textContent = css;
   document.head.appendChild(style);
@@ -416,20 +425,30 @@ function injectStyles(colors) {
 
 // ── HTML template ─────────────────────────────────────────────────────────────
 function buildHTML(config) {
-  const initials = config.restaurantName
-    .split(' ')
-    .slice(0, 2)
-    .map(w => w[0])
-    .join('');
+  // Ember particles at different positions/speeds/sizes
+  const embers = [
+    { left: '15%',  bottom: '18%', size: '5px',  dur: '6s',  delay: '0s'   },
+    { left: '28%',  bottom: '12%', size: '3.5px', dur: '8s',  delay: '2s'   },
+    { left: '52%',  bottom: '22%', size: '4.5px', dur: '5s',  delay: '1s'   },
+    { left: '68%',  bottom: '15%', size: '3px',   dur: '7s',  delay: '3.5s' },
+    { left: '82%',  bottom: '20%', size: '4px',   dur: '9s',  delay: '0.5s' },
+    { left: '38%',  bottom: '8%',  size: '2.5px', dur: '6.5s',delay: '4s'   },
+  ].map(e =>
+    `<div class="ember" style="left:${e.left};bottom:${e.bottom};width:${e.size};height:${e.size};animation-duration:${e.dur};animation-delay:${e.delay};"></div>`
+  ).join('');
 
   return /* html */`
     <div id="bg-gradient"></div>
     <div id="bg-grid"></div>
+    ${embers}
 
     <!-- Header -->
     <header id="header">
-      <div id="logo-placeholder">${initials}</div>
-      <span id="restaurant-name">${config.restaurantName}</span>
+      <div id="logo-icon">🔥</div>
+      <div id="header-text">
+        <span id="restaurant-name">${config.restaurantName.toUpperCase()}</span>
+        <span id="tagline">${config.tagline}</span>
+      </div>
       <div id="status-badge" class="state-idle">Idle</div>
     </header>
 
@@ -447,14 +466,14 @@ function buildHTML(config) {
 
     <!-- Bottom bar -->
     <div id="bottom-bar">
-      <button id="talk-btn">🎤&nbsp; Tap to talk to Mo</button>
+      <button id="talk-btn">🎤&nbsp; Tap to Talk to Mo</button>
     </div>
 
     <!-- Debug panel -->
     <div id="debug-panel">
-      <h3>🛠 Debug – Mo</h3>
+      <h3>⚡ Debug — Mo</h3>
 
-      <div class="debug-label">STATE</div>
+      <div class="debug-label">State</div>
       <div class="debug-row">
         <button class="dbg-btn active" data-state="idle">Idle</button>
         <button class="dbg-btn" data-state="listening">Listen</button>
@@ -462,24 +481,29 @@ function buildHTML(config) {
         <button class="dbg-btn" data-state="talking">Talk</button>
       </div>
 
-      <div class="debug-label">EXPRESSION</div>
+      <div class="debug-label">Expression</div>
       <div class="debug-row">
         <button class="dbg-btn active" data-expr="happy">Happy</button>
         <button class="dbg-btn" data-expr="smug">Smug</button>
-        <button class="dbg-btn" data-expr="surprised">Surprised</button>
+        <button class="dbg-btn" data-expr="excited">Excited</button>
       </div>
-
-      <div class="debug-label">MOUTH OPEN &nbsp;<span id="mouth-val">0.00</span></div>
-      <input type="range" id="mouth-slider" min="0" max="100" value="0" step="1"/>
-
-      <div class="debug-label" style="margin-top:4px">CAPTION PRESETS</div>
       <div class="debug-row">
-        <button class="dbg-btn" data-caption="What can I get you today?">Greet</button>
-        <button class="dbg-btn" data-caption="Let me think about that…">Think</button>
-        <button class="dbg-btn" data-caption="Here's what I recommend!">Rec.</button>
+        <button class="dbg-btn" data-expr="thinking">Think</button>
+        <button class="dbg-btn" data-expr="surprised">Surprise</button>
+        <button class="dbg-btn" data-expr="wink">Wink</button>
       </div>
 
-      <div class="debug-label" style="margin-top:4px">RESPONSE LATENCY</div>
+      <div class="debug-label">Mouth&nbsp;<span id="mouth-val">0.00</span></div>
+      <input type="range" id="mouth-slider" min="0" max="100" value="0"/>
+
+      <div class="debug-label">Caption</div>
+      <div class="debug-row">
+        <button class="dbg-btn" data-caption="Habibi, you look hungry.">Greet</button>
+        <button class="dbg-btn" data-caption="Lemme think on that...">Think</button>
+        <button class="dbg-btn" data-caption="Solid choice, trust me.">Order</button>
+      </div>
+
+      <div class="debug-label">Latency</div>
       <div id="debug-latency-val">-- ms</div>
     </div>
 
@@ -489,14 +513,9 @@ function buildHTML(config) {
 
 // ── App class ──────────────────────────────────────────────────────────────────
 export class App {
-  /**
-   * @param {HTMLElement} rootEl  – mount point (typically document.body)
-   * @param {{ Mo: object }} deps
-   */
   constructor(rootEl, deps) {
-    this._root  = rootEl;
-    this._Mo    = deps.Mo;
-    this._state = 'idle';
+    this._root = rootEl;
+    this._Mo   = deps.Mo;
     this._onTalkPress = null;
 
     injectStyles(CONFIG.colors);
@@ -511,71 +530,37 @@ export class App {
     this._bindEvents();
   }
 
-  /** Returns the container element for Mo's SVG. */
-  get moContainer() {
-    return document.getElementById('mo-container');
-  }
+  get moContainer() { return document.getElementById('mo-container'); }
 
-  // ── Public API ───────────────────────────────────────────────────────────────
+  onTalkPress(fn) { this._onTalkPress = fn; }
 
-  /** Register the callback fired when the user taps "Talk". */
-  onTalkPress(fn) {
-    this._onTalkPress = fn;
-  }
-
-  /**
-   * Update status label + button appearance.
-   * @param {'idle'|'listening'|'thinking'|'talking'} state
-   */
   setState(state) {
-    this._state = state;
-    const labels = {
-      idle:      'Idle',
-      listening: 'Listening',
-      thinking:  'Thinking',
-      talking:   'Talking',
-    };
+    const labels = { idle: 'Idle', listening: 'Listening', thinking: 'Thinking', talking: 'Talking' };
     this._statusEl.textContent = labels[state] || state;
     this._statusEl.className   = `state-${state}`;
 
-    if (state === 'listening') {
-      this._talkBtn.textContent = '\uD83D\uDED1\u00A0 Tap to stop';
-      this._talkBtn.classList.add('listening');
-    } else if (state === 'idle') {
-      this._talkBtn.textContent = '\uD83C\uDFA4\u00A0 Tap to talk to Mo';
-      this._talkBtn.classList.remove('listening');
+    if (state === 'listening' || state === 'thinking' || state === 'talking') {
+      this._talkBtn.textContent = '\uD83D\uDED1\u00A0 Tap to Stop';
+      this._talkBtn.classList.toggle('listening', state === 'listening');
     } else {
-      // thinking / talking — keep the stop button
-      if (!this._talkBtn.classList.contains('listening')) {
-        // Was not in listening before; keep current button text
-      }
+      this._talkBtn.textContent = '\uD83C\uDFA4\u00A0 Tap to Talk to Mo';
+      this._talkBtn.classList.remove('listening');
     }
 
-    // Sync debug buttons
-    document.querySelectorAll('[data-state]').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.state === state);
-    });
+    document.querySelectorAll('[data-state]').forEach(b =>
+      b.classList.toggle('active', b.dataset.state === state));
   }
 
-  /**
-   * Update Mo's speech bubble with a fade transition.
-   * @param {string} text
-   */
   setCaption(text) {
     const el = this._captionEl;
     el.classList.add('fade-out');
-    setTimeout(() => {
+    clearTimeout(this._captionTimer);
+    this._captionTimer = setTimeout(() => {
       el.textContent = text;
       el.classList.remove('fade-out');
-      el.classList.add('fade-in');
-      setTimeout(() => el.classList.remove('fade-in'), 400);
-    }, 300);
+    }, 280);
   }
 
-  /**
-   * Show what the customer said in a dimmer line below the caption bubble.
-   * @param {string} text
-   */
   setUserCaption(text) {
     const el = this._userCaptionEl;
     if (!el) return;
@@ -583,49 +568,31 @@ export class App {
     el.classList.toggle('visible', !!text);
   }
 
-  /** Hide the user caption line. */
-  clearUserCaption() {
-    this.setUserCaption('');
-  }
+  clearUserCaption() { this.setUserCaption(''); }
 
-  /**
-   * Update the latency readout in the debug panel.
-   * @param {number} ms
-   */
   updateLatency(ms) {
     const el = document.getElementById('debug-latency-val');
     if (el) el.textContent = `${ms} ms`;
   }
 
-  // ── Internal event wiring ────────────────────────────────────────────────────
-
   _bindEvents() {
-    // Talk button
     this._talkBtn.addEventListener('click', () => {
-      if (this._onTalkPress) this._onTalkPress(this._state);
+      this._onTalkPress?.(this._state);
     });
 
-    // D-key debug toggle
     document.addEventListener('keydown', e => {
-      if (e.key === 'd' || e.key === 'D') {
-        this._debugPanel.classList.toggle('open');
-      }
+      if (e.key === 'd' || e.key === 'D') this._debugPanel.classList.toggle('open');
     });
 
-    // Debug: state buttons
     document.querySelectorAll('[data-state]').forEach(btn => {
       btn.addEventListener('click', () => {
         this.setState(btn.dataset.state);
         this._Mo.setState(btn.dataset.state);
-        if (btn.dataset.state === 'talking') {
-          this._startTalkDemo();
-        } else {
-          this._stopTalkDemo();
-        }
+        if (btn.dataset.state === 'talking') this._startTalkDemo();
+        else this._stopTalkDemo();
       });
     });
 
-    // Debug: expression buttons
     document.querySelectorAll('[data-expr]').forEach(btn => {
       btn.addEventListener('click', () => {
         this._Mo.setExpression(btn.dataset.expr);
@@ -634,24 +601,19 @@ export class App {
       });
     });
 
-    // Debug: mouth slider
-    const slider   = document.getElementById('mouth-slider');
-    const mouthVal = document.getElementById('mouth-val');
-    if (slider) {
-      slider.addEventListener('input', () => {
-        const v = Number(slider.value) / 100;
-        if (mouthVal) mouthVal.textContent = v.toFixed(2);
-        this._Mo.setMouthOpen(v);
-      });
-    }
+    const slider = document.getElementById('mouth-slider');
+    const valEl  = document.getElementById('mouth-val');
+    slider?.addEventListener('input', () => {
+      const v = Number(slider.value) / 100;
+      if (valEl) valEl.textContent = v.toFixed(2);
+      this._Mo.setMouthOpen(v);
+    });
 
-    // Debug: caption presets
     document.querySelectorAll('[data-caption]').forEach(btn => {
       btn.addEventListener('click', () => this.setCaption(btn.dataset.caption));
     });
   }
 
-  // ── Talk demo (debug panel only) ─────────────────────────────────────────────
   _talkDemoRaf   = null;
   _talkDemoPhase = 0;
 
@@ -659,27 +621,21 @@ export class App {
     this._stopTalkDemo();
     let last = performance.now();
     const loop = (ts) => {
-      const dt = ts - last;
-      last = ts;
+      const dt = ts - last; last = ts;
       this._talkDemoPhase += dt * 0.006;
-      const v = Math.abs(Math.sin(this._talkDemoPhase)) * 0.85;
+      const v = Math.abs(Math.sin(this._talkDemoPhase)) * 0.88;
       this._Mo.setMouthOpen(v);
-
-      const slider = document.getElementById('mouth-slider');
-      const valEl  = document.getElementById('mouth-val');
-      if (slider) slider.value      = String(Math.round(v * 100));
-      if (valEl)  valEl.textContent = v.toFixed(2);
-
+      const sl = document.getElementById('mouth-slider');
+      const vl = document.getElementById('mouth-val');
+      if (sl) sl.value = String(Math.round(v * 100));
+      if (vl) vl.textContent = v.toFixed(2);
       this._talkDemoRaf = requestAnimationFrame(loop);
     };
     this._talkDemoRaf = requestAnimationFrame(loop);
   }
 
   _stopTalkDemo() {
-    if (this._talkDemoRaf) {
-      cancelAnimationFrame(this._talkDemoRaf);
-      this._talkDemoRaf = null;
-    }
+    if (this._talkDemoRaf) { cancelAnimationFrame(this._talkDemoRaf); this._talkDemoRaf = null; }
     this._Mo.setMouthOpen(0);
   }
 }

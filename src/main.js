@@ -1,14 +1,16 @@
 // src/main.js
 // ─────────────────────────────────────────────────────────────────────────────
-// Entry point – wires the voice layer to Mo and the kiosk UI.
+// Halalholic Mo — entry point.
+// Wires voice pipeline, state machine, expression triggers, session idle reset.
 //
 // State machine:
 //   idle ──tap──▶ connecting ──open──▶ listening
-//   listening ──(VAD detects end)──▶ thinking ──(first audio)──▶ talking
+//   listening ──(VAD end)──▶ thinking ──(first audio)──▶ talking
 //   talking ──(turn complete + queue drained)──▶ listening
-//   talking ──(user interrupts)──▶ listening
-//   any ──tap stop──▶ idle
-//   any ──error──▶ idle
+//   talking ──(user interrupts)──▶ listening  (with surprised expression)
+//   any ──tap stop / error──▶ idle
+//   listening (90s idle) ──▶ "Still there?" caption
+//   listening (120s idle) ──▶ full session reset → idle
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { Mo }  from './character/Mo.js';
@@ -27,143 +29,173 @@ import {
 } from './voice/audioOutput.js';
 import { startLipSync, stopLipSync } from './voice/lipSync.js';
 
-// ── 1. Bootstrap App and Mo ───────────────────────────────────────────────────
+// ── 1. Bootstrap ──────────────────────────────────────────────────────────────
 const app = new App(document.body, { Mo });
 Mo.init(app.moContainer);
 Mo.setExpression(CONFIG.character.defaultExpression);
-Mo.setState('idle');
+Mo.setState(CONFIG.character.defaultState);
 Mo.start();
 app.setState('idle');
 app.setCaption(CONFIG.character.idleCaption);
 
-// Create the audio output graph (safe to call before a user gesture;
-// the AudioContext is resumed inside startVoiceSession on the tap event)
+// Pre-create AudioContext (resumed on first tap due to autoplay policy)
 initOutputAudio();
 
 // ── 2. Session state ──────────────────────────────────────────────────────────
 /** @type {GeminiVoiceSession|null} */
 let _session   = null;
-let _isActive  = false;   // true while a session is running
-let _isTalking = false;   // true while Mo's audio is playing
+let _isActive  = false;
+let _isTalking = false;
 
-// ── 3. Talk button handler ────────────────────────────────────────────────────
+// ── 3. Idle session timeout ───────────────────────────────────────────────────
+let _idleTimer    = null;
+let _idleWarnTimer = null;
+
+function resetIdleTimer() {
+  clearTimeout(_idleTimer);
+  clearTimeout(_idleWarnTimer);
+
+  // After 90s of no activity: nudge the customer
+  _idleWarnTimer = setTimeout(() => {
+    if (_isActive && !_isTalking) {
+      app.setCaption('Still there, habibi? 👀');
+      Mo.setExpression('smug');
+    }
+  }, 90_000);
+
+  // After 120s of no activity: reset the session completely
+  _idleTimer = setTimeout(() => {
+    if (_isActive && !_isTalking) {
+      console.log('[Mo] Idle timeout — resetting session');
+      stopVoiceSession();
+    }
+  }, 120_000);
+}
+
+function clearIdleTimers() {
+  clearTimeout(_idleTimer);
+  clearTimeout(_idleWarnTimer);
+}
+
+// ── 4. Talk button ────────────────────────────────────────────────────────────
 app.onTalkPress(async () => {
-  if (_isActive) {
-    await stopVoiceSession();
-  } else {
-    await startVoiceSession();
-  }
+  if (_isActive) await stopVoiceSession();
+  else           await startVoiceSession();
 });
 
-// ── 4. Start session ──────────────────────────────────────────────────────────
+// ── 5. Start session ──────────────────────────────────────────────────────────
 async function startVoiceSession() {
   if (_isActive) return;
 
-  // Validate API key early so the user gets a clear message
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-  if (!apiKey || apiKey.trim() === '') {
-    app.setCaption(
-      'No API key found. Add VITE_GEMINI_API_KEY to your .env file and restart.'
-    );
-    console.error('[Mo] VITE_GEMINI_API_KEY is not set in .env');
+  if (!apiKey?.trim()) {
+    app.setCaption('No API key found. Add VITE_GEMINI_API_KEY to your .env file.');
     return;
   }
 
-  // Resume AudioContext on this user gesture (browser autoplay policy)
+  // Must resume AudioContext inside a user-gesture handler
   await resumeOutputAudio();
 
-  // Optimistic UI — we'll refine once the socket opens
   _isActive  = true;
   _isTalking = false;
   goState('listening');
   app.setCaption('Connecting to Mo\u2026');
 
-  // ── Build session ──────────────────────────────────────────────────────
   _session = new GeminiVoiceSession({
 
-    // Socket opened + model ready → start mic
+    // ── WebSocket open + model ready ──────────────────────────────────────
     onOpen: async () => {
       try {
-        await startMic((int16Chunk) => {
-          if (_isActive) _session?.sendAudioChunk(int16Chunk);
+        await startMic((chunk) => {
+          if (_isActive) _session?.sendAudioChunk(chunk);
         });
-        app.setCaption('I\u2019m listening\u2026 go ahead!');
-        console.log('[Mo] Mic streaming started');
-      } catch (micErr) {
-        handleError(micErr, 'mic');
+        Mo.setExpression('excited');
+        app.setCaption("Yo! What can I get you today? 🔥");
+        resetIdleTimer();
+        console.log('[Mo] Session live ✓');
+      } catch (err) {
+        handleError(err, 'mic');
       }
     },
 
-    // Audio chunk from Gemini → queue for playback, start lip sync
+    // ── Audio from Gemini → play + lip sync ───────────────────────────────
     onAudioChunk: (int16) => {
       enqueueAudioChunk(int16);
       if (!_isTalking) {
         _isTalking = true;
         goState('talking');
+        // Randomly smug or happy when Mo starts talking (keeps it fresh)
+        Mo.setExpression(Math.random() > 0.45 ? 'smug' : 'happy');
         startLipSync(getAnalyserNode());
       }
     },
 
-    // Mo's transcript streams in while he speaks
+    // ── Mo's transcript (streams while he speaks) ─────────────────────────
     onOutputTranscript: (text) => {
       app.setCaption(text);
     },
 
-    // Customer's transcript arrives after VAD detects end of speech
+    // ── Customer's transcript → switch to thinking ────────────────────────
     onInputTranscript: (text) => {
       app.setUserCaption(text);
-      // Switch to thinking while we wait for Mo's first audio chunk
+      resetIdleTimer(); // customer is active — reset idle clock
       if (!_isTalking) {
         goState('thinking');
+        Mo.setExpression('thinking');
       }
     },
 
-    // All of Mo's audio has been sent — wait for queue to drain, then listen
+    // ── Mo finished his turn → back to listening ──────────────────────────
     onTurnComplete: () => {
-      const waitMs = getRemainingPlaybackMs() + 300; // 300 ms safety margin
-      setOnPlaybackEnd(null); // clear any previous handler
+      const waitMs = getRemainingPlaybackMs() + 320;
+      setOnPlaybackEnd(null);
       setTimeout(() => {
         if (!_isActive) return;
         _isTalking = false;
         stopLipSync();
+        Mo.setExpression('happy');
         goState('listening');
         app.setCaption('What else can I get you?');
+        resetIdleTimer();
       }, waitMs);
     },
 
-    // User interrupted Mo mid-sentence → clear audio immediately and listen
+    // ── Customer interrupted Mo ───────────────────────────────────────────
     onInterrupted: () => {
       clearAudioQueue();
       stopLipSync();
       _isTalking = false;
+      Mo.setExpression('surprised');
+      // Recover to happy after 500ms — feels natural
+      setTimeout(() => { if (_isActive) Mo.setExpression('happy'); }, 500);
       goState('listening');
       app.clearUserCaption();
+      resetIdleTimer();
     },
 
-    // Latency readout → debug panel
+    // ── Latency readout ───────────────────────────────────────────────────
     onLatency: (ms) => {
       app.updateLatency(ms);
     },
 
-    // Session-level error
+    // ── Session error ─────────────────────────────────────────────────────
     onError: (err) => {
-      console.error('[Mo] Voice session error:', err);
-      let msg = 'Something went wrong. Tap to try again!';
-      if (err.message?.includes('API key') || err.message?.includes('GEMINI')) {
-        msg = 'API key issue. Check .env and restart the dev server.';
-      } else if (err.message?.includes('network') || err.message?.includes('WebSocket')) {
-        msg = 'Network error. Check your connection and tap to retry.';
-      }
+      console.error('[Mo] Voice error:', err);
+      let msg = 'Something went wrong \u2014 tap to try again!';
+      const m = err?.message ?? '';
+      if (m.includes('API key') || m.includes('GEMINI'))
+        msg = 'API key issue. Check your .env file.';
+      else if (m.includes('network') || m.includes('WebSocket'))
+        msg = 'Connection dropped. Check internet and tap to retry.';
       app.setCaption(msg);
       stopVoiceSession();
     },
 
-    // WebSocket closed unexpectedly
+    // ── WebSocket closed ──────────────────────────────────────────────────
     onClose: (ev) => {
       if (_isActive) {
-        const reason = ev?.reason ? ` (${ev.reason})` : '';
-        console.warn('[Mo] Connection closed unexpectedly' + reason);
-        app.setCaption('Connection dropped. Tap to reconnect!');
+        console.warn('[Mo] Session closed unexpectedly', ev?.code, ev?.reason);
+        app.setCaption('Connection dropped \u2014 tap to reconnect!');
         stopVoiceSession();
       }
     },
@@ -176,10 +208,11 @@ async function startVoiceSession() {
   }
 }
 
-// ── 5. Stop session ───────────────────────────────────────────────────────────
+// ── 6. Stop session ───────────────────────────────────────────────────────────
 async function stopVoiceSession() {
   _isActive  = false;
   _isTalking = false;
+  clearIdleTimers();
 
   stopMic();
   clearAudioQueue();
@@ -190,53 +223,40 @@ async function stopVoiceSession() {
   _session = null;
 
   goState('idle');
+  Mo.setExpression(CONFIG.character.defaultExpression);
   app.setCaption(CONFIG.character.idleCaption);
   app.clearUserCaption();
 }
 
-// ── 6. Helpers ────────────────────────────────────────────────────────────────
-
-/** Drive both Mo and the App status badge to a new state in one call. */
+// ── 7. Helpers ────────────────────────────────────────────────────────────────
 function goState(state) {
   Mo.setState(state);
   app.setState(state);
 }
 
-/** Friendly error handler for mic permission, connection, and config errors. */
-function handleError(err, context = '') {
-  console.error(`[Mo] Error (${context}):`, err);
-
-  let msg = 'Something went wrong. Tap to try again!';
-  const n = err?.name ?? '';
-  const m = err?.message ?? '';
-
-  if (n === 'NotAllowedError' || n === 'PermissionDeniedError') {
-    msg = 'Microphone access was denied. Allow mic access in your browser and tap again.';
-  } else if (n === 'NotFoundError') {
+function handleError(err, ctx = '') {
+  console.error(`[Mo] Error (${ctx}):`, err);
+  let msg = 'Something went wrong \u2014 tap to try again!';
+  const n = err?.name ?? '', m = err?.message ?? '';
+  if (n === 'NotAllowedError' || n === 'PermissionDeniedError')
+    msg = 'Mic access denied. Allow microphone in browser settings and tap again.';
+  else if (n === 'NotFoundError')
     msg = 'No microphone found. Connect one and try again.';
-  } else if (m.includes('API key') || m.includes('GEMINI_API_KEY') || m.includes('VITE_GEMINI')) {
+  else if (m.includes('API key') || m.includes('GEMINI'))
     msg = 'API key is missing or invalid. Check your .env file.';
-  } else if (m.includes('network') || m.includes('WebSocket') || m.includes('fetch')) {
-    msg = 'Can\u2019t connect to Gemini. Check your internet and tap to retry.';
-  }
-
+  else if (m.includes('network') || m.includes('WebSocket'))
+    msg = 'Can\u2019t connect. Check your internet and tap to retry.';
   app.setCaption(msg);
   stopVoiceSession();
 }
 
-// ── 7. Dev-console helpers ────────────────────────────────────────────────────
+// ── 8. Dev console helpers ────────────────────────────────────────────────────
 console.info(
-  '%c Your Mo %c v0.2 \u2013 Voice Edition \n' +
-  '%c \u2022 Press D to open the debug panel\n' +
-  '\u2022 Debug console: _mo.start() / _mo.stop()\n' +
-  '\u2022 Mo API: Mo.setState() Mo.setExpression() Mo.setMouthOpen()',
-  'background:#FF6B35;color:white;padding:2px 6px;border-radius:4px;font-weight:bold',
-  '',
-  'color:#8A8A9A'
+  '%c HALALHOLIC MO %c Hooked on Flavor \n' +
+  '%c Press D for debug panel | _mo.start() / _mo.stop() in console',
+  'background:#FF6A00;color:white;padding:2px 8px;border-radius:4px;font-weight:900;font-family:Arial Black',
+  'background:#0E302E;color:#5EA82A;padding:2px 8px;border-radius:4px;font-style:italic',
+  'color:#8FAF8A;font-size:11px'
 );
 
-window._mo = {
-  start:  startVoiceSession,
-  stop:   stopVoiceSession,
-  Mo,
-};
+window._mo = { start: startVoiceSession, stop: stopVoiceSession, Mo };
