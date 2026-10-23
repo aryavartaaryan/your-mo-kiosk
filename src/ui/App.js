@@ -29,6 +29,7 @@ function injectStyles(colors) {
 
     html, body {
       width: 100%; height: 100%;
+      margin: 0; padding: 0;
       overflow: hidden;
       background: var(--c-bg);
       color: var(--c-text);
@@ -36,14 +37,26 @@ function injectStyles(colors) {
       -webkit-font-smoothing: antialiased;
     }
 
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      width: 100vw; height: 100vh;
+      position: relative;
+    }
+
     /* ── App Shell ── */
     #app {
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 100vw; height: 100vh;
+      justify-content: space-between;
+      width: 100%; height: 100%;
+      max-width: 100vw;
       position: relative;
       overflow: hidden;
+      margin: 0 auto;
     }
 
     /* ── Background layers ── */
@@ -225,15 +238,16 @@ function injectStyles(colors) {
     /* ── Caption Area ── */
     #caption-area {
       position: relative; z-index: 10;
-      width: min(650px, 93vw);
+      width: min(650px, 92vw);
       display: flex;
       flex-direction: column;
       align-items: center;
       flex-shrink: 0;
-      margin-bottom: 6px;
+      margin: 0 auto 8px auto;
     }
 
     #caption-bubble {
+      position: relative;
       background: var(--c-surface);
       border: 1px solid color-mix(in srgb, var(--c-primary) 28%, transparent);
       border-left: 3.5px solid var(--c-primary);
@@ -291,20 +305,24 @@ function injectStyles(colors) {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
-      padding: 0 20px 22px;
+      justify-content: center;
+      gap: 12px;
+      padding: 0 20px 24px;
       flex-shrink: 0;
       width: 100%;
       max-width: 720px;
+      margin: 0 auto;
     }
 
     /* ── Quick Scenario Chips ── */
     #scenario-chips {
       display: flex;
-      gap: 7px;
+      gap: 8px;
       flex-wrap: wrap;
       justify-content: center;
+      align-items: center;
       width: 100%;
+      margin: 0 auto;
     }
     .chip {
       background: rgba(14, 48, 46, 0.82);
@@ -332,6 +350,7 @@ function injectStyles(colors) {
 
     /* ── Talk Button ── */
     #talk-btn {
+      margin: 0 auto;
       padding: 17px 52px;
       border-radius: 99px;
       border: none;
@@ -480,43 +499,45 @@ function buildHTML(config) {
   ).join('');
 
   return /* html */`
-    <div id="bg-gradient"></div>
-    <div id="bg-grid"></div>
-    ${embers}
+    <div id="app">
+      <div id="bg-gradient"></div>
+      <div id="bg-grid"></div>
+      ${embers}
 
-    <!-- Header -->
-    <header id="header">
-      <div id="logo-icon">🔥</div>
-      <div id="header-text">
-        <span id="restaurant-name">${config.restaurantName.toUpperCase()}</span>
-        <span id="tagline">${config.tagline}</span>
+      <!-- Header -->
+      <header id="header">
+        <div id="logo-icon">🔥</div>
+        <div id="header-text">
+          <span id="restaurant-name">${config.restaurantName.toUpperCase()}</span>
+          <span id="tagline">${config.tagline}</span>
+        </div>
+        <div id="status-badge" class="state-idle">Idle</div>
+      </header>
+
+      <!-- Character Stage -->
+      <main id="stage">
+        <div id="stage-glow"></div>
+        <div id="mo-container"></div>
+      </main>
+
+      <!-- Caption -->
+      <section id="caption-area">
+        <div id="caption-bubble">${config.character.idleCaption}</div>
+        <div id="user-caption"></div>
+      </section>
+
+      <!-- Bottom Bar -->
+      <div id="bottom-bar">
+        <!-- Quick Scenario Chips for Client Demo -->
+        <div id="scenario-chips">
+          <button class="chip" data-prompt="I have an exam tomorrow.">🎓 Exam tomorrow</button>
+          <button class="chip" data-prompt="What should I order?">🍗 What's good?</button>
+          <button class="chip" data-prompt="I brought the whole squad.">👥 Brought the squad</button>
+          <button class="chip" data-prompt="I'm running late to class, what's quick?">🥙 Running late</button>
+        </div>
+
+        <button id="talk-btn">🎤&nbsp; Tap to Talk to Mo</button>
       </div>
-      <div id="status-badge" class="state-idle">Idle</div>
-    </header>
-
-    <!-- Character Stage -->
-    <main id="stage">
-      <div id="stage-glow"></div>
-      <div id="mo-container"></div>
-    </main>
-
-    <!-- Caption -->
-    <section id="caption-area">
-      <div id="caption-bubble">${config.character.idleCaption}</div>
-      <div id="user-caption"></div>
-    </section>
-
-    <!-- Bottom Bar -->
-    <div id="bottom-bar">
-      <!-- Quick Scenario Chips for Client Demo -->
-      <div id="scenario-chips">
-        <button class="chip" data-prompt="I have an exam tomorrow.">🎓 Exam tomorrow</button>
-        <button class="chip" data-prompt="What should I order?">🍗 What's good?</button>
-        <button class="chip" data-prompt="I brought the whole squad.">👥 Brought the squad</button>
-        <button class="chip" data-prompt="I'm running late to class, what's quick?">🥙 Running late</button>
-      </div>
-
-      <button id="talk-btn">🎤&nbsp; Tap to Talk to Mo</button>
     </div>
 
     <!-- Debug Panel -->
