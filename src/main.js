@@ -1,16 +1,15 @@
 // src/main.js
 // ─────────────────────────────────────────────────────────────────────────────
-// Halalholic Mo — entry point.
-// Wires voice pipeline, state machine, expression triggers, session idle reset.
+// Halalholic Mo 2.0 — Orchestrator.
+// Wires voice pipeline, avatar expressions, speech cadence, scenario chips,
+// proactive voice greeting, and dining-room recovery.
 //
 // State machine:
-//   idle ──tap──▶ connecting ──open──▶ listening
+//   idle ──tap──▶ connecting ──open──▶ proactive greeting ──▶ listening
 //   listening ──(VAD end)──▶ thinking ──(first audio)──▶ talking
 //   talking ──(turn complete + queue drained)──▶ listening
-//   talking ──(user interrupts)──▶ listening  (with surprised expression)
+//   talking ──(user interrupts)──▶ listening (surprised expression)
 //   any ──tap stop / error──▶ idle
-//   listening (90s idle) ──▶ "Still there?" caption
-//   listening (120s idle) ──▶ full session reset → idle
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { Mo }  from './character/Mo.js';
@@ -38,7 +37,7 @@ Mo.start();
 app.setState('idle');
 app.setCaption(CONFIG.character.idleCaption);
 
-// Pre-create AudioContext (resumed on first tap due to autoplay policy)
+// Pre-create AudioContext (resumed on first user tap due to browser autoplay policy)
 initOutputAudio();
 
 // ── 2. Session state ──────────────────────────────────────────────────────────
@@ -48,14 +47,14 @@ let _isActive  = false;
 let _isTalking = false;
 
 // ── 3. Idle session timeout ───────────────────────────────────────────────────
-let _idleTimer    = null;
+let _idleTimer     = null;
 let _idleWarnTimer = null;
 
 function resetIdleTimer() {
   clearTimeout(_idleTimer);
   clearTimeout(_idleWarnTimer);
 
-  // After 90s of no activity: nudge the customer
+  // After 90s: playful poke
   _idleWarnTimer = setTimeout(() => {
     if (_isActive && !_isTalking) {
       app.setCaption('Still there, habibi? 👀');
@@ -63,7 +62,7 @@ function resetIdleTimer() {
     }
   }, 90_000);
 
-  // After 120s of no activity: reset the session completely
+  // After 120s: reset session cleanly
   _idleTimer = setTimeout(() => {
     if (_isActive && !_isTalking) {
       console.log('[Mo] Idle timeout — resetting session');
@@ -77,14 +76,26 @@ function clearIdleTimers() {
   clearTimeout(_idleWarnTimer);
 }
 
-// ── 4. Talk button ────────────────────────────────────────────────────────────
+// ── 4. Talk button & Scenario Chips ───────────────────────────────────────────
 app.onTalkPress(async () => {
   if (_isActive) await stopVoiceSession();
   else           await startVoiceSession();
 });
 
+// Interactive scenario chips for one-tap client demonstrations
+app.onChipClick(async (prompt) => {
+  if (!_isActive) {
+    await startVoiceSession(prompt);
+  } else {
+    app.setUserCaption(prompt);
+    goState('thinking');
+    Mo.setExpression('thinking');
+    _session?.sendTextMessage(prompt);
+  }
+});
+
 // ── 5. Start session ──────────────────────────────────────────────────────────
-async function startVoiceSession() {
+async function startVoiceSession(initialPrompt = null) {
   if (_isActive) return;
 
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
@@ -93,7 +104,6 @@ async function startVoiceSession() {
     return;
   }
 
-  // Must resume AudioContext inside a user-gesture handler
   await resumeOutputAudio();
 
   _isActive  = true;
@@ -103,51 +113,85 @@ async function startVoiceSession() {
 
   _session = new GeminiVoiceSession({
 
-    // ── WebSocket open + model ready ──────────────────────────────────────
+    // ── WebSocket Open: Start mic & Trigger Proactive Voice Greeting ──────
     onOpen: async () => {
       try {
         await startMic((chunk) => {
           if (_isActive) _session?.sendAudioChunk(chunk);
         });
+
         Mo.setExpression('excited');
-        app.setCaption("Yo! What can I get you today? 🔥");
         resetIdleTimer();
         console.log('[Mo] Session live ✓');
+
+        // If triggered via a scenario chip, send that scenario
+        if (initialPrompt) {
+          app.setUserCaption(initialPrompt);
+          goState('thinking');
+          Mo.setExpression('thinking');
+          _session.sendTextMessage(initialPrompt);
+        } else {
+          // Proactive vocal welcome — Mo speaks first!
+          _session.sendTextMessage(
+            "A customer just tapped to talk at the kiosk. Greet them out loud in your signature Mo style with a short, punchy 1-sentence welcome!"
+          );
+        }
       } catch (err) {
         handleError(err, 'mic');
       }
     },
 
-    // ── Audio from Gemini → play + lip sync ───────────────────────────────
+    // ── Audio Streaming: Playback + Lip Sync + Speech Cadence Nodding ──────
     onAudioChunk: (int16) => {
       enqueueAudioChunk(int16);
       if (!_isTalking) {
         _isTalking = true;
         goState('talking');
-        // Randomly smug or happy when Mo starts talking (keeps it fresh)
-        Mo.setExpression(Math.random() > 0.45 ? 'smug' : 'happy');
         startLipSync(getAnalyserNode());
       }
     },
 
-    // ── Mo's transcript (streams while he speaks) ─────────────────────────
+    // ── Mo's Transcript: Live caption & dynamic emotion routing ────────────
     onOutputTranscript: (text) => {
       app.setCaption(text);
-    },
+      const lower = text.toLowerCase();
 
-    // ── Customer's transcript → switch to thinking ────────────────────────
-    onInputTranscript: (text) => {
-      app.setUserCaption(text);
-      resetIdleTimer(); // customer is active — reset idle clock
-      if (!_isTalking) {
-        goState('thinking');
-        Mo.setExpression('thinking');
+      // Dynamic Mascot Reactions
+      if (lower.includes('personality trait') || lower.includes('respect') || lower.includes('iconic')) {
+        Mo.setExpression('smug');
+      } else if (lower.includes('holicbucket') || lower.includes('squad') || lower.includes('group project')) {
+        Mo.setExpression('excited');
+      } else if (lower.includes('flavor than your dining hall') || lower.includes('lettuce') || lower.includes('pita bread')) {
+        Mo.setExpression('mock_offended');
+        Mo.triggerLaugh();
+      } else if (lower.includes('haha') || lower.includes('sharing is caring') || lower.includes('earn')) {
+        Mo.triggerLaugh();
       }
     },
 
-    // ── Mo finished his turn → back to listening ──────────────────────────
+    // ── Customer's Transcript: Realtime understanding & reactive expression ─
+    onInputTranscript: (text) => {
+      app.setUserCaption(text);
+      resetIdleTimer();
+
+      if (!_isTalking) {
+        goState('thinking');
+        const lower = text.toLowerCase();
+        if (lower.includes('exam') || lower.includes('study') || lower.includes('lecture')) {
+          Mo.setExpression('smug');
+        } else if (lower.includes('squad') || lower.includes('friends') || lower.includes('group')) {
+          Mo.setExpression('excited');
+        } else if (lower.includes('eat you') || lower.includes('bread') || lower.includes('hair') || lower.includes('lettuce')) {
+          Mo.setExpression('mock_offended');
+        } else {
+          Mo.setExpression('thinking');
+        }
+      }
+    },
+
+    // ── Turn Complete: Smooth return to listening ─────────────────────────
     onTurnComplete: () => {
-      const waitMs = getRemainingPlaybackMs() + 320;
+      const waitMs = getRemainingPlaybackMs() + 280;
       setOnPlaybackEnd(null);
       setTimeout(() => {
         if (!_isActive) return;
@@ -155,30 +199,29 @@ async function startVoiceSession() {
         stopLipSync();
         Mo.setExpression('happy');
         goState('listening');
-        app.setCaption('What else can I get you?');
+        app.setCaption('What else can I get you, habibi?');
         resetIdleTimer();
       }, waitMs);
     },
 
-    // ── Customer interrupted Mo ───────────────────────────────────────────
+    // ── User Interrupted Mo: Snappy response ──────────────────────────────
     onInterrupted: () => {
       clearAudioQueue();
       stopLipSync();
       _isTalking = false;
       Mo.setExpression('surprised');
-      // Recover to happy after 500ms — feels natural
-      setTimeout(() => { if (_isActive) Mo.setExpression('happy'); }, 500);
+      setTimeout(() => { if (_isActive) Mo.setExpression('happy'); }, 450);
       goState('listening');
       app.clearUserCaption();
       resetIdleTimer();
     },
 
-    // ── Latency readout ───────────────────────────────────────────────────
+    // ── Latency Monitoring ────────────────────────────────────────────────
     onLatency: (ms) => {
       app.updateLatency(ms);
     },
 
-    // ── Session error ─────────────────────────────────────────────────────
+    // ── Session Error ─────────────────────────────────────────────────────
     onError: (err) => {
       console.error('[Mo] Voice error:', err);
       let msg = 'Something went wrong \u2014 tap to try again!';
@@ -191,7 +234,7 @@ async function startVoiceSession() {
       stopVoiceSession();
     },
 
-    // ── WebSocket closed ──────────────────────────────────────────────────
+    // ── WebSocket Closed ──────────────────────────────────────────────────
     onClose: (ev) => {
       if (_isActive) {
         console.warn('[Mo] Session closed unexpectedly', ev?.code, ev?.reason);
@@ -252,8 +295,8 @@ function handleError(err, ctx = '') {
 
 // ── 8. Dev console helpers ────────────────────────────────────────────────────
 console.info(
-  '%c HALALHOLIC MO %c Hooked on Flavor \n' +
-  '%c Press D for debug panel | _mo.start() / _mo.stop() in console',
+  '%c HALALHOLIC MO 2.0 %c Hooked on Flavor \n' +
+  '%c Press D for Studio Controls | _mo.start() / _mo.stop() in console',
   'background:#FF6A00;color:white;padding:2px 8px;border-radius:4px;font-weight:900;font-family:Arial Black',
   'background:#0E302E;color:#5EA82A;padding:2px 8px;border-radius:4px;font-style:italic',
   'color:#8FAF8A;font-size:11px'

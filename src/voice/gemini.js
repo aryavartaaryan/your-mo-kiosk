@@ -112,6 +112,25 @@ export class GeminiVoiceSession {
     }
   }
 
+  /**
+   * Send a client text turn to the model.
+   * Enables proactive audio responses and one-tap scenario chips.
+   * @param {string} text
+   */
+  sendTextMessage(text) {
+    if (!this._session) return;
+    try {
+      this._latencyMark     = performance.now();
+      this._waitingForAudio = true;
+      this._session.sendClientContent({
+        turns: [{ role: 'user', parts: [{ text }] }],
+        turnComplete: true,
+      });
+    } catch (err) {
+      console.warn('[Gemini] sendClientContent failed:', err);
+    }
+  }
+
   close() {
     try { this._session?.close(); } catch {}
     this._session = null;

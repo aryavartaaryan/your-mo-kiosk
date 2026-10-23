@@ -56,6 +56,7 @@ export function startLipSync(analyserNode) {
     // ── Normalise to 0..1 and drive Mo ───────────────────────────────────
     const mouthOpen = Math.min(1, _envelope / NORMALIZE_AT);
     Mo.setMouthOpen(mouthOpen);
+    Mo.setSpeechCadence?.(mouthOpen);
 
     _rafId = requestAnimationFrame(frame);
   }
@@ -73,4 +74,5 @@ export function stopLipSync() {
   }
   _envelope = 0;
   Mo.setMouthOpen(0);
+  Mo.setSpeechCadence?.(0);
 }
