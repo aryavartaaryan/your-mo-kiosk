@@ -1,32 +1,35 @@
 // src/ui/App.js
 // ─────────────────────────────────────────────────────────────────────────────
-// Halalholic Mo — Kiosk UI Shell v3.0
-// Extraordinary client-ready MVP with:
-//   • Rich animated brand background (multi-layer gradient + floating embers)
-//   • Full-bleed stage glow that pulses in sync with Mo's voice
-//   • Premium caption bubble with smooth animated typewriter feel
-//   • Interactive Quick Demo Chips for client presentations
-//   • Perfectly centered layout on all screen sizes (mobile → 4K desktop)
+// Halalholic Kiosk UI Shell v8.0 — Syracuse University Flagship Edition
+// Ultra-Premium US QSR Collegiate Kiosk:
+//   • Enlarged, human-sized 3D Mo avatar stage (min(58vh, 520px))
+//   • Symmetrical side wings: 2 action cards on left, 2 action cards on right
+//   • Iconic circular tactile "Tap to Talk" pulsating orb button
+//   • Elevated Syracuse University campus flagship branding
+//   • Floating glassmorphism dialogue capsule with dancing soundwave equalizer
+//   • Slide-out Menu Board drawer for live price and food browsing
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { CONFIG } from '../config.js';
 
 function injectStyles(colors) {
   const css = /* css */`
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Space+Grotesk:wght@700;800&display=swap');
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --c-primary:    ${colors.primary};
-      --c-secondary:  ${colors.secondary};
-      --c-accent:     ${colors.accent};
-      --c-bg:         ${colors.background};
-      --c-surface:    ${colors.surface};
-      --c-surface2:   ${colors.surfaceAlt};
-      --c-text:       ${colors.text};
-      --c-muted:      ${colors.textMuted};
-      --c-glow:       ${colors.glow};
+      --c-primary:        ${colors.primary};
+      --c-secondary:      ${colors.secondary};
+      --c-accent:         ${colors.accent};
+      --c-bg:             #041210;
+      --c-surface:        #08221E;
+      --c-surface-glass:  rgba(8, 32, 28, 0.88);
+      --c-card-glass:     rgba(10, 36, 32, 0.82);
+      --c-text:           ${colors.text};
+      --c-muted:          ${colors.textMuted};
+      --font-display:     'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+      --font-ui:          'Plus Jakarta Sans', system-ui, sans-serif;
     }
 
     html, body {
@@ -35,8 +38,9 @@ function injectStyles(colors) {
       overflow: hidden;
       background: var(--c-bg);
       color: var(--c-text);
-      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-family: var(--font-ui);
       -webkit-font-smoothing: antialiased;
+      user-select: none;
     }
 
     body {
@@ -45,9 +49,6 @@ function injectStyles(colors) {
       justify-content: center;
     }
 
-    /* ══════════════════════════════════════════════════
-       APP SHELL — Full-viewport centered column layout
-       ══════════════════════════════════════════════════ */
     #app {
       display: flex;
       flex-direction: column;
@@ -57,246 +58,280 @@ function injectStyles(colors) {
       height: 100vh;
       position: relative;
       overflow: hidden;
+      background: radial-gradient(circle at 50% 36%, #0B2F2A 0%, #041210 74%);
     }
 
-    /* ══════════════════════════════════════════════════
-       ANIMATED BACKGROUND LAYERS
-       ══════════════════════════════════════════════════ */
-    #bg-base {
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 50% 60%,
-          color-mix(in srgb, #FF6A00 13%, transparent) 0%,
-          color-mix(in srgb, #0A1F0C 40%, transparent) 55%,
-          transparent 80%
-        ),
-        radial-gradient(ellipse 50% 50% at 20% 20%,
-          color-mix(in srgb, #72CC38 6%, transparent) 0%,
-          transparent 60%
-        ),
-        radial-gradient(ellipse 50% 50% at 80% 80%,
-          color-mix(in srgb, #FF6A00 5%, transparent) 0%,
-          transparent 60%
-        );
-      pointer-events: none; z-index: 0;
-      animation: bg-breathe 8s ease-in-out infinite;
+    /* ── Ambient Radial Warmth Behind Mascot ── */
+    #bg-spotlight {
+      position: absolute;
+      top: 36%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(78vh, 660px);
+      height: min(78vh, 660px);
+      background: radial-gradient(circle,
+        rgba(255, 106, 0, 0.17) 0%,
+        rgba(119, 185, 63, 0.08) 46%,
+        transparent 72%
+      );
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      animation: ambient-breathe 7s ease-in-out infinite alternate;
     }
-    @keyframes bg-breathe {
-      0%, 100% { opacity: 0.9; }
-      50%       { opacity: 1; }
+    @keyframes ambient-breathe {
+      0%   { transform: translate(-50%, -50%) scale(0.96); opacity: 0.85; }
+      100% { transform: translate(-50%, -50%) scale(1.06); opacity: 1; }
     }
 
-    #bg-grid {
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(color-mix(in srgb, var(--c-primary) 4%, transparent) 1px, transparent 1px),
-        linear-gradient(90deg, color-mix(in srgb, var(--c-primary) 4%, transparent) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none; z-index: 0;
-      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
-    }
-
-    /* ── Floating Embers ── */
-    .ember {
+    /* ── Floating Food-Kiosk Embers ── */
+    .kiosk-ember {
       position: absolute;
       border-radius: 50%;
       pointer-events: none;
       z-index: 0;
-      animation: ember-rise linear infinite;
+      animation: ember-float linear infinite;
     }
-    @keyframes ember-rise {
-      0%   { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.8; }
-      50%  { opacity: 0.4; }
-      100% { transform: translateY(-100vh) scale(0.2) rotate(360deg); opacity: 0; }
+    @keyframes ember-float {
+      0%   { transform: translateY(0) scale(1); opacity: 0.75; }
+      50%  { opacity: 0.35; }
+      100% { transform: translateY(-105vh) scale(0.2); opacity: 0; }
     }
 
-    /* ══════════════════════════════════════════════════
-       HEADER
-       ══════════════════════════════════════════════════ */
+    /* ── Header: Elevated Campus Flagship Identity ── */
     #header {
-      position: relative; z-index: 20;
+      position: relative; z-index: 30;
       width: 100%;
       display: flex;
       align-items: center;
-      gap: 14px;
-      padding: 18px 32px 0;
+      justify-content: space-between;
+      padding: 18px 42px 0;
       flex-shrink: 0;
     }
 
-    #logo-wrap {
+    #brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    #brand-emblem {
+      width: 48px; height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #FF8030 0%, #D84200 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 22px rgba(255, 106, 0, 0.55), inset 0 1px 1px rgba(255,255,255,0.4);
+    }
+
+    #brand-text-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    #brand-name {
+      font-size: clamp(22px, 2.4vw, 28px);
+      font-weight: 900;
+      letter-spacing: 2.4px;
+      color: #FFF;
+      line-height: 1;
+      font-family: var(--font-display);
+      text-shadow: 0 2px 24px rgba(255,106,0,0.45);
+    }
+
+    #brand-sub {
+      font-size: 11px;
+      color: var(--c-primary);
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    #brand-sub span {
+      color: rgba(255,255,255,0.45);
+      font-weight: 700;
+    }
+
+    #header-nav {
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
-    #logo-icon {
-      width: 48px; height: 48px;
-      border-radius: 14px;
-      background: linear-gradient(145deg, #FF8030, #D64200);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px;
-      flex-shrink: 0;
-      box-shadow:
-        0 4px 24px color-mix(in srgb, var(--c-primary) 60%, transparent),
-        0 0 0 1px rgba(255,255,255,0.08);
-    }
-
-    #header-text {
+    #menu-board-btn {
       display: flex;
-      flex-direction: column;
-      gap: 1px;
-    }
-
-    #restaurant-name {
-      font-size: clamp(19px, 2.4vw, 26px);
-      font-weight: 900;
-      letter-spacing: 2px;
-      color: var(--c-primary);
-      line-height: 1;
-      font-family: 'Arial Black', 'Inter', Impact, sans-serif;
-      text-shadow: 0 0 30px color-mix(in srgb, var(--c-primary) 55%, transparent);
-    }
-
-    #tagline {
-      font-size: clamp(10px, 1.2vw, 13px);
-      color: var(--c-secondary);
-      font-weight: 600;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 20px;
+      border-radius: 99px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: #FFF;
+      font-size: 12.5px;
+      font-weight: 800;
       letter-spacing: 0.5px;
-      font-style: italic;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      transition: all 0.22s ease;
+    }
+    #menu-board-btn:hover {
+      background: rgba(255, 106, 0, 0.20);
+      border-color: var(--c-primary);
+      color: var(--c-primary);
     }
 
-    #status-badge {
-      margin-left: auto;
-      padding: 7px 20px;
+    #status-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 22px;
       border-radius: 99px;
       font-size: 11.5px;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 1px;
       text-transform: uppercase;
-      background: var(--c-surface);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: var(--c-surface-glass);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(12px);
       color: var(--c-muted);
-      transition: all 0.4s ease;
+      transition: all 0.35s ease;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.3);
     }
-    #status-badge::before {
-      content: '';
-      display: inline-block;
-      width: 7px; height: 7px;
+    #status-dot {
+      width: 8px; height: 8px;
       border-radius: 50%;
-      margin-right: 8px;
-      vertical-align: middle;
       background: currentColor;
-      opacity: 0;
-      transition: opacity 0.3s;
     }
-    #status-badge.state-idle      { color: var(--c-muted); }
-    #status-badge.state-listening {
-      color: var(--c-primary);
-      border-color: color-mix(in srgb, var(--c-primary) 50%, transparent);
-      background: color-mix(in srgb, var(--c-primary) 10%, var(--c-surface));
+    #status-pill.state-idle      { color: var(--c-muted); }
+    #status-pill.state-listening {
+      color: #FF8A30;
+      border-color: #FF8A30;
+      background: rgba(255, 106, 0, 0.16);
+      box-shadow: 0 0 24px rgba(255, 106, 0, 0.4);
     }
-    #status-badge.state-thinking  {
-      color: #FFD060;
-      border-color: color-mix(in srgb, #FFD060 50%, transparent);
-      background: color-mix(in srgb, #FFD060 10%, var(--c-surface));
+    #status-pill.state-listening #status-dot {
+      animation: dot-pulse 0.9s ease-in-out infinite;
     }
-    #status-badge.state-talking   {
-      color: var(--c-secondary);
-      border-color: color-mix(in srgb, var(--c-secondary) 50%, transparent);
-      background: color-mix(in srgb, var(--c-secondary) 10%, var(--c-surface));
+    #status-pill.state-talking   {
+      color: #72CC38;
+      border-color: #72CC38;
+      background: rgba(114, 204, 56, 0.18);
+      box-shadow: 0 0 24px rgba(114, 204, 56, 0.35);
     }
-    #status-badge.state-listening::before,
-    #status-badge.state-thinking::before,
-    #status-badge.state-talking::before {
-      opacity: 1;
-      animation: pulse-dot 1s ease-in-out infinite;
+    #status-pill.state-talking #status-dot {
+      animation: dot-pulse 0.8s ease-in-out infinite;
     }
-    @keyframes pulse-dot {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: 0.3; transform: scale(0.5); }
+    @keyframes dot-pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50%       { transform: scale(0.4); opacity: 0.25; }
     }
 
-    /* ══════════════════════════════════════════════════
-       CHARACTER STAGE
-       ══════════════════════════════════════════════════ */
-    #stage {
+    /* ── Main Stage Area: Symmetrical Side Wings + Larger Human Avatar ── */
+    #kiosk-main-stage {
       position: relative; z-index: 10;
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
       width: 100%;
+      max-width: 1140px;
+      padding: 0 32px;
+      margin: -4px 0 0;
       min-height: 0;
-      overflow: visible;
     }
 
-    /* Multi-ring glow system */
-    #stage-glow-outer {
-      position: absolute;
-      width: min(72vh, 600px);
-      height: min(72vh, 600px);
-      border-radius: 50%;
-      background: radial-gradient(circle,
-        color-mix(in srgb, var(--c-glow) 8%, transparent) 0%,
-        transparent 65%
-      );
-      pointer-events: none;
-      animation: glow-outer 4s ease-in-out infinite;
+    /* Side Flanking Action Wings */
+    .action-wing {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 250px;
+      flex-shrink: 0;
+      z-index: 15;
     }
-    @keyframes glow-outer {
-      0%, 100% { transform: scale(1); opacity: 0.7; }
-      50%       { transform: scale(1.12); opacity: 1; }
+    .action-wing-left  { align-items: flex-end; }
+    .action-wing-right { align-items: flex-start; }
+
+    .action-wing-card {
+      width: 100%;
+      background: var(--c-card-glass);
+      border: 1.5px solid rgba(255, 106, 0, 0.28);
+      border-radius: 18px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.1);
+      transition: all 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
+      text-align: left;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .action-wing-card:hover {
+      background: rgba(18, 56, 50, 0.96);
+      border-color: var(--c-primary);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 34px rgba(255, 106, 0, 0.42);
+    }
+    .action-wing-card:active {
+      transform: translateY(1px) scale(0.97);
     }
 
-    #stage-glow {
-      position: absolute;
-      width: min(52vh, 440px);
-      height: min(52vh, 440px);
-      border-radius: 50%;
-      background: radial-gradient(circle,
-        color-mix(in srgb, var(--c-glow) 26%, transparent) 0%,
-        transparent 68%
-      );
-      pointer-events: none;
-      animation: glow-inner 3s ease-in-out infinite;
-      transition: all 0.5s ease;
+    .wing-card-icon {
+      width: 42px; height: 42px;
+      border-radius: 12px;
+      background: rgba(255, 106, 0, 0.14);
+      border: 1px solid rgba(255, 106, 0, 0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
     }
-    @keyframes glow-inner {
-      0%, 100% { opacity: 0.8; transform: scale(1); }
-      50%       { opacity: 1; transform: scale(1.06); }
+    .wing-card-text {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
     }
-    #stage-glow.talking {
-      background: radial-gradient(circle,
-        color-mix(in srgb, var(--c-glow) 42%, transparent) 0%,
-        transparent 70%
-      );
-      transform: scale(1.2);
+    .wing-card-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #FFF;
+      letter-spacing: 0.3px;
+    }
+    .wing-card-sub {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--c-muted);
+      letter-spacing: 0.3px;
     }
 
-    /* Ground shadow ring under Mo's feet */
-    #stage-floor {
-      position: absolute;
-      bottom: calc(50% - min(31vh, 260px));
-      width: min(34vh, 280px);
-      height: 22px;
-      background: radial-gradient(ellipse, rgba(0,0,0,0.55) 0%, transparent 72%);
-      border-radius: 50%;
-      pointer-events: none;
+    /* Central Character Stage: Now Substantially Enlarged & Imposing */
+    #stage-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+      height: 100%;
     }
 
     #mo-container {
-      width: min(65vh, 540px);
-      height: min(65vh, 540px);
+      width: min(58vh, 520px);
+      height: min(58vh, 520px);
       position: relative; z-index: 2;
-      filter: drop-shadow(0 20px 48px rgba(0,0,0,0.6));
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* ══════════════════════════════════════════════════
-       CAPTION AREA
-       ══════════════════════════════════════════════════ */
-    #caption-area {
-      position: relative; z-index: 20;
-      width: min(640px, 90vw);
+    /* ── Floating Comic Speech Capsule ── */
+    #speech-capsule-area {
+      position: relative; z-index: 25;
+      width: min(680px, 92vw);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -304,66 +339,88 @@ function injectStyles(colors) {
       margin: 0 auto 10px;
     }
 
-    #caption-bubble {
+    #speech-capsule {
       position: relative;
-      background: var(--c-surface);
-      border: 1px solid color-mix(in srgb, var(--c-primary) 35%, transparent);
-      border-left: 4px solid var(--c-primary);
-      border-radius: 22px;
-      padding: 14px 26px;
-      text-align: center;
-      font-size: clamp(14px, 1.7vw, 17px);
-      font-weight: 500;
-      line-height: 1.55;
-      color: var(--c-text);
-      transition: opacity 0.24s ease;
+      background: var(--c-surface-glass);
+      border: 1.5px solid rgba(255, 106, 0, 0.38);
+      border-radius: 24px;
+      padding: 12px 28px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
       width: 100%;
-      box-shadow:
-        0 6px 36px rgba(0,0,0,0.45),
-        0 0 0 1px color-mix(in srgb, white 5%, transparent),
-        inset 0 1px 0 rgba(255,255,255,0.06);
+      box-shadow: 0 12px 42px rgba(0,0,0,0.55), inset 0 1px 1px rgba(255,255,255,0.12);
+      backdrop-filter: blur(18px);
+      transition: all 0.25s ease;
     }
-
-    /* Speech bubble pointer */
-    #caption-bubble::before {
+    #speech-capsule::before {
       content: '';
       position: absolute;
       bottom: 100%;
       left: 50%;
       transform: translateX(-50%);
       border: 10px solid transparent;
-      border-bottom-color: color-mix(in srgb, var(--c-primary) 40%, transparent);
+      border-bottom-color: var(--c-primary);
       margin-bottom: -1px;
     }
-    #caption-bubble::after {
+    #speech-capsule::after {
       content: '';
       position: absolute;
       bottom: calc(100% - 2px);
       left: 50%;
       transform: translateX(-50%);
       border: 9px solid transparent;
-      border-bottom-color: var(--c-surface);
+      border-bottom-color: rgba(8, 32, 28, 0.98);
     }
 
-    #caption-bubble.fade-out { opacity: 0; }
-    #caption-bubble.fade-in  { opacity: 1; }
-
-    /* Mo speaking emphasis */
-    #caption-bubble.speaking {
-      border-color: color-mix(in srgb, var(--c-secondary) 55%, transparent);
-      border-left-color: var(--c-secondary);
-      box-shadow:
-        0 6px 36px rgba(0,0,0,0.45),
-        0 0 20px color-mix(in srgb, var(--c-secondary) 18%, transparent);
+    #speech-text {
+      flex: 1;
+      text-align: center;
+      font-size: clamp(15px, 1.7vw, 17px);
+      font-weight: 700;
+      line-height: 1.45;
+      color: #FFF;
+      transition: opacity 0.2s ease;
+    }
+    #speech-capsule.speaking {
+      border-color: #72CC38;
+      box-shadow: 0 12px 42px rgba(0,0,0,0.55), 0 0 28px rgba(114, 204, 56, 0.35);
     }
 
-    #user-caption {
-      font-size: 12px;
+    /* Soundwave Equalizer Indicator */
+    .audio-eq-wave {
+      display: flex;
+      align-items: center;
+      gap: 3.5px;
+      height: 20px;
+    }
+    .eq-bar {
+      width: 3.5px;
+      height: 6px;
+      border-radius: 99px;
+      background: var(--c-primary);
+      transition: height 0.15s ease;
+    }
+    #speech-capsule.speaking .eq-bar {
+      background: #72CC38;
+      animation: eq-pulse 0.6s ease-in-out infinite alternate;
+    }
+    #speech-capsule.speaking .eq-bar:nth-child(1) { animation-delay: 0.1s; }
+    #speech-capsule.speaking .eq-bar:nth-child(2) { animation-delay: 0.25s; }
+    #speech-capsule.speaking .eq-bar:nth-child(3) { animation-delay: 0.4s; }
+    #speech-capsule.speaking .eq-bar:nth-child(4) { animation-delay: 0.15s; }
+    @keyframes eq-pulse {
+      0%   { height: 5px; }
+      100% { height: 20px; }
+    }
+
+    #user-sub-caption {
+      font-size: 13px;
       color: var(--c-muted);
       text-align: center;
-      padding: 5px 24px 0;
+      padding: 5px 20px 0;
       width: 100%;
-      height: 20px;
+      min-height: 20px;
       opacity: 0;
       transition: opacity 0.3s;
       white-space: nowrap;
@@ -371,183 +428,256 @@ function injectStyles(colors) {
       text-overflow: ellipsis;
       font-style: italic;
     }
-    #user-caption.visible { opacity: 1; }
+    #user-sub-caption.visible { opacity: 1; }
 
-    /* ══════════════════════════════════════════════════
-       BOTTOM BAR — CHIPS + TALK BUTTON
-       ══════════════════════════════════════════════════ */
-    #bottom-bar {
-      position: relative; z-index: 20;
+    /* ── Bottom Section: Iconic Circular Tap-to-Talk Orb ── */
+    #bottom-kiosk-bar {
+      position: relative; z-index: 25;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 12px;
-      padding: 0 20px 26px;
+      padding: 0 24px 22px;
       flex-shrink: 0;
       width: 100%;
-      max-width: 760px;
+      max-width: 880px;
       margin: 0 auto;
     }
 
-    /* ── Scenario Chips ── */
-    #scenario-chips {
+    #talk-orb-container {
       display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      width: 100%;
-    }
-    .chip {
-      background: rgba(14, 48, 46, 0.78);
-      border: 1px solid color-mix(in srgb, var(--c-primary) 30%, transparent);
-      color: var(--c-text);
-      padding: 7px 15px;
-      border-radius: 99px;
-      font-size: 12.5px;
-      font-weight: 600;
-      cursor: pointer;
-      backdrop-filter: blur(12px);
-      transition: all 0.22s ease;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      letter-spacing: 0.2px;
-    }
-    .chip:hover {
-      background: color-mix(in srgb, var(--c-primary) 20%, var(--c-surface));
-      border-color: var(--c-primary);
-      color: var(--c-primary);
-      transform: translateY(-2px);
-      box-shadow: 0 5px 18px color-mix(in srgb, var(--c-primary) 30%, transparent);
-    }
-    .chip:active { transform: translateY(0.5px) scale(0.97); }
-    .chip.chip-active {
-      background: color-mix(in srgb, var(--c-primary) 25%, var(--c-surface));
-      border-color: var(--c-primary);
-      color: var(--c-primary);
+      gap: 8px;
+      position: relative;
     }
 
-    /* ── Talk Button ── */
-    #talk-btn {
-      display: block;
-      margin: 0 auto;
-      padding: 18px 58px;
-      border-radius: 99px;
-      border: none;
-      background: linear-gradient(135deg, #FF7820 0%, var(--c-primary) 40%, #C84000 100%);
+    /* Ambient Pulsing Wave Rings Behind the Orb */
+    .orb-pulse-ring {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 106, 0, 0.35);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .orb-pulse-ring.ring-1 {
+      width: 104px; height: 104px;
+      animation: ring-expand 3s ease-out infinite;
+    }
+    .orb-pulse-ring.ring-2 {
+      width: 122px; height: 122px;
+      animation: ring-expand 3s ease-out infinite 1.2s;
+    }
+    @keyframes ring-expand {
+      0%   { transform: translate(-50%, -50%) scale(0.8); opacity: 0.7; }
+      100% { transform: translate(-50%, -50%) scale(1.22); opacity: 0; }
+    }
+
+    #talk-cta-btn {
+      position: relative; z-index: 2;
+      width: 82px; height: 82px;
+      border-radius: 50%;
+      border: 2.5px solid rgba(255, 255, 255, 0.35);
+      background: radial-gradient(circle at 35% 30%, #FF9944 0%, var(--c-primary) 55%, #B83500 100%);
       color: white;
-      font-size: clamp(16px, 2.1vw, 20px);
-      font-weight: 900;
-      letter-spacing: 0.4px;
       cursor: pointer;
       outline: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       box-shadow:
-        0 6px 36px color-mix(in srgb, var(--c-primary) 55%, transparent),
-        0 2px 10px rgba(0,0,0,0.5),
-        inset 0 1px 0 rgba(255,255,255,0.15);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+        0 10px 36px rgba(255, 106, 0, 0.65),
+        0 2px 8px rgba(0,0,0,0.5),
+        inset 0 2px 4px rgba(255,255,255,0.6),
+        inset 0 -3px 6px rgba(0,0,0,0.4);
+      transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
       -webkit-tap-highlight-color: transparent;
       user-select: none;
-      position: relative;
-      overflow: hidden;
-      font-family: 'Arial Black', 'Inter', sans-serif;
     }
-    #talk-btn::after {
-      content: '';
-      position: absolute;
-      top: 0; left: -110%;
-      width: 60%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transform: skewX(-20deg);
-      animation: btn-shimmer 3.8s ease-in-out infinite;
+    #talk-cta-btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 14px 48px rgba(255, 106, 0, 0.85), inset 0 2px 6px rgba(255,255,255,0.7);
     }
-    @keyframes btn-shimmer {
-      0%   { left: -110%; }
-      45%  { left: 170%; }
-      100% { left: 170%; }
-    }
-    #talk-btn:hover {
-      transform: translateY(-3px);
-      box-shadow:
-        0 12px 48px color-mix(in srgb, var(--c-primary) 62%, transparent),
-        0 4px 14px rgba(0,0,0,0.5);
-    }
-    #talk-btn:active { transform: translateY(1px) scale(0.98); }
-
-    #talk-btn.listening {
-      background: linear-gradient(135deg, #E03030, #A81818);
-      box-shadow:
-        0 6px 36px rgba(220, 48, 48, 0.6),
-        0 2px 10px rgba(0,0,0,0.5);
-      animation: listening-pulse 1.5s ease-in-out infinite;
-    }
-    @keyframes listening-pulse {
-      0%, 100% { box-shadow: 0 6px 36px rgba(220, 48, 48, 0.55), 0 2px 10px rgba(0,0,0,0.5); }
-      50%       { box-shadow: 0 6px 60px rgba(220, 48, 48, 0.9), 0 2px 10px rgba(0,0,0,0.5); }
+    #talk-cta-btn:active {
+      transform: scale(0.95);
     }
 
-    /* ══════════════════════════════════════════════════
-       DEBUG PANEL
-       ══════════════════════════════════════════════════ */
+    #talk-cta-btn svg {
+      width: 36px; height: 36px;
+      fill: #FFF;
+      filter: drop-shadow(0 2px 5px rgba(0,0,0,0.4));
+      transition: transform 0.2s ease;
+    }
+    #talk-cta-btn:hover svg {
+      transform: scale(1.08);
+    }
+
+    /* Listening state: transitions to glowing red/pulse */
+    #talk-cta-btn.listening {
+      background: radial-gradient(circle at 35% 30%, #FF5A5A 0%, #D81616 65%, #9E0000 100%);
+      border-color: rgba(255,255,255,0.6);
+      box-shadow: 0 0 45px rgba(230, 25, 25, 0.85);
+      animation: orb-speaking-pulse 1.2s ease-in-out infinite;
+    }
+    @keyframes orb-speaking-pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 35px rgba(230, 25, 25, 0.7); }
+      50%       { transform: scale(1.07); box-shadow: 0 0 60px rgba(230, 25, 25, 0.95); }
+    }
+
+    #talk-cta-label-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      user-select: none;
+    }
+    #talk-cta-label {
+      font-size: 13.5px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #FFF;
+      font-family: var(--font-display);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    }
+    #talk-cta-sub {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--c-muted);
+      letter-spacing: 0.5px;
+    }
+
+    /* Responsive Adaptation for Tablets / Narrow Screens */
+    @media (max-width: 960px) {
+      #kiosk-main-stage {
+        flex-direction: column;
+        padding: 0 16px;
+      }
+      .action-wing {
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+      }
+      .action-wing-left, .action-wing-right {
+        align-items: center;
+      }
+      .action-wing-card {
+        width: auto;
+        min-width: 180px;
+      }
+      #mo-container {
+        width: min(44vh, 380px);
+        height: min(44vh, 380px);
+      }
+    }
+
+    /* ── Slide-Out Menu Board Drawer ── */
+    #menu-drawer {
+      position: fixed;
+      top: 0; right: -420px;
+      width: 400px; height: 100vh;
+      background: rgba(6, 21, 19, 0.98);
+      backdrop-filter: blur(20px);
+      border-left: 2px solid rgba(255, 106, 0, 0.35);
+      z-index: 2000;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: -15px 0 50px rgba(0,0,0,0.85);
+      transition: right 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      overflow-y: auto;
+    }
+    #menu-drawer.open { right: 0; }
+
+    .menu-drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 12px;
+    }
+    .menu-drawer-header h2 {
+      font-size: 19px;
+      font-family: var(--font-display);
+      color: var(--c-primary);
+    }
+    .drawer-close-btn {
+      background: none; border: none;
+      color: var(--c-muted);
+      font-size: 22px; cursor: pointer;
+    }
+    .menu-category-block {
+      background: rgba(10, 36, 32, 0.75);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 12px 16px;
+    }
+    .menu-cat-title {
+      font-size: 13px; font-weight: 800; color: var(--c-secondary);
+      margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px;
+    }
+    .menu-item-row {
+      display: flex; justify-content: space-between;
+      font-size: 13px; font-weight: 600; padding: 5px 0;
+      border-bottom: 1px dashed rgba(255,255,255,0.06);
+    }
+    .menu-item-row:last-child { border-bottom: none; }
+    .item-price { color: var(--c-primary); font-weight: 800; }
+
+    /* ── Studio Debug Panel (Press 'D') ── */
     #debug-panel {
-      position: fixed; top: 14px; right: 14px;
-      z-index: 1000;
-      background: rgba(6, 18, 8, 0.96);
-      backdrop-filter: blur(16px);
-      border: 1px solid color-mix(in srgb, var(--c-primary) 30%, transparent);
-      border-radius: 20px;
+      position: fixed; top: 16px; right: 16px;
+      z-index: 3000;
+      background: rgba(6, 20, 18, 0.98);
+      backdrop-filter: blur(18px);
+      border: 1.5px solid rgba(255, 106, 0, 0.4);
+      border-radius: 22px;
       padding: 18px;
-      width: 284px;
+      width: 320px;
+      max-height: 92vh;
+      overflow-y: auto;
       display: none;
       flex-direction: column;
-      gap: 9px;
-      box-shadow: 0 10px 50px rgba(0,0,0,0.75);
+      gap: 10px;
+      box-shadow: 0 12px 60px rgba(0,0,0,0.85);
     }
     #debug-panel.open { display: flex; }
     #debug-panel h3 {
-      font-size: 11.5px;
-      font-weight: 800;
-      letter-spacing: 1.3px;
-      text-transform: uppercase;
-      color: var(--c-primary);
+      font-size: 13px; font-weight: 900; letter-spacing: 1.4px;
+      text-transform: uppercase; color: var(--c-primary);
+      display: flex; align-items: center; justify-content: space-between;
     }
     .debug-row { display: flex; gap: 5px; flex-wrap: wrap; }
     .dbg-btn {
       flex: 1; min-width: 0;
       padding: 7px 9px;
       border-radius: 9px;
-      border: 1px solid rgba(255,255,255,0.09);
-      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
       color: var(--c-text);
-      font-size: 11.5px; font-weight: 600;
+      font-size: 11px; font-weight: 700;
       cursor: pointer;
       transition: all 0.15s;
       white-space: nowrap; text-align: center;
     }
-    .dbg-btn:hover  { background: rgba(255,255,255,0.1); }
+    .dbg-btn:hover { background: rgba(255,255,255,0.15); }
     .dbg-btn.active {
-      background: color-mix(in srgb, var(--c-primary) 22%, transparent);
+      background: rgba(255, 106, 0, 0.28);
       border-color: var(--c-primary);
       color: var(--c-primary);
     }
     .debug-label {
-      font-size: 10.5px;
-      color: var(--c-muted);
-      font-weight: 700;
-      letter-spacing: 0.7px;
-      text-transform: uppercase;
-      margin-top: 3px;
+      font-size: 11px; color: var(--c-muted);
+      font-weight: 800; letter-spacing: 0.8px;
+      text-transform: uppercase; margin-top: 3px;
     }
-    input[type=range] { width: 100%; accent-color: var(--c-primary); cursor: pointer; }
     #debug-latency-val {
       font-size: 24px; font-weight: 900; color: var(--c-primary);
-      text-align: center; letter-spacing: -1px; font-family: 'Inter', monospace;
-    }
-    #debug-hint {
-      position: fixed; bottom: 14px; right: 18px;
-      font-size: 10.5px; color: rgba(255,255,255,0.16);
-      pointer-events: none; z-index: 999; letter-spacing: 0.5px;
+      text-align: center; font-family: var(--font-display);
     }
   `;
   const style = document.createElement('style');
@@ -555,70 +685,169 @@ function injectStyles(colors) {
   document.head.appendChild(style);
 }
 
-// ── HTML Template ─────────────────────────────────────────────────────────────
 function buildHTML(config) {
   const embers = [
-    { left: '8%',   bottom: '14%', size: '4px',   col: '#FF6A00', dur: '7s',   delay: '0s'   },
-    { left: '22%',  bottom: '10%', size: '3px',   col: '#FF8A30', dur: '9s',   delay: '2.2s' },
-    { left: '38%',  bottom: '7%',  size: '2.5px', col: '#FFD060', dur: '6.5s', delay: '4s'   },
-    { left: '54%',  bottom: '18%', size: '5px',   col: '#FF6A00', dur: '5.5s', delay: '1s'   },
-    { left: '68%',  bottom: '12%', size: '3.5px', col: '#FF8A30', dur: '7.5s', delay: '3.5s' },
-    { left: '82%',  bottom: '16%', size: '4.5px', col: '#FF6A00', dur: '8.5s', delay: '0.8s' },
-    { left: '92%',  bottom: '8%',  size: '2.5px', col: '#72CC38', dur: '6s',   delay: '2.8s' },
-    { left: '5%',   bottom: '30%', size: '2px',   col: '#72CC38', dur: '10s',  delay: '5s'   },
+    { left: '10%',  bottom: '12%', size: '4.5px', col: '#FF6A00', dur: '7s',   delay: '0s'   },
+    { left: '26%',  bottom: '8%',  size: '3px',   col: '#FF8A30', dur: '9s',   delay: '2s'   },
+    { left: '42%',  bottom: '6%',  size: '2.5px', col: '#FFD060', dur: '6.5s', delay: '3.5s' },
+    { left: '58%',  bottom: '16%', size: '5px',   col: '#FF6A00', dur: '5.5s', delay: '1s'   },
+    { left: '74%',  bottom: '10%', size: '3.5px', col: '#FF8A30', dur: '8s',   delay: '2.8s' },
+    { left: '88%',  bottom: '14%', size: '4.5px', col: '#FF6A00', dur: '8.5s', delay: '0.5s' },
   ].map(e =>
-    `<div class="ember" style="left:${e.left};bottom:${e.bottom};width:${e.size};height:${e.size};background:${e.col};animation-duration:${e.dur};animation-delay:${e.delay};box-shadow:0 0 6px ${e.col};"></div>`
+    `<div class="kiosk-ember" style="left:${e.left};bottom:${e.bottom};width:${e.size};height:${e.size};background:${e.col};animation-duration:${e.dur};animation-delay:${e.delay};box-shadow:0 0 8px ${e.col};"></div>`
   ).join('');
 
   return /* html */`
     <div id="app">
-      <div id="bg-base"></div>
-      <div id="bg-grid"></div>
+      <div id="bg-spotlight"></div>
       ${embers}
 
-      <!-- Header -->
+      <!-- Header: Elevated Campus Flagship Branding -->
       <header id="header">
-        <div id="logo-wrap">
-          <div id="logo-icon">🔥</div>
-          <div id="header-text">
-            <span id="restaurant-name">${config.restaurantName.toUpperCase()}</span>
-            <span id="tagline">${config.tagline}</span>
+        <div id="brand-lockup">
+          <div id="brand-emblem">🔥</div>
+          <div id="brand-text-group">
+            <span id="brand-name">${config.restaurantName.toUpperCase()}</span>
+            <span id="brand-sub">SYRACUSE CAMPUS <span>• UNIVERSITY AVE • 100% ZABIHA</span></span>
           </div>
         </div>
-        <div id="status-badge" class="state-idle">Idle</div>
+
+        <div id="header-nav">
+          <button id="menu-board-btn">📋&nbsp; Menu Board</button>
+          <div id="status-pill" class="state-idle">
+            <span id="status-dot"></span>
+            <span id="status-text">Idle</span>
+          </div>
+        </div>
       </header>
 
-      <!-- Character Stage -->
-      <main id="stage">
-        <div id="stage-glow-outer"></div>
-        <div id="stage-glow"></div>
-        <div id="stage-floor"></div>
-        <div id="mo-container"></div>
-      </main>
+      <!-- Main Stage: Symmetrical Side Wings + Larger Human-Size 3D Mo Avatar -->
+      <section id="kiosk-main-stage">
+        <!-- Left Action Wing (2 Buttons) -->
+        <aside class="action-wing action-wing-left">
+          <button class="action-wing-card" data-prompt="I have an exam tomorrow.">
+            <div class="wing-card-icon">🎓</div>
+            <div class="wing-card-text">
+              <span class="wing-card-title">Cramming for Finals</span>
+              <span class="wing-card-sub">Heavy Fuel Platter</span>
+            </div>
+          </button>
+          <button class="action-wing-card" data-prompt="What should I order?">
+            <div class="wing-card-icon">🍗</div>
+            <div class="wing-card-text">
+              <span class="wing-card-title">What's Hitting Today?</span>
+              <span class="wing-card-sub">Mo's Signature Pick</span>
+            </div>
+          </button>
+        </aside>
 
-      <!-- Caption -->
-      <section id="caption-area">
-        <div id="caption-bubble">${config.character.idleCaption}</div>
-        <div id="user-caption"></div>
+        <!-- Central Mascot Stage (Noticeably Larger Scale) -->
+        <main id="stage-area">
+          <div id="mo-container"></div>
+        </main>
+
+        <!-- Right Action Wing (2 Buttons) -->
+        <aside class="action-wing action-wing-right">
+          <button class="action-wing-card" data-prompt="I brought the whole squad.">
+            <div class="wing-card-icon">👥</div>
+            <div class="wing-card-text">
+              <span class="wing-card-title">Pulled Up with Squad</span>
+              <span class="wing-card-sub">HolicBucket 5-in-1</span>
+            </div>
+          </button>
+          <button class="action-wing-card" data-prompt="I'm running late to class, what's quick?">
+            <div class="wing-card-icon">🏃</div>
+            <div class="wing-card-text">
+              <span class="wing-card-title">Late to Class</span>
+              <span class="wing-card-sub">Speed Gyro Wrap</span>
+            </div>
+          </button>
+        </aside>
       </section>
 
-      <!-- Bottom Bar -->
-      <div id="bottom-bar">
-        <div id="scenario-chips">
-          <button class="chip" data-prompt="I have an exam tomorrow.">🎓 Exam tomorrow</button>
-          <button class="chip" data-prompt="What should I order?">🍗 What's good?</button>
-          <button class="chip" data-prompt="I brought the whole squad.">👥 Whole squad</button>
-          <button class="chip" data-prompt="I'm running late to class, what's quick?">🥙 Running late</button>
+      <!-- Floating Comic Speech Capsule -->
+      <section id="speech-capsule-area">
+        <div id="speech-capsule">
+          <div class="audio-eq-wave">
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+          </div>
+          <div id="speech-text">${config.character.idleCaption}</div>
+          <div class="audio-eq-wave">
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+          </div>
         </div>
-        <button id="talk-btn">🎤&nbsp; Tap to Talk to Mo</button>
+        <div id="user-sub-caption"></div>
+      </section>
+
+      <!-- Bottom Console: Iconic Circular Tactile Tap-to-Talk Orb -->
+      <div id="bottom-kiosk-bar">
+        <div id="talk-orb-container">
+          <div class="orb-pulse-ring ring-1"></div>
+          <div class="orb-pulse-ring ring-2"></div>
+          
+          <button id="talk-cta-btn" aria-label="Tap to talk with Mo">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+              <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+            </svg>
+          </button>
+
+          <div id="talk-cta-label-group">
+            <span id="talk-cta-label">TAP TO TALK WITH MO</span>
+            <span id="talk-cta-sub">TOUCH OR CLICK TO SPEAK</span>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Debug Panel (press D) -->
-    <div id="debug-panel">
-      <h3>⚡ Mo 2.0 Studio</h3>
+    <!-- Slide-Out Menu Drawer -->
+    <div id="menu-drawer">
+      <div class="menu-drawer-header">
+        <h2>🔥 Halalholic Menu</h2>
+        <button class="drawer-close-btn" id="drawer-close-btn">✕</button>
+      </div>
 
-      <div class="debug-label">State</div>
+      <div class="menu-category-block">
+        <div class="menu-cat-title">Platters Over Rice (Choice of 2 Sides)</div>
+        <div class="menu-item-row"><span>Chicken Dose</span><span class="item-price">$9.99</span></div>
+        <div class="menu-item-row"><span>Lamb Dose</span><span class="item-price">$9.99</span></div>
+        <div class="menu-item-row"><span>Mix Combo Dose</span><span class="item-price">$9.99</span></div>
+        <div class="menu-item-row"><span>Falafel Dose</span><span class="item-price">$9.99</span></div>
+        <div class="menu-item-row"><span>Make It Extra Holic</span><span class="item-price">+$3.00</span></div>
+      </div>
+
+      <div class="menu-category-block">
+        <div class="menu-cat-title">Gyro Sandwiches (Speed Pick)</div>
+        <div class="menu-item-row"><span>Chicken Gyro</span><span class="item-price">$7.99</span></div>
+        <div class="menu-item-row"><span>Lamb Gyro</span><span class="item-price">$7.99</span></div>
+        <div class="menu-item-row"><span>Mix Gyro</span><span class="item-price">$7.99</span></div>
+        <div class="menu-item-row"><span>Falafel Gyro</span><span class="item-price">$7.99</span></div>
+      </div>
+
+      <div class="menu-category-block">
+        <div class="menu-cat-title">⭐ HolicBucket (Squad Star)</div>
+        <div class="menu-item-row"><span>Tenders, Boneless Wings, Fries, Mozz Sticks & Mac Bites</span><span class="item-price">$15.99</span></div>
+      </div>
+
+      <div class="menu-category-block">
+        <div class="menu-cat-title">Wings & Tenders</div>
+        <div class="menu-item-row"><span>6pc Wings</span><span class="item-price">$9.99</span></div>
+        <div class="menu-item-row"><span>3pc Tenders</span><span class="item-price">$6.99</span></div>
+        <div class="menu-item-row"><span>Combo: Fries & Drink</span><span class="item-price">+$2.99</span></div>
+      </div>
+    </div>
+
+    <!-- Studio Debug Panel (Press 'D') -->
+    <div id="debug-panel">
+      <h3>⚡ Mo Living 3D Studio <span style="font-size:11px;color:#888;">ESC to close</span></h3>
+
+      <div class="debug-label">Kiosk State</div>
       <div class="debug-row">
         <button class="dbg-btn active" data-state="idle">Idle</button>
         <button class="dbg-btn" data-state="listening">Listen</button>
@@ -626,45 +855,18 @@ function buildHTML(config) {
         <button class="dbg-btn" data-state="talking">Talk</button>
       </div>
 
-      <div class="debug-label">Expressions</div>
+      <div class="debug-label">Organic Reactions</div>
       <div class="debug-row">
-        <button class="dbg-btn" data-expr="neutral">Neutral</button>
-        <button class="dbg-btn active" data-expr="happy">Happy</button>
-        <button class="dbg-btn" data-expr="smug">Smug</button>
-      </div>
-      <div class="debug-row">
-        <button class="dbg-btn" data-expr="excited">Excited</button>
-        <button class="dbg-btn" data-expr="thinking">Think</button>
-        <button class="dbg-btn" data-expr="mock_offended">Offended</button>
-      </div>
-      <div class="debug-row">
-        <button class="dbg-btn" data-expr="surprised">Surprise</button>
-        <button class="dbg-btn" data-expr="wink">Wink</button>
-        <button class="dbg-btn" id="dbg-laugh-btn">😂 Laugh</button>
+        <button class="dbg-btn" id="dbg-blink-btn">👁️ Blink Eyes</button>
+        <button class="dbg-btn" id="dbg-laugh-btn">😂 Laugh Bounce</button>
       </div>
 
-      <div class="debug-label">Mouth&nbsp;<span id="mouth-val">0.00</span></div>
-      <input type="range" id="mouth-slider" min="0" max="100" value="0"/>
-
-      <div class="debug-label">Quick Lines</div>
-      <div class="debug-row">
-        <button class="dbg-btn" data-caption="Yo habibi! You came hungry — that's a problem I can fix.">Welcome</button>
-        <button class="dbg-btn" data-caption="Extra Holic? That's not an add-on, habibi. That's a personality trait.">Extra Holic</button>
-      </div>
-      <div class="debug-row">
-        <button class="dbg-btn" data-caption="You brought the whole squad? HOLICBUCKET. Group project finally done right.">HolicBucket</button>
-        <button class="dbg-btn" data-caption="My hair is lettuce and I still have more flavor than your dining hall.">Roast</button>
-      </div>
-
-      <div class="debug-label">Latency</div>
+      <div class="debug-label">Audio Latency</div>
       <div id="debug-latency-val">-- ms</div>
     </div>
-
-    <div id="debug-hint">Press D for studio controls</div>
   `;
 }
 
-// ── App Class ──────────────────────────────────────────────────────────────────
 export class App {
   constructor(rootEl, deps) {
     this._root = rootEl;
@@ -676,12 +878,16 @@ export class App {
     injectStyles(CONFIG.colors);
     rootEl.innerHTML = buildHTML(CONFIG);
 
-    this._captionEl     = document.getElementById('caption-bubble');
-    this._userCaptionEl = document.getElementById('user-caption');
-    this._statusEl      = document.getElementById('status-badge');
-    this._talkBtn       = document.getElementById('talk-btn');
-    this._stageGlow     = document.getElementById('stage-glow');
+    this._captionEl     = document.getElementById('speech-text');
+    this._capsuleEl     = document.getElementById('speech-capsule');
+    this._userCaptionEl = document.getElementById('user-sub-caption');
+    this._statusPillEl  = document.getElementById('status-pill');
+    this._statusTextEl  = document.getElementById('status-text');
+    this._talkBtn       = document.getElementById('talk-cta-btn');
+    this._talkLabelEl   = document.getElementById('talk-cta-label');
+    this._talkSubEl     = document.getElementById('talk-cta-sub');
     this._debugPanel    = document.getElementById('debug-panel');
+    this._menuDrawer    = document.getElementById('menu-drawer');
 
     this._bindEvents();
   }
@@ -693,16 +899,22 @@ export class App {
 
   setState(state) {
     const labels = { idle: 'Idle', listening: 'Listening…', thinking: 'Thinking…', talking: 'Speaking' };
-    this._statusEl.textContent = labels[state] || state;
-    this._statusEl.className   = `state-${state}`;
+    if (this._statusTextEl) this._statusTextEl.textContent = labels[state] || state;
+    this._statusPillEl.className = `state-${state}`;
 
     const isActive = state !== 'idle';
-    this._talkBtn.textContent = isActive
-      ? '\uD83D\uDED1\u00A0 Tap to Stop'
-      : '\uD83C\uDFA4\u00A0 Tap to Talk to Mo';
-    this._talkBtn.classList.toggle('listening', state === 'listening');
-    this._stageGlow?.classList.toggle('talking', state === 'talking');
-    this._captionEl?.classList.toggle('speaking', state === 'talking');
+    if (this._talkBtn) {
+      this._talkBtn.classList.toggle('listening', state === 'listening');
+      if (isActive) {
+        this._talkLabelEl.textContent = state === 'listening' ? 'LISTENING TO YOU…' : 'MO IS SPEAKING';
+        this._talkSubEl.textContent   = 'TOUCH TO STOP';
+      } else {
+        this._talkLabelEl.textContent = 'TAP TO TALK WITH MO';
+        this._talkSubEl.textContent   = 'TOUCH OR CLICK TO SPEAK';
+      }
+    }
+
+    this._capsuleEl?.classList.toggle('speaking', state === 'talking');
 
     document.querySelectorAll('[data-state]').forEach(b =>
       b.classList.toggle('active', b.dataset.state === state));
@@ -711,12 +923,12 @@ export class App {
   setCaption(text) {
     const el = this._captionEl;
     if (!el) return;
-    el.classList.add('fade-out');
+    el.style.opacity = '0';
     clearTimeout(this._captionTimer);
     this._captionTimer = setTimeout(() => {
       el.textContent = text;
-      el.classList.remove('fade-out');
-    }, 220);
+      el.style.opacity = '1';
+    }, 160);
   }
 
   setUserCaption(text) {
@@ -736,85 +948,45 @@ export class App {
   _bindEvents() {
     this._talkBtn.addEventListener('click', () => this._onTalkPress?.());
 
-    // Scenario chips
-    document.querySelectorAll('.chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        document.querySelectorAll('.chip').forEach(c => c.classList.remove('chip-active'));
-        chip.classList.add('chip-active');
-        setTimeout(() => chip.classList.remove('chip-active'), 1200);
-        this._onChipClick?.(chip.dataset.prompt);
+    // Symmetrical Action Cards (Left & Right Wings)
+    document.querySelectorAll('.action-wing-card').forEach(card => {
+      card.addEventListener('click', () => {
+        card.style.transform = 'translateY(1px) scale(0.97)';
+        setTimeout(() => { card.style.transform = ''; }, 200);
+        this._onChipClick?.(card.dataset.prompt);
       });
     });
 
-    // Debug panel toggle
+    // Menu Drawer Toggle
+    const peekBtn  = document.getElementById('menu-board-btn');
+    const closeBtn = document.getElementById('drawer-close-btn');
+    peekBtn?.addEventListener('click', () => this._menuDrawer.classList.toggle('open'));
+    closeBtn?.addEventListener('click', () => this._menuDrawer.classList.remove('open'));
+
+    // Studio Debug Panel Toggle (Press 'D' or 'ESC')
     document.addEventListener('keydown', e => {
-      if (e.key === 'd' || e.key === 'D') this._debugPanel.classList.toggle('open');
+      if (e.key === 'd' || e.key === 'D') {
+        this._debugPanel.classList.toggle('open');
+      } else if (e.key === 'Escape') {
+        this._debugPanel.classList.remove('open');
+        this._menuDrawer.classList.remove('open');
+      }
     });
 
-    // State buttons
-    document.querySelectorAll('[data-state]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        this.setState(btn.dataset.state);
-        this._Mo.setState(btn.dataset.state);
-        if (btn.dataset.state === 'talking') this._startTalkDemo();
-        else this._stopTalkDemo();
-      });
+    // Debug Triggers
+    document.getElementById('dbg-blink-btn')?.addEventListener('click', () => {
+      this._Mo.triggerBlink();
     });
-
-    // Expression buttons
-    document.querySelectorAll('[data-expr]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        this._Mo.setExpression(btn.dataset.expr);
-        document.querySelectorAll('[data-expr]').forEach(b =>
-          b.classList.toggle('active', b === btn));
-      });
-    });
-
-    // Laugh button
     document.getElementById('dbg-laugh-btn')?.addEventListener('click', () => {
       this._Mo.triggerLaugh();
     });
 
-    // Mouth slider
-    const slider = document.getElementById('mouth-slider');
-    const valEl  = document.getElementById('mouth-val');
-    slider?.addEventListener('input', () => {
-      const v = Number(slider.value) / 100;
-      if (valEl) valEl.textContent = v.toFixed(2);
-      this._Mo.setMouthOpen(v);
+    // Debug State triggers
+    document.querySelectorAll('[data-state]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.setState(btn.dataset.state);
+        this._Mo.setState(btn.dataset.state);
+      });
     });
-
-    // Caption buttons
-    document.querySelectorAll('[data-caption]').forEach(btn => {
-      btn.addEventListener('click', () => this.setCaption(btn.dataset.caption));
-    });
-  }
-
-  // Demo talk animation for debug panel
-  _talkDemoRaf   = null;
-  _talkDemoPhase = 0;
-
-  _startTalkDemo() {
-    this._stopTalkDemo();
-    let last = performance.now();
-    const loop = (ts) => {
-      const dt = ts - last; last = ts;
-      this._talkDemoPhase += dt * 0.006;
-      const v = Math.abs(Math.sin(this._talkDemoPhase)) * 0.9;
-      this._Mo.setMouthOpen(v);
-      this._Mo.setSpeechCadence?.(v);
-      const sl = document.getElementById('mouth-slider');
-      const vl = document.getElementById('mouth-val');
-      if (sl) sl.value = String(Math.round(v * 100));
-      if (vl) vl.textContent = v.toFixed(2);
-      this._talkDemoRaf = requestAnimationFrame(loop);
-    };
-    this._talkDemoRaf = requestAnimationFrame(loop);
-  }
-
-  _stopTalkDemo() {
-    if (this._talkDemoRaf) { cancelAnimationFrame(this._talkDemoRaf); this._talkDemoRaf = null; }
-    this._Mo?.setMouthOpen(0);
-    this._Mo?.setSpeechCadence?.(0);
   }
 }
