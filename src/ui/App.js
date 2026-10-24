@@ -865,6 +865,78 @@ function injectStyles(colors) {
       100% { height: 16px; }
     }
 
+    /* ── Charismatic Billion-Dollar Tagline Badge Just Below Mo ── */
+    #mo-recharge-tagline {
+      position: relative;
+      z-index: 12;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      margin-top: 6px;
+      padding: 6.5px 20px;
+      border-radius: 99px;
+      background: linear-gradient(135deg, rgba(14, 40, 32, 0.92) 0%, rgba(8, 22, 17, 0.96) 100%);
+      border: 1px solid rgba(255, 120, 30, 0.48);
+      box-shadow: 0 4px 22px rgba(0, 0, 0, 0.5), 0 0 24px rgba(255, 106, 0, 0.22);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      cursor: default;
+      pointer-events: auto;
+      max-width: 92%;
+      text-align: center;
+      animation: tagline-entrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes tagline-entrance {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    #mo-recharge-tagline:hover {
+      border-color: rgba(255, 160, 68, 0.85);
+      box-shadow: 0 6px 28px rgba(0, 0, 0, 0.6), 0 0 35px rgba(255, 120, 30, 0.45);
+      transform: translateY(-1px);
+    }
+    .tagline-pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #72CC38;
+      box-shadow: 0 0 10px #72CC38, 0 0 18px rgba(114, 204, 56, 0.8);
+      flex-shrink: 0;
+      animation: dot-pulse 1.1s ease-in-out infinite alternate;
+    }
+    .tagline-brand {
+      font-family: var(--font-display);
+      font-size: clamp(12px, 1.25vw, 15px);
+      font-weight: 900;
+      letter-spacing: 0.4px;
+      color: #FFA044;
+      background: linear-gradient(135deg, #FFB066 0%, #FF7B1A 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 14px rgba(255, 120, 30, 0.4);
+      white-space: nowrap;
+    }
+    .tagline-sep {
+      color: rgba(255, 255, 255, 0.35);
+      font-size: 9px;
+      flex-shrink: 0;
+    }
+    .tagline-core {
+      font-size: clamp(11.5px, 1.2vw, 14.5px);
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      color: #F7F3E9;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
+      white-space: nowrap;
+    }
+    .tagline-flame {
+      font-size: 13px;
+      filter: drop-shadow(0 0 6px rgba(255, 106, 0, 0.65));
+      flex-shrink: 0;
+    }
+
     /* ── Bottom Section: Centered Sonic Reactor ("Tap to Talk") ── */
     #bottom-kiosk-bar {
       position: relative; z-index: 25;
@@ -1226,6 +1298,18 @@ function injectStyles(colors) {
         height: 22px;
       }
 
+      #mo-recharge-tagline {
+        margin-top: clamp(8px, 1.2vh, 16px);
+        padding: clamp(7px, 1vh, 11px) clamp(18px, 2.8vw, 30px);
+        max-width: 95%;
+      }
+      .tagline-brand {
+        font-size: clamp(13px, 1.8vw, 17px);
+      }
+      .tagline-core {
+        font-size: clamp(12px, 1.6vw, 16px);
+      }
+
       /* "TRY ASKING MO" Crave Action Grid (2x2 Full Touch Cards) */
       .action-wing {
         width: 100%;
@@ -1494,6 +1578,7 @@ function injectStyles(colors) {
         flex: 1;
         height: 100%;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         padding: 0;
@@ -1503,6 +1588,16 @@ function injectStyles(colors) {
         width: min(65vh, 520px);
         height: min(65vh, 520px);
         position: relative;
+      }
+      #mo-recharge-tagline {
+        margin-top: 3px;
+        padding: 4.5px 16px;
+      }
+      .tagline-brand {
+        font-size: clamp(11.5px, 1.1vw, 13.5px);
+      }
+      .tagline-core {
+        font-size: clamp(11px, 1.05vw, 13px);
       }
 
       /* Speech Bubble: Cleanly elevated above Mo's head with zero overlap */
@@ -1980,6 +2075,15 @@ function buildHTML(config) {
               <div class="stage-disc-inner"></div>
               <div class="stage-contact-shadow"></div>
             </div>
+          </div>
+
+          <!-- Charismatic Billion-Dollar Student Tagline Badge Just Below Mo -->
+          <div id="mo-recharge-tagline">
+            <span class="tagline-pulse-dot"></span>
+            <span class="tagline-brand">Welcome to Halalholic</span>
+            <span class="tagline-sep">•</span>
+            <span class="tagline-core">You're in the best place to recharge</span>
+            <span class="tagline-flame">🔥</span>
           </div>
         </main>
 
