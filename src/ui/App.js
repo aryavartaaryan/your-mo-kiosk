@@ -85,8 +85,26 @@ function injectStyles(colors) {
       height: 108%;
       object-fit: cover;
       object-position: center 28%;
-      filter: saturate(1.22) contrast(1.12) brightness(0.74);
-      animation: bg-cinematic-drift 32s ease-in-out infinite alternate;
+      filter: saturate(1.22) contrast(1.12) brightness(0.72);
+      transition: opacity 1.8s ease-in-out;
+    }
+    .kiosk-bg-photo.bg-campus {
+      opacity: 1;
+      animation: bg-cinematic-drift 32s ease-in-out infinite alternate, bg-fade-campus 26s ease-in-out infinite;
+    }
+    .kiosk-bg-photo.bg-food {
+      opacity: 0;
+      animation: bg-cinematic-drift 28s ease-in-out infinite alternate-reverse, bg-fade-food 26s ease-in-out infinite;
+    }
+    @keyframes bg-fade-campus {
+      0%, 42%   { opacity: 1; }
+      50%, 92%  { opacity: 0; }
+      100%      { opacity: 1; }
+    }
+    @keyframes bg-fade-food {
+      0%, 42%   { opacity: 0; }
+      50%, 92%  { opacity: 1; }
+      100%      { opacity: 0; }
     }
     @keyframes bg-cinematic-drift {
       0%   { transform: scale(1) translate(0, 0); }
@@ -454,6 +472,17 @@ function injectStyles(colors) {
       color: #72CC38;
       text-transform: uppercase;
     }
+    .ticker-perk {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #FFB055;
+      text-transform: uppercase;
+      background: rgba(255, 160, 68, 0.18);
+      border: 1px solid rgba(255, 160, 68, 0.5);
+      padding: 1.5px 7px;
+      border-radius: 99px;
+    }
 
     /* ── Main Stage Area: Side Wings + 3D Holographic Stage Pedestal ── */
     #kiosk-main-stage {
@@ -691,6 +720,19 @@ function injectStyles(colors) {
       filter: blur(4px);
       z-index: 2;
     }
+    #mo-stage-pedestal.talking .stage-disc-outer {
+      border-color: #FFA044;
+      box-shadow: 0 0 52px rgba(255, 120, 30, 0.85), inset 0 0 28px rgba(255, 140, 40, 0.55);
+    }
+    #mo-stage-pedestal.talking .stage-disc-inner {
+      border-color: #FFD080;
+      box-shadow: 0 0 38px rgba(255, 180, 68, 0.95), inset 0 0 22px rgba(255, 220, 120, 0.7);
+      animation: stage-voice-pulse 0.7s ease-in-out infinite alternate;
+    }
+    @keyframes stage-voice-pulse {
+      0%   { transform: scaleY(0.32) scale(0.97); opacity: 0.85; }
+      100% { transform: scaleY(0.32) scale(1.05); opacity: 1; }
+    }
 
     /* ── Dynamic Floating Speech Bubble Anchored to Mo ── */
     #mo-speech-bubble {
@@ -773,87 +815,6 @@ function injectStyles(colors) {
     @keyframes eq-pulse {
       0%   { height: 4px; }
       100% { height: 16px; }
-    }
-
-    /* ── Peripheral Campus Lifestyle & Food Vignettes (Landscape Only) ── */
-    #bg-student-vignettes {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 12;
-      overflow: hidden;
-    }
-
-    .bg-vignette-card {
-      position: absolute;
-      width: clamp(210px, 17vw, 255px);
-      height: clamp(135px, 12vw, 165px);
-      border-radius: 18px;
-      padding: 7px;
-      background: rgba(12, 28, 24, 0.90);
-      border: 1.5px solid rgba(255, 130, 50, 0.4);
-      backdrop-filter: blur(16px);
-      box-shadow: 0 16px 45px rgba(0,0,0,0.75), 0 0 28px rgba(255, 106, 0, 0.22);
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
-      opacity: 1.0;
-      pointer-events: auto;
-      cursor: pointer;
-    }
-    .bg-vignette-card:hover {
-      transform: translateY(-4px) scale(1.04) !important;
-      border-color: #FFA044;
-      box-shadow: 0 20px 55px rgba(0,0,0,0.85), 0 0 38px rgba(255, 106, 0, 0.48);
-    }
-    .bg-vignette-card.left-card {
-      bottom: 80px;
-      left: 32px;
-    }
-    .bg-vignette-card.right-card {
-      bottom: 80px;
-      right: 32px;
-    }
-
-    .vignette-img-wrap {
-      position: relative;
-      width: 100%;
-      height: 77%;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    .vignette-img-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: saturate(1.15) contrast(1.08);
-      transition: transform 0.4s ease;
-    }
-    .bg-vignette-card:hover .vignette-img-wrap img {
-      transform: scale(1.06);
-    }
-
-    .vignette-glass-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(6, 24, 20, 0.75) 100%);
-    }
-
-    .vignette-badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 8px 0;
-      font-size: 8.5px;
-      font-weight: 800;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      color: #FFA044;
-    }
-    .vignette-badge .badge-dot {
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: #FF6A00;
-      box-shadow: 0 0 6px #FF6A00;
-      animation: dot-pulse 1s infinite alternate;
     }
 
     /* ── Bottom Section: Centered Sonic Reactor ("Tap to Talk") ── */
@@ -1329,51 +1290,6 @@ function injectStyles(colors) {
         font-size: clamp(13px, 1.4vw, 15px);
         min-height: 20px;
       }
-
-      /* Attracting College Lifestyle & Halal Craving Portals (Syracuse Campus Energy) */
-      #bg-student-vignettes {
-        position: absolute;
-        inset: 0;
-        pointer-events: none;
-        z-index: 4;
-        overflow: hidden;
-      }
-      .bg-vignette-card {
-        display: block !important;
-        position: absolute;
-        width: clamp(180px, 22vw, 240px);
-        height: clamp(118px, 14.5vw, 160px);
-        border-radius: 20px;
-        padding: 7px;
-        background: rgba(10, 26, 22, 0.88);
-        border: 1.5px solid rgba(255, 130, 50, 0.45);
-        backdrop-filter: blur(18px);
-        box-shadow: 0 16px 48px rgba(0,0,0,0.78), 0 0 32px rgba(255, 106, 0, 0.25);
-        opacity: 0.92;
-        pointer-events: auto;
-        cursor: pointer;
-        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
-      }
-      .bg-vignette-card:hover {
-        transform: translateY(-4px) scale(1.05) !important;
-        border-color: #FFA044;
-        box-shadow: 0 22px 60px rgba(0,0,0,0.85), 0 0 44px rgba(255, 106, 0, 0.5);
-        opacity: 1;
-      }
-      .bg-vignette-card.left-card {
-        top: clamp(130px, 14vh, 200px);
-        left: clamp(20px, 3.5vw, 44px);
-        bottom: auto;
-      }
-      .bg-vignette-card.right-card {
-        top: clamp(130px, 14vh, 200px);
-        right: clamp(20px, 3.5vw, 44px);
-        bottom: auto;
-      }
-      .bg-vignette-card .vignette-badge {
-        font-size: clamp(8.5px, 1vw, 10.5px);
-        padding: 5px 6px 0;
-      }
     }
 
     /* ── Slide-Out Crave Menu Board Drawer ── */
@@ -1602,40 +1518,16 @@ function buildHTML(config) {
 
   return /* html */`
     <div id="app">
-      <!-- Full-Screen Cinematic Campus Atmosphere (College Student Life & Halal Dining) -->
+      <!-- Full-Screen Cinematic Campus Atmosphere (Dual Cross-Fade: Campus Life & Gourmet Sizzle) -->
       <div id="kiosk-cinematic-bg">
-        <img class="kiosk-bg-photo" src="/assets/backgrounds/college_students_hangout.jpg" alt="Syracuse Campus Dining Vibe" />
+        <img class="kiosk-bg-photo bg-campus" src="/assets/backgrounds/college_students_hangout.jpg" alt="Syracuse Campus Dining Vibe" />
+        <img class="kiosk-bg-photo bg-food" src="/assets/backgrounds/halal_crave_platter.jpg" alt="Sizzling Halal Crave Platter" />
         <div class="kiosk-bg-glass-overlay"></div>
         <div class="kiosk-bg-vignette"></div>
       </div>
 
       <!-- Cyber-Varsity Campus Stage Grid Matrix -->
       <div id="bg-campus-grid"></div>
-
-      <!-- Peripheral Campus Lifestyle & Food Vignettes -->
-      <div id="bg-student-vignettes">
-        <div class="bg-vignette-card left-card" data-prompt="What's the best late-night meal for Syracuse students?">
-          <div class="vignette-img-wrap">
-            <img src="/assets/backgrounds/college_students_hangout.jpg" alt="Syracuse Students Hangout" />
-            <div class="vignette-glass-overlay"></div>
-          </div>
-          <div class="vignette-badge">
-            <span class="badge-dot"></span>
-            <span>CAMPUS NIGHTS • SYRACUSE 'CUSE</span>
-          </div>
-        </div>
-
-        <div class="bg-vignette-card right-card" data-prompt="Tell me about the signature Halalholic rice platter!">
-          <div class="vignette-img-wrap">
-            <img src="/assets/backgrounds/halal_crave_platter.jpg" alt="Loaded Halal Crave Platter" />
-            <div class="vignette-glass-overlay"></div>
-          </div>
-          <div class="vignette-badge">
-            <span class="badge-dot"></span>
-            <span>SIZZLING PLATTERS • CRAVE 24/7</span>
-          </div>
-        </div>
-      </div>
 
       <div id="bg-spotlight"></div>
       ${embers}
@@ -1688,6 +1580,8 @@ function buildHTML(config) {
           <span class="ticker-tag">⚡ 2-MIN SPEED RUSH</span>
           <span class="ticker-sep">•</span>
           <span class="ticker-tag">🎓 100% FRESH ZABIHA</span>
+          <span class="ticker-sep">•</span>
+          <span class="ticker-perk">⭐ FREE SAUCE W/ STUDENT ID</span>
         </div>
       </div>
 
@@ -1706,11 +1600,11 @@ function buildHTML(config) {
             </div>
             <div class="chip-info-wrap">
               <div class="chip-badge-row">
-                <span class="chip-badge">🔥 EXTRA LOADED</span>
+                <span class="chip-badge">🔥 #1 CAMPUS HIT</span>
                 <span class="chip-price-tag">$9.99</span>
               </div>
               <span class="chip-title">Finals Fuel Platter</span>
-              <span class="chip-sub">Heavy Rice & Double Meat</span>
+              <span class="chip-sub">Heavy Rice & Double Meat • 2 Mins</span>
             </div>
           </button>
 
@@ -1720,7 +1614,7 @@ function buildHTML(config) {
             </div>
             <div class="chip-info-wrap">
               <div class="chip-badge-row">
-                <span class="chip-badge">⭐ MO'S PICK</span>
+                <span class="chip-badge">⭐ MO'S SPECIALTY</span>
                 <span class="chip-price-tag">$8.99</span>
               </div>
               <span class="chip-title">Crispy Sauced Wings</span>
@@ -1769,11 +1663,11 @@ function buildHTML(config) {
             </div>
             <div class="chip-info-wrap">
               <div class="chip-badge-row">
-                <span class="chip-badge">🍗 FEEDS 3-4</span>
+                <span class="chip-badge">🍗 SQUAD FEAST (3-4)</span>
                 <span class="chip-price-tag">$15.99</span>
               </div>
               <span class="chip-title">Holic Squad Bucket</span>
-              <span class="chip-sub">5-in-1 Feast & Waffle Fries</span>
+              <span class="chip-sub">5-in-1 Feast & Waffle Fries • Share</span>
             </div>
           </button>
 
@@ -1783,11 +1677,11 @@ function buildHTML(config) {
             </div>
             <div class="chip-info-wrap">
               <div class="chip-badge-row">
-                <span class="chip-badge">⚡ 3-MIN RUSH</span>
+                <span class="chip-badge">⚡ 2-MIN SPEED RUSH</span>
                 <span class="chip-price-tag">$7.99</span>
               </div>
               <span class="chip-title">Speed Gyro Rush</span>
-              <span class="chip-sub">Toasted Flatbread On-the-Go</span>
+              <span class="chip-sub">Toasted Flatbread On-the-Go • Fast</span>
             </div>
           </button>
         </aside>
@@ -2018,6 +1912,7 @@ export class App {
     }
 
     this._speechBubble?.classList.toggle('speaking', state === 'talking');
+    document.getElementById('mo-stage-pedestal')?.classList.toggle('talking', state === 'talking');
 
     document.querySelectorAll('[data-state]').forEach(b =>
       b.classList.toggle('active', b.dataset.state === state));
@@ -2055,15 +1950,6 @@ export class App {
     document.querySelectorAll('.action-wing-card').forEach(card => {
       card.addEventListener('click', () => {
         card.style.transform = 'translateY(1px) scale(0.96)';
-        setTimeout(() => { card.style.transform = ''; }, 200);
-        this._onChipClick?.(card.dataset.prompt);
-      });
-    });
-
-    // Peripheral Lifestyle Vignettes (Interactive Voice Triggers)
-    document.querySelectorAll('.bg-vignette-card[data-prompt]').forEach(card => {
-      card.addEventListener('click', () => {
-        card.style.transform = 'scale(0.97)';
         setTimeout(() => { card.style.transform = ''; }, 200);
         this._onChipClick?.(card.dataset.prompt);
       });
