@@ -41,7 +41,40 @@ let _session   = null;
 let _isActive  = false;
 let _isTalking = false;
 
-// ── 3. Idle session timeout ───────────────────────────────────────────────────
+// ── 3. Natural variation helpers ──────────────────────────────────────────────
+// Mo never says the same thing twice — these pools are rotated to keep
+// every response feeling spontaneous and human, not scripted.
+const GREETING_PROMPTS = [
+  "Greet the customer in your natural Mo style — short, punchy, one sentence.",
+  "New customer just showed up. Give them your opener.",
+  "Someone stepped up to the kiosk. Welcome them in Mo's signature style.",
+  "They're here and they look hungry. Be Mo.",
+  "Welcome them the way only Mo can — one line, big energy.",
+];
+const LISTENING_CAPTIONS = [
+  "Go ahead, habibi…",
+  "I'm listening.",
+  "Talk to me.",
+  "What's the move?",
+  "Say the word.",
+  "Yeah, go for it.",
+  "What are you feeling?",
+  "Habibi, I'm all ears.",
+];
+let _greetingIdx = Math.floor(Math.random() * GREETING_PROMPTS.length);
+let _captionIdx  = 0;
+function nextGreeting() {
+  const msg = GREETING_PROMPTS[_greetingIdx % GREETING_PROMPTS.length];
+  _greetingIdx++;
+  return msg;
+}
+function nextListeningCaption() {
+  const msg = LISTENING_CAPTIONS[_captionIdx % LISTENING_CAPTIONS.length];
+  _captionIdx++;
+  return msg;
+}
+
+
 let _idleTimer     = null;
 let _idleWarnTimer = null;
 
@@ -151,9 +184,8 @@ async function startVoiceSession(initialPrompt = null) {
             }
           }, 1800);
 
-          _session.sendTextMessage(
-            "A student just tapped to talk at the Syracuse kiosk. Greet them out loud in your signature Mo style with a short, punchy 1-sentence welcome!"
-          );
+          // Natural varied greeting — never the same mechanical prompt twice
+          _session.sendTextMessage(nextGreeting());
         }
       } catch (err) {
         handleError(err, 'mic');
@@ -180,10 +212,10 @@ async function startVoiceSession(initialPrompt = null) {
       if (lower.includes('personality trait') || lower.includes('respect') || lower.includes('iconic')) {
         Mo.setExpression('confident');
         Mo.setPose('arms_crossed');
-      } else if (lower.includes('holicbucket') || lower.includes('squad') || lower.includes('group project')) {
+      } else if (lower.includes('holicbucket') || lower.includes('squad') || lower.includes('group project') || lower.includes('sharing is caring')) {
         Mo.setExpression('excited');
         Mo.setPose('dancing');
-      } else if (lower.includes('gyro') || lower.includes('running late') || lower.includes('class')) {
+      } else if (lower.includes('gyro') || lower.includes('running late') || lower.includes('class') || lower.includes('rush')) {
         Mo.setExpression('confident');
         Mo.setPose('pointing');
       } else if (lower.includes('platter') || lower.includes('extra holic') || lower.includes('earned it')) {
@@ -193,7 +225,7 @@ async function startVoiceSession(initialPrompt = null) {
         Mo.setExpression('laughing');
         Mo.setPose('dancing');
         Mo.triggerLaugh();
-      } else if (lower.includes('haha') || lower.includes('sharing is caring')) {
+      } else if (lower.includes('haha') || lower.includes('bold move') || lower.includes('say less')) {
         Mo.triggerLaugh();
       }
     },
@@ -221,13 +253,16 @@ async function startVoiceSession(initialPrompt = null) {
 
     // ── Turn Complete: Smooth return to listening ─────────────────────────
     onTurnComplete: () => {
+      // Capture the next varied caption before callbacks fire
+      const listeningCaption = nextListeningCaption();
+
       // Listen for exact audio buffer completion from the audio hardware
       setOnPlaybackEnd(() => {
         if (!_isActive) return;
         _isTalking = false;
         stopLipSync();
         goState('listening');
-        app.setCaption('What else can I get you, habibi?');
+        app.setCaption(listeningCaption);
         resetIdleTimer();
       });
 
@@ -238,7 +273,7 @@ async function startVoiceSession(initialPrompt = null) {
           if (!_isActive || _isTalking) return;
           stopLipSync();
           goState('listening');
-          app.setCaption('What else can I get you, habibi?');
+          app.setCaption(listeningCaption);
           resetIdleTimer();
         }, waitMs);
       }
