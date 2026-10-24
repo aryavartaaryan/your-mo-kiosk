@@ -1188,9 +1188,9 @@ function injectStyles(colors) {
     }
     .horizon-sub {
       font-family: var(--font-display);
-      font-size: clamp(10.5px, 1.5vw, 14px);
+      font-size: clamp(8.5px, 1.2vw, 13px);
       font-weight: 800;
-      letter-spacing: clamp(1.2px, 0.2vw, 2.2px);
+      letter-spacing: clamp(0.7px, 0.14vw, 1.6px);
       text-transform: uppercase;
       line-height: 1;
       color: #FFC085;
@@ -1204,7 +1204,7 @@ function injectStyles(colors) {
       filter: blur(1.5px);
     }
 
-    /* ── Bottom Section: Centered Sonic Reactor ("Tap to Talk") ── */
+    /* ── Bottom Section: Centered Ultra-Luxury Acoustic Soundshape Core ("Tap to Speak") ── */
     #bottom-kiosk-bar {
       position: relative; z-index: 25;
       display: flex;
@@ -1235,7 +1235,7 @@ function injectStyles(colors) {
     }
     #user-sub-caption.visible { opacity: 1; }
 
-    /* ── Centered Sonic Reactor Orb Container ── */
+    /* ── Centered Acoustic Soundshape Container ── */
     #talk-orb-container {
       display: flex;
       flex-direction: column;
@@ -1246,70 +1246,77 @@ function injectStyles(colors) {
       height: auto;
     }
 
-    /* Dedicated Touch Plate containing Button & Concentric Rings */
+    /* Precision Soundshape Stage containing Button & Multi-Layer Sonic Rings */
     .orb-plate {
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 88px;
-      height: 88px;
+      width: 96px;
+      height: 96px;
     }
 
-    /* Concentric Dynamic Acoustic Pulse Rings (Anchored to .orb-plate Center) */
+    /* Concentric Acoustic Harmonic Soundwave Rings */
     .orb-pulse-ring {
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       border-radius: 50%;
-      border: 1.5px solid rgba(255, 130, 40, 0.45);
       pointer-events: none;
       z-index: 1;
     }
     .orb-pulse-ring.ring-1 {
-      width: 110px; height: 110px;
-      animation: ring-expand 3s ease-out infinite;
+      width: 120px; height: 120px;
+      border: 1.5px solid rgba(255, 170, 70, 0.45);
+      box-shadow: 0 0 16px rgba(255, 140, 50, 0.3);
+      animation: soundwave-ripple 2.8s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
     }
     .orb-pulse-ring.ring-2 {
-      width: 132px; height: 132px;
-      animation: ring-expand 3s ease-out infinite 1s;
+      width: 146px; height: 146px;
+      border: 1px dashed rgba(255, 140, 50, 0.35);
+      box-shadow: 0 0 24px rgba(255, 106, 0, 0.22);
+      animation: soundwave-ripple 2.8s cubic-bezier(0.2, 0.8, 0.2, 1) infinite 0.9s;
     }
     .orb-pulse-ring.ring-3 {
-      width: 154px; height: 154px;
-      animation: ring-expand 3s ease-out infinite 2s;
+      width: 174px; height: 174px;
+      border: 1px solid rgba(255, 110, 20, 0.22);
+      box-shadow: 0 0 32px rgba(255, 90, 0, 0.15);
+      animation: soundwave-ripple 2.8s cubic-bezier(0.2, 0.8, 0.2, 1) infinite 1.8s;
     }
-    @keyframes ring-expand {
-      0%   { transform: translate(-50%, -50%) scale(0.75); opacity: 0.75; }
-      100% { transform: translate(-50%, -50%) scale(1.25); opacity: 0; }
+    @keyframes soundwave-ripple {
+      0%   { transform: translate(-50%, -50%) scale(0.85); opacity: 0.85; filter: drop-shadow(0 0 6px rgba(255,140,50,0.6)); }
+      50%  { opacity: 0.45; }
+      100% { transform: translate(-50%, -50%) scale(1.30); opacity: 0; filter: drop-shadow(0 0 0px transparent); }
     }
 
-    /* Concentric Rotating Holographic Neon Cyber-Halo */
+    /* Concentric Rotating Holographic Precision Acoustic Bezel */
     .orb-cyber-halo {
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      width: 104px; height: 104px;
+      width: 110px; height: 110px;
       border-radius: 50%;
-      background: conic-gradient(from 0deg, #FF6A00, #FFA855, transparent 55%, #FF8A30, #FF6A00);
-      mask: radial-gradient(circle, transparent 44px, black 45px);
-      -webkit-mask: radial-gradient(circle, transparent 44px, black 45px);
+      background: conic-gradient(from 0deg, #FFA844 0%, #FF6A00 25%, transparent 45%, #FFB566 65%, #FF4500 85%, #FFA844 100%);
+      mask: radial-gradient(circle, transparent 49px, black 50px);
+      -webkit-mask: radial-gradient(circle, transparent 49px, black 50px);
       pointer-events: none;
       z-index: 1;
-      animation: cyber-spin 4s linear infinite;
-      opacity: 0.85;
-      filter: drop-shadow(0 0 10px rgba(255, 106, 0, 0.65));
+      animation: cyber-spin 6s linear infinite;
+      opacity: 0.92;
+      filter: drop-shadow(0 0 12px rgba(255, 120, 30, 0.7));
     }
     @keyframes cyber-spin {
       from { transform: translate(-50%, -50%) rotate(0deg); }
       to   { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
+    /* Ultra-Luxury Optical Glass Soundshape Core */
     #talk-cta-btn {
       position: relative; z-index: 2;
-      width: 88px; height: 88px;
+      width: 96px; height: 96px;
       border-radius: 50%;
-      border: 3.5px solid rgba(255, 220, 140, 0.88);
-      background: radial-gradient(circle at 35% 25%, #FFC888 0%, #FF8000 40%, #C23800 78%, #521200 100%);
+      border: 3px solid rgba(255, 235, 190, 0.95);
+      background: radial-gradient(circle at 35% 25%, #FFF6EC 0%, #FFA240 22%, #FF6000 50%, #B82C00 78%, #360D00 100%);
       color: white;
       cursor: pointer;
       outline: none;
@@ -1319,73 +1326,123 @@ function injectStyles(colors) {
       justify-content: center;
       gap: 2px;
       box-shadow:
-        0 14px 44px rgba(255, 106, 0, 0.85),
-        0 4px 14px rgba(0,0,0,0.6),
+        0 18px 52px rgba(255, 106, 0, 0.88),
+        0 4px 16px rgba(0, 0, 0, 0.8),
         inset 0 3px 6px rgba(255, 255, 255, 0.95),
-        inset 0 -6px 14px rgba(0, 0, 0, 0.7),
-        0 0 0 4px rgba(255, 120, 40, 0.24);
-      transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+        inset 0 -8px 20px rgba(0, 0, 0, 0.85),
+        0 0 0 5px rgba(255, 140, 50, 0.26);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
       user-select: none;
+      overflow: hidden;
     }
     #talk-cta-btn:hover {
-      transform: scale(1.08) translateY(-2px);
-      border-color: #FFF;
+      transform: scale(1.08) translateY(-3px);
+      border-color: #FFFFFF;
       box-shadow:
-        0 20px 58px rgba(255, 106, 0, 1),
-        0 6px 18px rgba(0,0,0,0.7),
-        inset 0 4px 8px rgba(255, 255, 255, 1),
-        inset 0 -6px 14px rgba(0, 0, 0, 0.7),
-        0 0 0 8px rgba(255, 120, 40, 0.38);
+        0 24px 64px rgba(255, 106, 0, 1),
+        0 6px 20px rgba(0, 0, 0, 0.85),
+        inset 0 4px 8px #FFFFFF,
+        inset 0 -8px 20px rgba(0, 0, 0, 0.85),
+        0 0 0 8px rgba(255, 150, 50, 0.38);
     }
     #talk-cta-btn:active {
       transform: scale(0.96) translateY(1px);
     }
 
-    #talk-cta-btn svg {
-      width: 32px; height: 32px;
-      fill: #FFF;
-      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.5)) drop-shadow(0 0 8px rgba(255,255,255,0.6));
-      transition: transform 0.2s ease;
-    }
-    #talk-cta-btn:hover svg {
-      transform: scale(1.10);
+    /* Lens Top Caustic Glare */
+    .soundshape-lens-glare {
+      position: absolute;
+      top: 5px;
+      left: 14px;
+      right: 14px;
+      height: 28px;
+      border-radius: 50% 50% 45% 45% / 70% 70% 30% 30%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.05) 100%);
+      pointer-events: none;
+      z-index: 3;
     }
 
-    /* Mini Internal EQ Wave inside Orb */
-    .orb-internal-eq {
+    /* Precision Soundwave & Studio Capsule SVG */
+    .soundshape-mic-wrap {
+      position: relative;
+      z-index: 4;
       display: flex;
       align-items: center;
-      gap: 2.5px;
-      height: 8px;
-      margin-top: -1px;
+      justify-content: center;
+      margin-top: 3px;
     }
-    .orb-eq-bar {
-      width: 2.5px; height: 4px;
-      border-radius: 99px;
-      background: rgba(255, 255, 255, 0.9);
-      animation: orb-eq-bounce 0.8s ease-in-out infinite alternate;
+    .soundshape-mic-svg {
+      width: 38px;
+      height: 38px;
+      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+      transition: transform 0.25s ease;
     }
-    .orb-eq-bar:nth-child(1) { animation-delay: 0.1s; }
-    .orb-eq-bar:nth-child(2) { animation-delay: 0.3s; }
-    .orb-eq-bar:nth-child(3) { animation-delay: 0.2s; }
-    @keyframes orb-eq-bounce {
-      0%   { height: 3px; }
-      100% { height: 8px; }
+    #talk-cta-btn:hover .soundshape-mic-svg {
+      transform: scale(1.12);
+    }
+    .sonic-wave {
+      transform-origin: center;
+      animation: sonic-wave-ping 2s ease-in-out infinite alternate;
+    }
+    .wave-l1, .wave-r1 {
+      animation-delay: 0.2s;
+    }
+    .wave-l2, .wave-r2 {
+      animation-delay: 0.5s;
+    }
+    @keyframes sonic-wave-ping {
+      0%   { opacity: 0.45; transform: scale(0.94); }
+      100% { opacity: 1.0; transform: scale(1.08); filter: drop-shadow(0 0 4px #FFFFFF); }
     }
 
-    /* Listening state: transitions to glowing red/pulse */
-    #talk-cta-btn.listening {
-      background: radial-gradient(circle at 35% 25%, #FFAAAA 0%, #E62020 50%, #990000 85%, #4A0000 100%);
-      border-color: rgba(255, 255, 255, 0.95);
-      box-shadow:
-        0 0 58px rgba(230, 25, 25, 1),
-        0 0 0 8px rgba(230, 25, 25, 0.4),
-        inset 0 3px 6px rgba(255, 255, 255, 0.9);
-      animation: orb-speaking-pulse 1.2s ease-in-out infinite;
+    /* Multi-Channel Dynamic Acoustic Frequency Spectrum */
+    .soundshape-eq-spectrum {
+      position: relative;
+      z-index: 4;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 3px;
+      height: 10px;
+      margin-top: 2px;
     }
-    @keyframes orb-speaking-pulse {
-      0%, 100% { transform: scale(1); box-shadow: 0 0 42px rgba(230, 25, 25, 0.85), 0 0 0 6px rgba(230, 25, 25, 0.35); }
-      50%       { transform: scale(1.07); box-shadow: 0 0 75px rgba(230, 25, 25, 1), 0 0 0 10px rgba(230, 25, 25, 0.5); }
+    .eq-freq {
+      width: 3px;
+      border-radius: 99px;
+      background: linear-gradient(180deg, #FFFFFF 0%, #FFD4A3 100%);
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.85);
+      animation: eq-spectrum-bounce 0.85s ease-in-out infinite alternate;
+    }
+    .eq-freq.f-1 { height: 4px; animation-delay: 0.1s; }
+    .eq-freq.f-2 { height: 7px; animation-delay: 0.35s; }
+    .eq-freq.f-3 { height: 9px; animation-delay: 0.2s; }
+    .eq-freq.f-4 { height: 6px; animation-delay: 0.45s; }
+    .eq-freq.f-5 { height: 4px; animation-delay: 0.15s; }
+    @keyframes eq-spectrum-bounce {
+      0%   { height: 3px; opacity: 0.7; }
+      100% { height: 10px; opacity: 1; transform: scaleY(1.1); }
+    }
+
+    /* Listening State: Radiant Crimson Acoustic Bloom */
+    #talk-cta-btn.listening {
+      background: radial-gradient(circle at 35% 25%, #FFF0F0 0%, #FF3D3D 24%, #D40000 55%, #7A0000 85%, #2B0000 100%);
+      border-color: #FFFFFF;
+      box-shadow:
+        0 0 65px rgba(255, 25, 25, 1),
+        0 0 0 8px rgba(255, 45, 45, 0.45),
+        inset 0 3px 6px #FFFFFF,
+        inset 0 -8px 20px rgba(0, 0, 0, 0.85);
+      animation: soundshape-listening-pulse 1.2s ease-in-out infinite;
+    }
+    @keyframes soundshape-listening-pulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 45px rgba(255, 25, 25, 0.85), 0 0 0 6px rgba(255, 45, 45, 0.35);
+      }
+      50% {
+        transform: scale(1.07);
+        box-shadow: 0 0 80px rgba(255, 25, 25, 1), 0 0 0 11px rgba(255, 45, 45, 0.55);
+      }
     }
 
     #talk-cta-label-group {
@@ -1595,7 +1652,7 @@ function injectStyles(colors) {
       }
 
       #floor-horizon-signature {
-        width: min(94vw, 540px);
+        width: min(96vw, 680px);
         margin: 6px auto 4px;
       }
       .horizon-lightbar-glass {
@@ -1603,12 +1660,12 @@ function injectStyles(colors) {
         gap: 8px;
       }
       .horizon-lead {
-        font-size: clamp(11.5px, 2vw, 15px);
-        letter-spacing: clamp(1.4px, 0.25vw, 2.4px);
+        font-size: clamp(10.5px, 1.8vw, 14.5px);
+        letter-spacing: clamp(1px, 0.2vw, 2px);
       }
       .horizon-sub {
-        font-size: clamp(9.5px, 1.6vw, 12.5px);
-        letter-spacing: clamp(1px, 0.15vw, 1.8px);
+        font-size: clamp(8px, 1.3vw, 11px);
+        letter-spacing: clamp(0.5px, 0.1vw, 1px);
       }
 
       /* "TRY ASKING MO" Crave Action Grid (2x2 Full Touch Cards) */
@@ -1919,17 +1976,20 @@ function injectStyles(colors) {
         font-size: 10.5px;
       }
       #floor-horizon-signature {
-        width: min(80vw, 620px);
+        width: min(85vw, 720px);
         margin: 4px auto 3px;
       }
       .horizon-lightbar-glass {
-        padding: 5px 16px;
+        padding: 5px 18px;
+        gap: 8px;
       }
       .horizon-lead {
-        font-size: clamp(11.5px, 1.4vw, 15px);
+        font-size: clamp(11px, 1.4vw, 15px);
+        letter-spacing: clamp(1.2px, 0.2vw, 2.2px);
       }
       .horizon-sub {
-        font-size: clamp(10px, 1.2vw, 13px);
+        font-size: clamp(8.5px, 1vw, 12px);
+        letter-spacing: clamp(0.6px, 0.12vw, 1.2px);
       }
 
       /* Speech Bubble: Cleanly elevated above Mo's head with zero overlap */
@@ -2692,13 +2752,13 @@ function buildHTML(config) {
           </div>
 
           <!-- Ultra-Premium Architectural Floor Horizon Lightbar Signature (Option 2) -->
-          <div id="floor-horizon-signature" aria-label="Welcome to Halalholic - The Best Place to Recharge">
+          <div id="floor-horizon-signature" aria-label="Welcome to Halalholic - The Best Place to Recharge with Halal Meat Proteins">
             <div class="horizon-lightbar-glow"></div>
             <div class="horizon-lightbar-glass">
               <span class="horizon-spark left">✦</span>
               <span class="horizon-lead">WELCOME TO HALALHOLIC</span>
               <span class="horizon-divider">•</span>
-              <span class="horizon-sub">THE BEST PLACE TO RECHARGE</span>
+              <span class="horizon-sub">THE BEST PLACE TO RECHARGE WITH HALAL MEAT PROTEINS</span>
               <span class="horizon-spark right">✦</span>
             </div>
             <div class="horizon-floor-reflection"></div>
@@ -2756,11 +2816,11 @@ function buildHTML(config) {
         </aside>
       </section>
 
-      <!-- Bottom Console: Centered Sonic Reactor Orb ("Tap to Talk") -->
+      <!-- Bottom Console: Centered Ultra-Luxury Acoustic Soundshape Core ("Tap to Speak") -->
       <div id="bottom-kiosk-bar">
         <div id="user-sub-caption"></div>
 
-        <!-- Perfectly Centered Sonic Reactor -->
+        <!-- Perfectly Centered Acoustic Soundshape Core -->
         <div id="talk-orb-container">
           <div class="orb-plate">
             <div class="orb-pulse-ring ring-1"></div>
@@ -2768,21 +2828,41 @@ function buildHTML(config) {
             <div class="orb-pulse-ring ring-3"></div>
             <div class="orb-cyber-halo"></div>
 
-            <button id="talk-cta-btn" aria-label="Tap to talk with Mo">
-              <svg viewBox="0 0 24 24">
-                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
-                <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
-              </svg>
-              <div class="orb-internal-eq">
-                <div class="orb-eq-bar"></div>
-                <div class="orb-eq-bar"></div>
-                <div class="orb-eq-bar"></div>
+            <button id="talk-cta-btn" class="soundshape-btn" aria-label="Tap to speak with Mo">
+              <!-- Ultra-Luxury Frosted Optical Chamfer & Specular Sheen -->
+              <div class="soundshape-lens-glare"></div>
+
+              <!-- Modern Studio Capsule Microphone & Radiating Acoustic Waves -->
+              <div class="soundshape-mic-wrap">
+                <svg class="soundshape-mic-svg" viewBox="0 0 44 44" fill="none">
+                  <!-- Left Acoustic Soundwaves -->
+                  <path class="sonic-wave wave-l2" d="M8 13C5.5 16.5 4.5 20.2 4.5 24C4.5 27.8 5.5 31.5 8 35" stroke="rgba(255,255,255,0.75)" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 3"/>
+                  <path class="sonic-wave wave-l1" d="M13 16.5C11.5 18.8 11 21.3 11 24C11 26.7 11.5 29.2 13 31.5" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+                  
+                  <!-- Modern Studio Mic Capsule -->
+                  <rect x="18" y="10" width="8" height="15" rx="4" fill="#FFFFFF"/>
+                  <path d="M14 21.5C14 26.2 17.6 30 22 30C26.4 30 30 26.2 30 21.5" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+                  <path d="M22 30V36M17 36H27" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+
+                  <!-- Right Acoustic Soundwaves -->
+                  <path class="sonic-wave wave-r1" d="M31 16.5C32.5 18.8 33 21.3 33 24C33 26.7 32.5 29.2 31 31.5" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+                  <path class="sonic-wave wave-r2" d="M36 13C38.5 16.5 39.5 20.2 39.5 24C39.5 27.8 38.5 31.5 36 35" stroke="rgba(255,255,255,0.75)" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 3"/>
+                </svg>
+              </div>
+
+              <!-- Multi-Channel Dynamic Acoustic Frequency Spectrum -->
+              <div class="soundshape-eq-spectrum">
+                <span class="eq-freq f-1"></span>
+                <span class="eq-freq f-2"></span>
+                <span class="eq-freq f-3"></span>
+                <span class="eq-freq f-4"></span>
+                <span class="eq-freq f-5"></span>
               </div>
             </button>
           </div>
 
           <div id="talk-cta-label-group">
-            <span id="talk-cta-label">TAP TO TALK WITH MO</span>
+            <span id="talk-cta-label">TAP TO SPEAK WITH MO</span>
             <span id="talk-cta-sub">
               <span class="sub-live-dot"></span>
               SAY "YO MO!" OR TAP TO ORDER
@@ -3456,7 +3536,7 @@ export class App {
         this._talkLabelEl.textContent = state === 'listening' ? 'LISTENING TO YOU…' : 'MO IS SPEAKING';
         this._talkSubEl.innerHTML     = '<span class="sub-live-dot" style="background:#FF3B30;box-shadow:0 0 8px #FF3B30;"></span> TOUCH TO STOP';
       } else {
-        this._talkLabelEl.textContent = 'TAP TO TALK WITH MO';
+        this._talkLabelEl.textContent = 'TAP TO SPEAK WITH MO';
         this._talkSubEl.innerHTML     = '<span class="sub-live-dot"></span> SAY "YO MO!" OR TAP TO ORDER';
       }
     }
