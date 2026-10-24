@@ -1819,11 +1819,11 @@ function injectStyles(colors) {
 
       /* Compact, ultra-clean header */
       #header {
-        padding: 14px 32px 0;
+        padding: 10px 32px 0;
         margin-bottom: 2px;
       }
       #feedback-kiosk-btn {
-        padding: 6.5px 14px;
+        padding: 6px 14px;
         font-size: 10px;
         gap: 6px;
       }
@@ -1832,59 +1832,97 @@ function injectStyles(colors) {
         padding: 1.5px 6px;
       }
 
-      /* Streamline "Meet Mo" banner: reduced vertical footprint, sleek typography */
+      /* Streamlined Horizontal Command HUD: Side-by-side capsules eliminate vertical clutter */
       #kiosk-hero-banner {
-        padding: 4px 24px 0;
-        margin-top: 0;
+        display: grid;
+        grid-template-columns: auto auto;
+        grid-template-rows: auto auto;
+        align-items: center;
+        justify-content: center;
+        gap: 3px 14px;
+        padding: 2px 24px 0;
+        margin: 0 auto;
+        max-width: 1240px;
+        z-index: 20;
       }
       .hero-live-badge {
-        padding: 3px 12px;
-        margin-bottom: 4px;
+        grid-column: 1 / -1;
+        justify-self: center;
+        padding: 2px 10px;
+        margin-bottom: 0;
       }
       .hero-live-badge span {
-        font-size: 8.5px;
-        letter-spacing: 1.6px;
+        font-size: 8px;
+        letter-spacing: 1.4px;
       }
       .hero-title {
-        font-size: clamp(26px, 2.5vw, 36px);
+        grid-column: 1 / -1;
+        justify-self: center;
+        font-size: 22px;
         margin-bottom: 2px;
         line-height: 1;
       }
-      .mo-story-capsule {
-        padding: 4.5px 16px;
-        gap: 9px;
-        margin-top: 2px;
+      #mo-story-capsule {
+        grid-column: 1 / 2;
+        justify-self: end;
+        padding: 4px 14px;
+        margin: 0;
+        max-width: 480px;
+        height: 28px;
       }
       .story-tag-pill {
-        padding: 2.5px 8px;
+        padding: 2px 7px;
       }
       .story-tag-text {
-        font-size: 8.5px;
-        letter-spacing: 1px;
+        font-size: 8px;
+        letter-spacing: 0.8px;
       }
       .mo-story-text {
-        font-size: clamp(11.5px, 1.1vw, 13px);
-        line-height: 1.3;
+        font-size: 11px;
+        line-height: 1.25;
+        white-space: nowrap;
+      }
+      #halal-purity-capsule {
+        grid-column: 2 / 3;
+        justify-self: start;
+        padding: 4px 14px;
+        margin: 0;
+        max-width: 500px;
+        height: 28px;
+      }
+      .purity-badge-pill {
+        padding: 2px 7px;
+      }
+      .purity-title {
+        font-size: 8px;
+        letter-spacing: 0.8px;
+      }
+      .purity-desc {
+        font-size: 11px;
+        line-height: 1.25;
+        white-space: nowrap;
       }
 
-      /* Sleek live ticker: elegant horizontal pill */
+      /* Sleek live ticker: elegant horizontal pill with ample breathing room */
       #kiosk-live-ticker {
         margin-top: 4px;
-        margin-bottom: 0;
+        margin-bottom: 2px;
+        z-index: 10;
       }
       .ticker-pill {
-        padding: 3.5px 16px;
+        padding: 3px 18px;
         gap: 8px;
+        background: rgba(8, 26, 20, 0.9);
       }
       .ticker-fire {
-        font-size: 11.5px;
+        font-size: 11px;
       }
       .ticker-text {
-        font-size: 9.5px;
-        letter-spacing: 1.1px;
+        font-size: 9px;
+        letter-spacing: 1px;
       }
       .ticker-tag, .ticker-perk {
-        font-size: 9px;
+        font-size: 8.5px;
       }
 
       /* Ambient Luxury Slide Indicator: Float gracefully at bottom-left corner */
@@ -1926,11 +1964,14 @@ function injectStyles(colors) {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        margin-top: 6px;
+        position: relative;
+        z-index: 20;
       }
 
       /* Side Wings: Wider, crisp, elegant spacing */
       .action-wing {
-        width: clamp(260px, 20vw, 310px);
+        width: clamp(250px, 18vw, 300px);
         gap: 12px;
         z-index: 15;
       }
@@ -1950,7 +1991,7 @@ function injectStyles(colors) {
         font-size: 10.5px;
       }
 
-      /* Central Stage: Mo enlarged by ~15-20% and 100% free of obstructions */
+      /* Central Stage: Mo enlarged by ~35-40% with 100% visible, completely uncovered speech bubble */
       #stage-area {
         flex: 1;
         height: 100%;
@@ -1962,22 +2003,34 @@ function injectStyles(colors) {
         position: relative;
       }
       #mo-stage-wrapper {
-        width: min(65vh, 520px);
-        height: min(65vh, 520px);
+        width: min(78vh, 660px);
+        height: min(78vh, 660px);
         position: relative;
+        margin-top: 14px;
+      }
+      #mo-container {
+        transform: scale(1.24);
+        transform-origin: 50% 86%;
+      }
+      #mo-stage-pedestal {
+        bottom: -4px;
+        width: 88%;
+        height: 52px;
       }
       #mo-stage-actions-row {
-        gap: 10px;
+        gap: 12px;
         margin-top: 4px;
         margin-bottom: 2px;
+        z-index: 25;
       }
       .stage-action-pill {
-        padding: 5px 14px;
-        font-size: 10.5px;
+        padding: 6px 16px;
+        font-size: 11px;
       }
       #floor-horizon-signature {
-        width: min(85vw, 720px);
-        margin: 4px auto 3px;
+        width: min(85vw, 700px);
+        margin: 6px auto 3px;
+        z-index: 25;
       }
       .horizon-lightbar-glass {
         padding: 5px 18px;
@@ -1992,41 +2045,52 @@ function injectStyles(colors) {
         letter-spacing: clamp(0.6px, 0.12vw, 1.2px);
       }
 
-      /* Speech Bubble: Cleanly elevated above Mo's head with zero overlap */
+      /* Speech Bubble: Cleanly elevated above Mo's head with ZERO overlap and 100% visibility */
       #mo-speech-bubble {
-        top: -32px;
-        padding: 8px 20px;
-        max-width: 460px;
-        border-radius: 20px;
-        z-index: 30;
+        top: -46px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 9px 24px;
+        max-width: 480px;
+        border-radius: 22px;
+        background: rgba(8, 26, 20, 0.95);
+        border: 1.5px solid rgba(255, 140, 50, 0.65);
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.8), 0 0 24px rgba(255, 120, 30, 0.3);
+        z-index: 40;
+        pointer-events: auto;
       }
       #speech-text {
-        font-size: 13.5px;
-        max-width: 390px;
+        font-size: 14px;
+        font-weight: 800;
+        max-width: 420px;
+        color: #FFFFFF;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
       }
 
       /* Bottom Bar: Sleek, compact console leaving generous headroom for Mo */
       #bottom-kiosk-bar {
-        padding: 0 24px 12px;
+        padding: 0 24px 8px;
         gap: 4px;
-        max-width: 520px;
+        max-width: 540px;
+        margin: 0 auto;
+        z-index: 25;
       }
       #talk-orb-container {
-        gap: 8px;
+        gap: 6px;
       }
       .orb-plate {
-        width: 80px;
-        height: 80px;
+        width: 88px;
+        height: 88px;
       }
       #talk-cta-btn svg {
-        width: 32px;
-        height: 32px;
+        width: 34px;
+        height: 34px;
       }
       #talk-cta-label-group {
         gap: 2px;
       }
       #talk-cta-label {
-        font-size: 12.5px;
+        font-size: 13px;
         letter-spacing: 2px;
       }
       #talk-cta-sub {
@@ -2040,41 +2104,52 @@ function injectStyles(colors) {
 
     @media (min-width: 901px) and (min-aspect-ratio: 1.05/1) and (max-height: 850px) {
       #header {
-        padding-top: 10px;
+        padding-top: 8px;
       }
       #kiosk-hero-banner {
-        padding-top: 2px;
+        padding-top: 1px;
+        gap: 2px 12px;
       }
       .hero-title {
-        font-size: 26px;
+        font-size: 20px;
       }
-      .mo-story-capsule {
-        padding: 3.5px 12px;
-        gap: 7px;
-      }
-      .story-tag-text {
-        font-size: 8px;
+      #mo-story-capsule {
+        padding: 3px 12px;
+        height: 26px;
       }
       .mo-story-text {
-        font-size: 11px;
+        font-size: 10px;
+      }
+      #halal-purity-capsule {
+        padding: 3px 12px;
+        height: 26px;
+      }
+      .purity-desc {
+        font-size: 10px;
       }
       #mo-stage-wrapper {
-        width: min(58vh, 460px);
-        height: min(58vh, 460px);
+        width: min(74vh, 580px);
+        height: min(74vh, 580px);
+        margin-top: 8px;
+      }
+      #mo-container {
+        transform: scale(1.22);
+        transform-origin: 50% 86%;
       }
       #mo-speech-bubble {
-        top: -24px;
-        padding: 6px 16px;
+        top: -42px;
+        padding: 7px 18px;
+        z-index: 40;
       }
       #speech-text {
-        font-size: 12.5px;
+        font-size: 13px;
       }
       .orb-plate {
-        width: 74px;
-        height: 74px;
+        width: 80px;
+        height: 80px;
       }
       #bottom-kiosk-bar {
-        padding-bottom: 8px;
+        padding-bottom: 6px;
       }
     }
 
