@@ -45,12 +45,12 @@ let _isTalking = false;
 // Mo never says the same thing twice — these pools are rotated to keep
 // every response feeling spontaneous, comedic, and human, not scripted.
 const GREETING_PROMPTS = [
-  "Give a witty, funny 1-sentence welcome as Mo to a Syracuse student stepping up to the counter!",
-  "Someone just stepped up looking hungry. Drop a punchy, jokey Mo one-liner to break the ice!",
-  "New student at the kiosk! Hit them with a quick laugh and your signature Mo charm in 1 sentence!",
-  "A student just tapped to talk. Greet them like your favorite campus buddy with a short witty one-liner!",
-  "Welcome them in your legendary jokey Mo style — 1 short punchy line!",
-  "They're here and ready to feast. Give them a warm, hilarious Mo greeting in one sentence!",
+  "You're Mo, the fast-talking Syracuse classmate who acts like he runs Halalholic. Greet your fellow student with a punchy, witty 1-sentence one-liner!",
+  "A classmate just walked up to the counter looking exhausted from lectures. Break the ice with your signature smug, warm Mo humor in 1 sentence!",
+  "Give a fast, confident, funny classmate welcome as Mo to someone stepping up to order food in 1 short sentence!",
+  "A student just tapped to talk. Greet them like their favorite campus buddy and food icon with a quick laugh!",
+  "Someone's here looking hungry after classes. Hit them with your signature Mo charm in 1 punchy line!",
+  "Welcome your fellow Syracuse student to Halalholic in your fast-talking, hilarious Mo style — 1 punchy sentence!",
 ];
 const LISTENING_CAPTIONS = [
   "What's hitting today, habibi?",
