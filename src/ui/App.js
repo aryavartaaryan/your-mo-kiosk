@@ -433,55 +433,64 @@ function injectStyles(colors) {
       50%       { transform: scale(0.4); opacity: 0.25; }
     }
 
-    /* ── Compact "Meet Mo" Identity Pill (Center Jewel in Header) ── */
+    /* ── Bold & Catchy "Meet Mo" Executive Identity Jewel (Center in Header) ── */
     .mo-story-capsule {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 7px;
-      padding: 6px 16px;
+      gap: 10px;
+      padding: 8px 24px;
       border-radius: 99px;
-      background: rgba(12, 28, 24, 0.92);
-      border: 1.5px solid rgba(255, 140, 50, 0.45);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), 0 0 16px rgba(255, 120, 30, 0.16);
+      background: linear-gradient(135deg, rgba(14, 38, 30, 0.95) 0%, rgba(8, 22, 18, 0.98) 100%);
+      border: 2px solid rgba(255, 140, 50, 0.65);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 6px 26px rgba(0, 0, 0, 0.65), 0 0 24px rgba(255, 120, 30, 0.28), inset 0 1px 1px rgba(255, 255, 255, 0.35);
       transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
       cursor: pointer;
       pointer-events: auto;
       flex-shrink: 0;
     }
     .mo-story-capsule:hover {
-      transform: translateY(-1.5px);
-      background: rgba(16, 36, 30, 0.96);
-      border-color: rgba(255, 160, 60, 0.75);
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6), 0 0 24px rgba(255, 120, 30, 0.32);
+      transform: translateY(-2px) scale(1.03);
+      background: linear-gradient(135deg, rgba(18, 48, 38, 0.98) 0%, rgba(12, 28, 24, 0.98) 100%);
+      border-color: #FFA544;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.72), 0 0 32px rgba(255, 120, 30, 0.48), inset 0 1px 2px rgba(255, 255, 255, 0.5);
     }
     .mo-story-capsule:active {
-      transform: translateY(0) scale(0.99);
+      transform: translateY(0) scale(0.98);
     }
     .mo-live-dot {
-      width: 7px;
-      height: 7px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
       background: #72CC38;
-      box-shadow: 0 0 8px #72CC38;
+      box-shadow: 0 0 10px #72CC38, 0 0 18px rgba(114, 204, 56, 0.6);
       animation: dot-pulse 1s infinite alternate;
     }
     .mo-hero-name {
       font-family: var(--font-display);
-      font-size: 13.5px;
-      font-weight: 900;
-      letter-spacing: -0.01em;
+      font-size: clamp(17px, 1.8vw, 21px);
+      font-weight: 950;
+      letter-spacing: 0.6px;
       color: #FFF;
       line-height: 1;
       white-space: nowrap;
+      text-transform: uppercase;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
     }
     .mo-name-accent {
       color: #FF7B1A;
-      background: linear-gradient(135deg, #FFA044 0%, #FF6A00 100%);
+      background: linear-gradient(135deg, #FFC066 0%, #FF8A00 50%, #FF4500 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 12px rgba(255, 120, 30, 0.65));
+    }
+    .mo-spark-star {
+      font-size: 11px;
+      color: #FFB366;
+      line-height: 1;
+      filter: drop-shadow(0 0 6px rgba(255, 160, 60, 0.7));
     }
 
     /* ── Main Stage Area: Side Wings + 3D Holographic Stage Pedestal ── */
@@ -734,60 +743,67 @@ function injectStyles(colors) {
       100% { transform: scaleY(0.32) scale(1.05); opacity: 1; }
     }
 
-    /* ── Dynamic Floating Speech Bubble Anchored to Mo ── */
+    /* ── Dynamic Floating Speech Bubble Anchored on Mo's Left Side ── */
     #mo-speech-bubble {
       position: absolute;
-      top: -46px;
-      left: 50%;
-      transform: translateX(-50%);
+      top: 18%;
+      right: calc(50% + 105px);
+      left: auto;
+      transform: translateY(-50%);
       z-index: 100;
-      background: rgba(12, 28, 24, 0.94);
-      border: 1.5px solid rgba(255, 120, 40, 0.45);
+      background: linear-gradient(135deg, rgba(12, 30, 25, 0.95) 0%, rgba(6, 18, 14, 0.98) 100%);
+      border: 1.5px solid rgba(255, 140, 50, 0.55);
       border-radius: 20px;
-      padding: 9px 20px;
+      padding: 10px 20px;
       display: flex;
       align-items: center;
       gap: 12px;
-      max-width: 440px;
+      max-width: clamp(210px, 26vw, 340px);
       width: max-content;
-      box-shadow: 0 12px 38px rgba(0,0,0,0.65), 0 0 25px rgba(255, 106, 0, 0.25);
+      box-shadow: 0 14px 42px rgba(0,0,0,0.7), 0 0 28px rgba(255, 120, 30, 0.28);
       backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: auto;
     }
     #mo-speech-bubble.speaking {
       border-color: #72CC38;
-      box-shadow: 0 12px 42px rgba(0,0,0,0.7), 0 0 30px rgba(114, 204, 56, 0.4);
-      transform: translateX(-50%) scale(1.02);
+      box-shadow: 0 14px 45px rgba(0,0,0,0.75), 0 0 32px rgba(114, 204, 56, 0.45);
+      transform: translateY(-50%) scale(1.03);
     }
 
-    /* Speech Bubble Downward Tail */
+    /* Speech Bubble Pointer: Directed Rightwards toward Mo's Mouth */
     .speech-bubble-tail {
       position: absolute;
-      bottom: -9px;
-      left: 50%;
-      transform: translateX(-50%);
+      right: -10px;
+      top: 50%;
+      transform: translateY(-50%);
       width: 0; height: 0;
-      border-left: 9px solid transparent;
-      border-right: 9px solid transparent;
-      border-top: 9px solid rgba(255, 120, 40, 0.6);
-      filter: drop-shadow(0 3px 4px rgba(0,0,0,0.5));
-      transition: border-top-color 0.25s ease;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-left: 10px solid rgba(255, 140, 50, 0.65);
+      border-right: none;
+      filter: drop-shadow(3px 0 4px rgba(0,0,0,0.5));
+      transition: border-left-color 0.25s ease;
     }
     #mo-speech-bubble.speaking .speech-bubble-tail {
-      border-top-color: #72CC38;
+      border-left-color: #72CC38;
     }
 
     #speech-text {
-      font-size: clamp(13px, 1.35vw, 15.5px);
-      font-weight: 700;
+      font-size: clamp(13px, 1.35vw, 15px);
+      font-weight: 750;
       line-height: 1.35;
       color: #FFF;
       transition: opacity 0.2s ease;
-      text-align: center;
-      white-space: nowrap;
+      text-align: left;
+      white-space: normal;
       overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 380px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      max-width: 280px;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
     }
 
     /* Speech Bubble Audio Wave */
@@ -1331,13 +1347,16 @@ function injectStyles(colors) {
         font-size: clamp(11.5px, 1.2vw, 13px);
       }
 
-      /* Combined Mo Hero & Alumni Capsule in Portrait View */
+      /* Bold "Meet Mo" Identity Jewel in Portrait View */
       .mo-story-capsule {
         order: 3;
         width: auto;
-        margin: 4px auto 0;
-        padding: 5px 16px;
+        margin: 6px auto 2px;
+        padding: 7px 22px;
         justify-content: center;
+      }
+      .mo-hero-name {
+        font-size: clamp(16px, 2.2vw, 20px);
       }
 
       /* Main Stage Area: Full Vertical Scale */
@@ -1372,27 +1391,52 @@ function injectStyles(colors) {
         position: relative;
       }
 
-      /* Dynamic Floating Speech Bubble */
+      /* Dynamic Floating Speech Bubble Anchored on Mo's Left Side */
       #mo-speech-bubble {
-        top: -64px;
-        padding: 11px 26px;
-        max-width: min(92vw, 620px);
-        border-radius: 24px;
+        top: 18%;
+        right: calc(50% + 78px);
+        left: auto;
+        transform: translateY(-50%);
+        padding: 9px 18px;
+        max-width: min(44vw, 290px);
+        border-radius: 20px;
         box-shadow: 0 16px 45px rgba(0,0,0,0.7), 0 0 30px rgba(255, 106, 0, 0.35);
       }
+      #mo-speech-bubble.speaking {
+        transform: translateY(-50%) scale(1.03);
+      }
       #speech-text {
-        font-size: clamp(15px, 1.7vw, 19px);
-        max-width: 500px;
+        font-size: clamp(13px, 1.4vw, 15px);
+        max-width: 250px;
+        text-align: left;
+        white-space: normal;
       }
       .speech-eq .eq-bar {
         width: 3.5px;
         height: 6px;
       }
       .speech-bubble-tail {
-        bottom: -11px;
-        border-left-width: 11px;
-        border-right-width: 11px;
-        border-top-width: 11px;
+        right: -10px;
+        top: 50%;
+        bottom: auto;
+        left: auto;
+        transform: translateY(-50%);
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-left: 10px solid rgba(255, 120, 40, 0.65);
+        border-right: none;
+      }
+      @media (max-width: 480px) {
+        #mo-speech-bubble {
+          left: 10px;
+          right: auto;
+          top: 14%;
+          max-width: calc(50% - 6px);
+          padding: 8px 12px;
+        }
+        #speech-text {
+          font-size: 12px;
+        }
       }
 
       #mo-stage-pedestal {
@@ -1614,11 +1658,11 @@ function injectStyles(colors) {
       }
       #mo-story-capsule {
         order: 2;
-        padding: 5px 16px;
+        padding: 8px 24px;
         margin: 0;
       }
       .mo-hero-name {
-        font-size: 13.5px;
+        font-size: 19px;
       }
       #header-nav {
         order: 3;
@@ -1744,13 +1788,14 @@ function injectStyles(colors) {
         letter-spacing: clamp(0.6px, 0.12vw, 1.2px);
       }
 
-      /* Speech Bubble: Cleanly elevated above Mo's head with ZERO overlap and 100% visibility */
+      /* Speech Bubble: Anchored on Mo's left side with zero overlap */
       #mo-speech-bubble {
-        top: -46px;
-        left: 50%;
-        transform: translateX(-50%);
-        padding: 9px 24px;
-        max-width: 480px;
+        top: 22%;
+        right: calc(50% + 95px);
+        left: auto;
+        transform: translateY(-50%);
+        padding: 10px 22px;
+        max-width: clamp(210px, 22vw, 320px);
         border-radius: 22px;
         background: rgba(8, 26, 20, 0.95);
         border: 1.5px solid rgba(255, 140, 50, 0.65);
@@ -1758,12 +1803,28 @@ function injectStyles(colors) {
         z-index: 100;
         pointer-events: auto;
       }
+      #mo-speech-bubble.speaking {
+        transform: translateY(-50%) scale(1.03);
+      }
       #speech-text {
         font-size: 14px;
-        font-weight: 800;
-        max-width: 420px;
+        font-weight: 750;
+        max-width: 270px;
         color: #FFFFFF;
         text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+        text-align: left;
+        white-space: normal;
+      }
+      .speech-bubble-tail {
+        right: -10px;
+        top: 50%;
+        bottom: auto;
+        left: auto;
+        transform: translateY(-50%);
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-left: 10px solid rgba(255, 140, 50, 0.65);
+        border-right: none;
       }
 
       /* Bottom Bar: Sleek, compact console leaving generous headroom for Mo */
@@ -1810,10 +1871,10 @@ function injectStyles(colors) {
         padding: 5px 12px;
       }
       #mo-story-capsule {
-        padding: 4px 14px;
+        padding: 6px 18px;
       }
       .mo-hero-name {
-        font-size: 12.5px;
+        font-size: 16px;
       }
       #mo-stage-wrapper {
         width: min(72vh, 560px);
@@ -1825,8 +1886,12 @@ function injectStyles(colors) {
         transform-origin: 50% 90%;
       }
       #mo-speech-bubble {
-        top: -42px;
-        padding: 6px 18px;
+        top: 20%;
+        right: calc(50% + 80px);
+        left: auto;
+        transform: translateY(-50%);
+        padding: 8px 16px;
+        max-width: clamp(180px, 20vw, 260px);
         z-index: 100;
       }
       #speech-text {
@@ -2371,10 +2436,11 @@ function buildHTML(config) {
           <span class="purity-mini-badge">✨ 100% PURE ZABIHA HALAL</span>
         </div>
 
-        <!-- Compact "Meet Mo" Identity Pill -->
+        <!-- Bold & Catchy "Meet Mo" Executive Identity Jewel -->
         <div id="mo-story-capsule" class="mo-story-capsule" role="button" tabindex="0" title="Tap to hear Mo speak">
           <span class="mo-live-dot"></span>
           <span class="mo-hero-name">Meet <span class="mo-name-accent">Mo</span></span>
+          <span class="mo-spark-star">✦</span>
         </div>
 
         <div id="header-nav">
