@@ -45,21 +45,21 @@ let _isTalking = false;
 // Mo never says the same thing twice — these pools are rotated to keep
 // every response feeling spontaneous and human, not scripted.
 const GREETING_PROMPTS = [
-  "Greet the customer in your natural Mo style — short, punchy, one sentence.",
-  "New customer just showed up. Give them your opener.",
-  "Someone stepped up to the kiosk. Welcome them in Mo's signature style.",
-  "They're here and they look hungry. Be Mo.",
-  "Welcome them the way only Mo can — one line, big energy.",
+  "A Syracuse student just stepped up! Give them your funniest, warmest 1-sentence Mo welcome — pure campus buddy energy!",
+  "Hit them with a quick, witty one-liner welcoming them like your favorite college friend — 1 punchy sentence!",
+  "Welcome your campus friend with a jokey, high-energy 1-sentence opener!",
+  "A hungry student is here! Drop a funny, warm 1-sentence greeting asking what they're craving!",
+  "Drop your funniest, punchiest Mo opener — 1 sentence, peak Syracuse legend energy!",
 ];
 const LISTENING_CAPTIONS = [
-  "Go ahead, habibi…",
-  "I'm listening.",
-  "Talk to me.",
-  "What's the move?",
-  "Say the word.",
-  "Yeah, go for it.",
-  "What are you feeling?",
-  "Habibi, I'm all ears.",
+  "I'm all ears, habibi…",
+  "Talk to me — what's the move?",
+  "What are we eating today?",
+  "Say less, I'm listening.",
+  "Hit me with your crave!",
+  "Solo or squad? Tell me.",
+  "What's hitting today?",
+  "Go ahead, habibi!",
 ];
 let _greetingIdx = Math.floor(Math.random() * GREETING_PROMPTS.length);
 let _captionIdx  = 0;
@@ -215,17 +215,19 @@ async function startVoiceSession(initialPrompt = null) {
       } else if (lower.includes('holicbucket') || lower.includes('squad') || lower.includes('group project') || lower.includes('sharing is caring')) {
         Mo.setExpression('excited');
         Mo.setPose('dancing');
-      } else if (lower.includes('gyro') || lower.includes('running late') || lower.includes('class') || lower.includes('rush')) {
+        Mo.triggerLaugh();
+      } else if (lower.includes('gyro') || lower.includes('running late') || lower.includes('class') || lower.includes('rush') || lower.includes('sprint')) {
         Mo.setExpression('confident');
         Mo.setPose('pointing');
-      } else if (lower.includes('platter') || lower.includes('extra holic') || lower.includes('earned it')) {
+      } else if (lower.includes('platter') || lower.includes('extra holic') || lower.includes('earned it') || lower.includes('study fuel')) {
         Mo.setExpression('happy');
         Mo.setPose('thumbs_up');
-      } else if (lower.includes('flavor than your dining hall') || lower.includes('lettuce') || lower.includes('pita bread')) {
+      } else if (lower.includes('flavor than your dining hall') || lower.includes('lettuce') || lower.includes('pita bread') || lower.includes('dining hall')) {
         Mo.setExpression('laughing');
         Mo.setPose('dancing');
         Mo.triggerLaugh();
-      } else if (lower.includes('haha') || lower.includes('bold move') || lower.includes('say less')) {
+      } else if (lower.includes('haha') || lower.includes('joke') || lower.includes('gpa') || lower.includes('bold move') || lower.includes('say less') || lower.includes('decision') || lower.includes('syllabus')) {
+        Mo.setExpression('laughing');
         Mo.triggerLaugh();
       }
     },
@@ -239,7 +241,10 @@ async function startVoiceSession(initialPrompt = null) {
         goState('thinking');
         Mo.setPose('sitting');
         const lower = text.toLowerCase();
-        if (lower.includes('exam') || lower.includes('study') || lower.includes('lecture')) {
+        if (lower.includes('joke') || lower.includes('funny') || lower.includes('laugh') || lower.includes('lol') || lower.includes('haha')) {
+          Mo.setExpression('excited');
+          Mo.triggerLaugh();
+        } else if (lower.includes('exam') || lower.includes('study') || lower.includes('lecture')) {
           Mo.setExpression('confident');
         } else if (lower.includes('squad') || lower.includes('friends') || lower.includes('group')) {
           Mo.setExpression('excited');
