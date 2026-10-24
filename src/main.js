@@ -26,7 +26,12 @@ import { getCampusTimeContext } from './voice/timeEngine.js';
 // Helper for dynamic real-time caption
 function getDynamicIdleCaption() {
   const timeCtx = getCampusTimeContext();
-  return `Yo 'Cuse! (${timeCtx.formattedTime}) Welcome to Halalholic — best place to recharge! Tap below to talk with Mo! 🔥`;
+  const idleOptions = [
+    `Yo 'Cuse! (${timeCtx.formattedTime}) What's going on today? Tap below to talk with Mo! 🔥`,
+    `Yo 'Cuse! (${timeCtx.formattedTime}) How was your day? Tap below to chop it up with Mo! 🔥`,
+    `Yo 'Cuse! (${timeCtx.formattedTime}) Welcome to the recharge zone — tap below to talk with Mo! 🔥`,
+  ];
+  return idleOptions[Math.floor(Math.random() * idleOptions.length)];
 }
 
 // ── 1. Bootstrap ──────────────────────────────────────────────────────────────
@@ -51,13 +56,13 @@ let _isTalking = false;
 // ── 3. Natural variation helpers ──────────────────────────────────────────────
 // Mo never says the same thing twice — these pools are rotated and dynamically
 // stamped with the real-time clock to keep every response spontaneous, comedic, and hyper-aware.
-// RULE: Mo starts as a real friend welcoming them to recharge and asking where they came from — NEVER opening with food pitches!
+// RULE: Mo starts as a real friend with natural curiosity — never opening with canned slogans or forced robot welcomes!
 const FALLBACK_GREETINGS = [
-  "You're Mo, the fast-talking Syracuse classmate who acts like he runs Halalholic. Welcome your fellow student to Halalholic as the ultimate place to recharge, ask what's going on, and ask where they just walked in from (dorms, basketball courts, studio, campus job, or gym) — zero food pitch yet, 1 punchy sentence!",
-  "A classmate just walked up. Welcome them warmly to the Halalholic recharge sanctuary, ask how their day is going, and ask where they just came from on campus — 1 punchy sentence!",
-  "Welcome your fellow student warmly to Halalholic to recharge: ask what is happening with them today and what they were just doing — 1 short punchy line!",
-  "A student just tapped to talk. Greet them like a day-one friend, welcome them to Halalholic to recharge their battery, and ask where they just walked in from — 1 punchy sentence!",
-  "Break the ice like an authentic companion: welcome them to Halalholic as the best spot in Syracuse to recharge, and ask what's going on with their day — 1 punchy line!",
+  "You're Mo, the fast-talking Syracuse classmate who acts like he runs Halalholic. Greet your fellow student like a real friend, ask what's going on with their day, and ask where they just walked in from (dorms, courts, studio, campus job, or classes) — zero food pitch, 1 punchy sentence!",
+  "A classmate just walked up. Greet them like a true homie, ask how their day is treating them, and ask what they've been up to on campus — 1 punchy sentence!",
+  "Break the ice like an authentic campus friend: ask what's the story today and where they just survived walking over from — 1 short punchy line!",
+  "A student just tapped to talk. Greet them like a day-one friend, ask what is happening today and if they're celebrating or surviving — 1 punchy sentence!",
+  "Welcome your classmate naturally: ask what's good today, check in on how they're holding up, and ask where they just came from — 1 punchy line!",
 ];
 let _greetingIdx = Math.floor(Math.random() * 10);
 let _captionIdx  = 0;
