@@ -32,6 +32,7 @@ export const Mo = (() => {
   let _rawMouthOpen    = 0;
   let _smoothMouthOpen = 0;
   let _cadence         = 0;
+  let _visemeState     = 'closed';
 
   // Laugh spring physics
   let _lPos    = 0;
@@ -94,7 +95,7 @@ export const Mo = (() => {
           opacity: 0;
           transform-origin: 51.5% 31.8%;
           transform: scaleY(0.9);
-          transition: opacity 0.05s cubic-bezier(0.2, 0.8, 0.4, 1), transform 0.05s ease;
+          transition: none;
           will-change: opacity, transform;
         " />
 
@@ -110,7 +111,7 @@ export const Mo = (() => {
           opacity: 0;
           transform-origin: 51.5% 31.8%;
           transform: scaleY(1.0);
-          transition: opacity 0.05s cubic-bezier(0.2, 0.8, 0.4, 1), transform 0.05s ease;
+          transition: none;
           will-change: opacity, transform;
         " />
 
@@ -230,48 +231,57 @@ export const Mo = (() => {
       $shadow.style.transform = `translateX(${shadowX.toFixed(2)}px) scale(${shadowScale.toFixed(3)})`;
     }
 
-    // 6. Dynamic Syllabic Lip-Sync Articulation (Continuous Smooth Crossfade)
-    _smoothMouthOpen += (_rawMouthOpen - _smoothMouthOpen) * 0.55;
+    // 6. Zero-Latency Crisp Syllabic Lip-Sync Articulation (Hysteresis & Elastic Flex)
+    _smoothMouthOpen += (_rawMouthOpen - _smoothMouthOpen) * 0.85;
 
     if ($mouthHalf && $mouthOpen) {
-      let halfOpacity = 0;
-      let openOpacity = 0;
-      let halfScaleY  = 0.90;
-      let openScaleX  = 1.0;
-      let openScaleY  = 0.96;
-
-      if (_curState === 'talking' && _smoothMouthOpen > 0.04) {
-        const energy = _smoothMouthOpen;
-
-        if (energy < 0.24) {
-          // Stage 1: Soft syllables / consonants / opening transition (neutral -> half)
-          const t = (energy - 0.04) / (0.24 - 0.04);
-          halfOpacity = Math.min(1, Math.max(0, t));
-          openOpacity = 0;
-          halfScaleY = 0.88 + t * 0.12;
-        } else if (energy < 0.52) {
-          // Stage 2: Medium vowels (smooth crossfade half -> open)
-          const t = (energy - 0.24) / (0.52 - 0.24);
-          halfOpacity = Math.max(0, 1 - t * 1.15);
-          openOpacity = Math.min(1, Math.max(0, t));
-          halfScaleY = 1.0;
-          openScaleY = 0.92 + t * 0.10;
-          openScaleX = 0.98 + t * 0.04;
+      if (_curState === 'talking' && _smoothMouthOpen > 0.038) {
+        // Hysteresis debouncing to eliminate flutter at transition boundaries
+        if (_visemeState === 'open') {
+          // Open vowel stays open until acoustic energy drops below release threshold
+          if (_smoothMouthOpen < 0.22) {
+            _visemeState = _smoothMouthOpen >= 0.04 ? 'half' : 'closed';
+          }
+        } else if (_visemeState === 'half') {
+          // Half open transitions to full open when vocal energy spikes
+          if (_smoothMouthOpen >= 0.32) {
+            _visemeState = 'open';
+          } else if (_smoothMouthOpen < 0.036) {
+            _visemeState = 'closed';
+          }
         } else {
-          // Stage 3: Full open vowels (A, E, O, emphasized syllables)
-          const t = Math.min(1, (energy - 0.52) / 0.48);
-          halfOpacity = 0;
-          openOpacity = 1;
-          openScaleY = 1.02 + t * 0.18;
-          openScaleX = 1.02 + t * 0.08;
+          // From resting closed smile, instantly articulate on speech onset
+          if (_smoothMouthOpen >= 0.30) {
+            _visemeState = 'open';
+          } else if (_smoothMouthOpen >= 0.048) {
+            _visemeState = 'half';
+          } else {
+            _visemeState = 'closed';
+          }
         }
+      } else {
+        _visemeState = 'closed';
       }
 
-      $mouthHalf.style.opacity = halfOpacity.toFixed(3);
-      $mouthHalf.style.transform = `scaleY(${halfScaleY.toFixed(3)})`;
-
-      $mouthOpen.style.opacity = openOpacity.toFixed(3);
-      $mouthOpen.style.transform = `scale(${openScaleX.toFixed(3)}, ${openScaleY.toFixed(3)})`;
+      // Viseme Rendering: Solid opacity (ZERO ghosting / double-mouth artifact)
+      // + Organic dynamic scaling with audio volume
+      if (_visemeState === 'open') {
+        const excess = Math.max(0, _smoothMouthOpen - 0.24);
+        const scaleY = 0.94 + Math.min(0.38, excess * 0.52);
+        const scaleX = 0.98 + Math.min(0.12, excess * 0.18);
+        $mouthOpen.style.opacity = '1';
+        $mouthOpen.style.transform = `scale(${scaleX.toFixed(3)}, ${scaleY.toFixed(3)})`;
+        $mouthHalf.style.opacity = '0';
+      } else if (_visemeState === 'half') {
+        const scaleY = 0.86 + Math.min(0.34, _smoothMouthOpen * 0.60);
+        const scaleX = 0.98 + Math.min(0.08, _smoothMouthOpen * 0.16);
+        $mouthHalf.style.opacity = '1';
+        $mouthHalf.style.transform = `scale(${scaleX.toFixed(3)}, ${scaleY.toFixed(3)})`;
+        $mouthOpen.style.opacity = '0';
+      } else {
+        $mouthHalf.style.opacity = '0';
+        $mouthOpen.style.opacity = '0';
+      }
     }
 
     // 7. Check Eye Blink Schedule
@@ -339,6 +349,7 @@ export const Mo = (() => {
     if (state !== 'talking') {
       _rawMouthOpen    = 0;
       _smoothMouthOpen = 0;
+      _visemeState     = 'closed';
       _cadence         = 0;
       _smoothCadence   = 0;
       if ($mouthHalf) $mouthHalf.style.opacity = '0';
