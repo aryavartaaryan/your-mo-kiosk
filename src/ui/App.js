@@ -1591,7 +1591,7 @@ function buildHTML(config) {
         <div class="kiosk-bg-slide" data-index="1" data-label="🍛 LOADED RICE PLATTERS • $9.99">
           <img class="kiosk-bg-photo" src="/assets/food/halal_platter.jpg" alt="Loaded Rice Platters" />
         </div>
-        <div class="kiosk-bg-slide" data-index="2" data-label="🍗 CRISPY SAUCED WINGS • $8.99">
+        <div class="kiosk-bg-slide" data-index="2" data-label="🍗 CRISPY SAUCED WINGS • FROM $9.99">
           <img class="kiosk-bg-photo" src="/assets/food/crispy_wings.jpg" alt="Crispy Sauced Wings" />
         </div>
         <div class="kiosk-bg-slide" data-index="3" data-label="🌯 SPEED GYRO WRAPS • $7.99">
@@ -1599,6 +1599,18 @@ function buildHTML(config) {
         </div>
         <div class="kiosk-bg-slide" data-index="4" data-label="⭐ SQUAD HOLICBUCKET 5-IN-1 • $15.99">
           <img class="kiosk-bg-photo" src="/assets/food/holic_bucket.jpg" alt="Squad HolicBucket" />
+        </div>
+        <div class="kiosk-bg-slide" data-index="5" data-label="🍔 CHOPPED CHEESE & HEROES • $6.99–$9.99">
+          <img class="kiosk-bg-photo" src="/assets/food/burger_hero.jpg" alt="Chopped Cheese & Gourmet Burgers" />
+        </div>
+        <div class="kiosk-bg-slide" data-index="6" data-label="🍗 CRISPY TENDERS & NUGGETS • FROM $5.99">
+          <img class="kiosk-bg-photo" src="/assets/food/chicken_tenders.jpg" alt="Crispy Chicken Tenders & Nuggets" />
+        </div>
+        <div class="kiosk-bg-slide" data-index="7" data-label="🍟 CHEESE FRIES & SIDES FEAST • FROM $3.99">
+          <img class="kiosk-bg-photo" src="/assets/food/loaded_sides.jpg" alt="Loaded Cheese Fries & Sides" />
+        </div>
+        <div class="kiosk-bg-slide" data-index="8" data-label="🥗 FALAFEL & MEDITERRANEAN SALADS • FROM $8.99">
+          <img class="kiosk-bg-photo" src="/assets/food/falafel_salad.jpg" alt="Mediterranean Falafel & Fresh Salads" />
         </div>
         <div class="kiosk-bg-glass-overlay"></div>
         <div class="kiosk-bg-vignette"></div>
@@ -1671,6 +1683,10 @@ function buildHTML(config) {
           <span class="indicator-dot" data-slide="2" title="Crispy Wings"></span>
           <span class="indicator-dot" data-slide="3" title="Speed Gyros"></span>
           <span class="indicator-dot" data-slide="4" title="Squad Bucket"></span>
+          <span class="indicator-dot" data-slide="5" title="Burgers & Heroes"></span>
+          <span class="indicator-dot" data-slide="6" title="Tenders & Nuggets"></span>
+          <span class="indicator-dot" data-slide="7" title="Loaded Sides"></span>
+          <span class="indicator-dot" data-slide="8" title="Fresh Salads"></span>
         </div>
         <span id="slide-feature-tag">🎓 CAMPUS NIGHTS • SYRACUSE 'CUSE</span>
       </div>
@@ -1833,14 +1849,14 @@ function buildHTML(config) {
           <div class="menu-item-row" data-prompt="Can I get the Chicken Dose Platter?" data-slide-target="1">
             <div class="item-name-group">
               <span class="item-name">Chicken Dose Platter</span>
-              <span class="item-sub">Seasoned basmati rice, spiced chicken, signature white sauce</span>
+              <span class="item-sub">Seasoned basmati rice, spiced chicken, mix salad & fries or hummus</span>
             </div>
             <span class="item-price-tag">$9.99</span>
           </div>
           <div class="menu-item-row" data-prompt="Can I get the Lamb Dose Platter?" data-slide-target="1">
             <div class="item-name-group">
               <span class="item-name">Lamb Dose Platter</span>
-              <span class="item-sub">Tender marinated gyro lamb over golden seasoned rice</span>
+              <span class="item-sub">Tender marinated gyro lamb over golden rice + two sides</span>
             </div>
             <span class="item-price-tag">$9.99</span>
           </div>
@@ -1851,10 +1867,24 @@ function buildHTML(config) {
             </div>
             <span class="item-price-tag">$9.99</span>
           </div>
+          <div class="menu-item-row" data-prompt="Can I get the Fish Dose Platter?" data-slide-target="1">
+            <div class="item-name-group">
+              <span class="item-name">Fish Dose Platter</span>
+              <span class="item-sub">Golden crispy fish fillet over basmati rice + two sides</span>
+            </div>
+            <span class="item-price-tag">$9.99</span>
+          </div>
           <div class="menu-item-row" data-prompt="Can I get the Falafel Dose Platter?" data-slide-target="1">
             <div class="item-name-group">
               <span class="item-name">Falafel Dose (Vegetarian)</span>
               <span class="item-sub">Crispy golden handmade falafels & pickled cabbage</span>
+            </div>
+            <span class="item-price-tag">$9.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get the Kofta Dose Platter?" data-slide-target="1">
+            <div class="item-name-group">
+              <span class="item-name">Kofta Dose Platter</span>
+              <span class="item-sub">Seasoned beef & lamb kofta skewers over spiced rice</span>
             </div>
             <span class="item-price-tag">$9.99</span>
           </div>
@@ -1874,7 +1904,7 @@ function buildHTML(config) {
           <img src="/assets/food/gyro_wrap.jpg" alt="Speed Gyro Wraps" />
           <div class="menu-cat-hero-overlay">
             <span class="menu-cat-hero-title">🌯 Speed Gyro Wraps</span>
-            <span class="menu-cat-badge">3-MIN RUSH</span>
+            <span class="menu-cat-badge">2-MIN RUSH</span>
           </div>
         </div>
         <div class="menu-items-list">
@@ -1899,6 +1929,27 @@ function buildHTML(config) {
             </div>
             <span class="item-price-tag">$7.99</span>
           </div>
+          <div class="menu-item-row" data-prompt="Can I get the Fish Gyro?" data-slide-target="3">
+            <div class="item-name-group">
+              <span class="item-name">Fish Gyro Wrap</span>
+              <span class="item-sub">Golden fish fillet, crisp greens & tartar white sauce</span>
+            </div>
+            <span class="item-price-tag">$7.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get the Falafel Gyro?" data-slide-target="3">
+            <div class="item-name-group">
+              <span class="item-name">Falafel Gyro (Vegetarian)</span>
+              <span class="item-sub">Handmade falafel, hummus, lettuce, tomato & tahini</span>
+            </div>
+            <span class="item-price-tag">$7.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get the Chicken Kofta Gyro?" data-slide-target="3">
+            <div class="item-name-group">
+              <span class="item-name">Chicken Kofta Gyro</span>
+              <span class="item-sub">Spiced chicken kofta, grilled onions & white sauce</span>
+            </div>
+            <span class="item-price-tag">$7.99</span>
+          </div>
         </div>
       </div>
 
@@ -1919,10 +1970,292 @@ function buildHTML(config) {
             </div>
             <span class="item-price-tag">$15.99</span>
           </div>
+        </div>
+      </div>
+
+      <!-- Category 4: Crispy Sauced Wings -->
+      <div class="menu-category-block" data-slide-target="2">
+        <div class="menu-cat-hero-img">
+          <img src="/assets/food/crispy_wings.jpg" alt="Crispy Sauced Wings" />
+          <div class="menu-cat-hero-overlay">
+            <span class="menu-cat-hero-title">🍗 Crispy Sauced Wings</span>
+            <span class="menu-cat-badge">5 FLAVORS</span>
+          </div>
+        </div>
+        <div class="menu-items-list">
           <div class="menu-item-row" data-prompt="Can I order 6 piece Wings?" data-slide-target="2">
             <div class="item-name-group">
-              <span class="item-name">6pc Crispy Wings (Sauced)</span>
-              <span class="item-sub">Choice of Mild, Hot Holic, or Garlic Parm</span>
+              <span class="item-name">6 Pieces Crispy Wings</span>
+              <span class="item-sub">Hot, BBQ, Buffalo, Lemon Pepper, or Mango Habanero</span>
+            </div>
+            <span class="item-price-tag">$9.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I order 9 piece Wings?" data-slide-target="2">
+            <div class="item-name-group">
+              <span class="item-name">9 Pieces Crispy Wings</span>
+              <span class="item-sub">Sauced with your choice of White, Blue Cheese or Ranch dip</span>
+            </div>
+            <span class="item-price-tag">$12.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get the 12 piece Wings?" data-slide-target="2">
+            <div class="item-name-group">
+              <span class="item-name">12 Pieces Crispy Wings</span>
+              <span class="item-sub">Perfect for sharing with friends</span>
+            </div>
+            <span class="item-price-tag">$15.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Give me the 20 piece party Wings!" data-slide-target="2">
+            <div class="item-name-group">
+              <span class="item-name">20 Pieces Party Wings</span>
+              <span class="item-sub">Maximum crave feast for study groups</span>
+            </div>
+            <span class="item-price-tag">$23.99</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category 5: Gourmet Burgers & Heroes -->
+      <div class="menu-category-block" data-slide-target="5">
+        <div class="menu-cat-hero-img">
+          <img src="/assets/food/burger_hero.jpg" alt="Gourmet Burgers & Heroes" />
+          <div class="menu-cat-hero-overlay">
+            <span class="menu-cat-hero-title">🍔 Burgers & Hero Sandwiches</span>
+            <span class="menu-cat-badge">+$2.99 COMBO</span>
+          </div>
+        </div>
+        <div class="menu-items-list">
+          <div class="menu-item-row" data-prompt="Can I get the Chopped Cheese on Hero?" data-slide-target="5">
+            <div class="item-name-group">
+              <span class="item-name">Chopped Cheese On Hero</span>
+              <span class="item-sub">NYC bodega style seasoned beef, melted cheese, lettuce, tomato</span>
+            </div>
+            <span class="item-price-tag">$9.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get the Philly Cheesesteak On Hero?" data-slide-target="5">
+            <div class="item-name-group">
+              <span class="item-name">Philly Cheesesteak On Hero</span>
+              <span class="item-sub">Shaved ribeye, grilled peppers, onions, melted provolone</span>
+            </div>
+            <span class="item-price-tag">$9.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get the Chicken Cheesesteak On Hero?" data-slide-target="5">
+            <div class="item-name-group">
+              <span class="item-name">Chicken Cheesesteak On Hero</span>
+              <span class="item-sub">Grilled chicken, sweet peppers, melted cheese</span>
+            </div>
+            <span class="item-price-tag">$9.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get the Chicken Cutlet On Hero?" data-slide-target="5">
+            <div class="item-name-group">
+              <span class="item-name">Chicken Cutlet On Hero</span>
+              <span class="item-sub">Crispy breaded golden chicken cutlet, mayo, lettuce</span>
+            </div>
+            <span class="item-price-tag">$9.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get the Pastrami On Hero?" data-slide-target="5">
+            <div class="item-name-group">
+              <span class="item-name">Pastrami On Hero</span>
+              <span class="item-sub">Warm sliced pastrami with mustard & melted swiss</span>
+            </div>
+            <span class="item-price-tag">$9.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get the Turkey On Hero?" data-slide-target="5">
+            <div class="item-name-group">
+              <span class="item-name">Turkey On Hero</span>
+              <span class="item-sub">Smoked halal turkey breast, cheese, crisp lettuce</span>
+            </div>
+            <span class="item-price-tag">$9.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get a Classic Cheeseburger?" data-slide-target="5">
+            <div class="item-name-group">
+              <span class="item-name">Classic Cheeseburger</span>
+              <span class="item-sub">Grilled beef patty, American cheese, pickle, special sauce</span>
+            </div>
+            <span class="item-price-tag">$6.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get the Double Cheeseburger?" data-slide-target="5">
+            <div class="item-name-group">
+              <span class="item-name">Double Cheeseburger</span>
+              <span class="item-sub">Two smash patties, double cheese, toasted brioche bun</span>
+            </div>
+            <span class="item-price-tag">$8.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get the Crispy Chicken Sandwich?" data-slide-target="5">
+            <div class="item-name-group">
+              <span class="item-name">Crispy Chicken Sandwich</span>
+              <span class="item-sub">Golden fried breast fillet, pickles, house spread</span>
+            </div>
+            <span class="item-price-tag">$6.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get the Spicy Crispy Chicken Sandwich?" data-slide-target="5">
+            <div class="item-name-group">
+              <span class="item-name">Spicy Crispy Chicken Sandwich</span>
+              <span class="item-sub">Spicy glazed chicken fillet, jalapeño crunch</span>
+            </div>
+            <span class="item-price-tag">$6.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get the Heart Attack Burger?" data-slide-target="5">
+            <div class="item-name-group">
+              <span class="item-name">Heart Attack Burger</span>
+              <span class="item-sub">Loaded burger stack with extra beef & melted cheese</span>
+            </div>
+            <span class="item-price-tag">$7.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Add fries and drink to my sandwich." data-slide-target="5">
+            <div class="item-name-group">
+              <span class="item-name">Combo Deal: Add Fries & Drink</span>
+              <span class="item-sub">Includes seasoned fries & fountain soda</span>
+            </div>
+            <span class="item-price-tag">+$2.99</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category 6: Tenders & Nuggets -->
+      <div class="menu-category-block" data-slide-target="6">
+        <div class="menu-cat-hero-img">
+          <img src="/assets/food/chicken_tenders.jpg" alt="Crispy Chicken Tenders & Nuggets" />
+          <div class="menu-cat-hero-overlay">
+            <span class="menu-cat-hero-title">🍗 Tenders & Golden Nuggets</span>
+            <span class="menu-cat-badge">CRISPY GOLD</span>
+          </div>
+        </div>
+        <div class="menu-items-list">
+          <div class="menu-item-row" data-prompt="Can I get 3 piece Chicken Tenders?" data-slide-target="6">
+            <div class="item-name-group">
+              <span class="item-name">3 Pieces Tenders</span>
+              <span class="item-sub">Hand-breaded tenders with honey mustard or white sauce</span>
+            </div>
+            <span class="item-price-tag">$6.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get 5 piece Chicken Tenders?" data-slide-target="6">
+            <div class="item-name-group">
+              <span class="item-name">5 Pieces Tenders</span>
+              <span class="item-sub">Golden crunch tenders with choice of 2 dipping sauces</span>
+            </div>
+            <span class="item-price-tag">$9.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get 10 piece Chicken Tenders?" data-slide-target="6">
+            <div class="item-name-group">
+              <span class="item-name">10 Pieces Tenders</span>
+              <span class="item-sub">Giant tender box for sharing</span>
+            </div>
+            <span class="item-price-tag">$15.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get 6 piece Nuggets?" data-slide-target="6">
+            <div class="item-name-group">
+              <span class="item-name">6 Pieces Nuggets</span>
+              <span class="item-sub">Bite-sized crispy golden chicken nuggets</span>
+            </div>
+            <span class="item-price-tag">$5.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get 12 piece Nuggets?" data-slide-target="6">
+            <div class="item-name-group">
+              <span class="item-name">12 Pieces Nuggets</span>
+              <span class="item-sub">12 golden nuggets with dipping sauce</span>
+            </div>
+            <span class="item-price-tag">$8.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get 20 piece Nuggets?" data-slide-target="6">
+            <div class="item-name-group">
+              <span class="item-name">20 Pieces Nuggets</span>
+              <span class="item-sub">20-piece party nugget pack</span>
+            </div>
+            <span class="item-price-tag">$10.99</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category 7: Side Orders & Loaded Starters -->
+      <div class="menu-category-block" data-slide-target="7">
+        <div class="menu-cat-hero-img">
+          <img src="/assets/food/loaded_sides.jpg" alt="Loaded Sides Feast" />
+          <div class="menu-cat-hero-overlay">
+            <span class="menu-cat-hero-title">🍟 Loaded Sides & Starters</span>
+            <span class="menu-cat-badge">HOT SIDES</span>
+          </div>
+        </div>
+        <div class="menu-items-list">
+          <div class="menu-item-row" data-prompt="Can I get Seasoned Fries?" data-slide-target="7">
+            <div class="item-name-group">
+              <span class="item-name">Seasoned Fries</span>
+              <span class="item-sub">Golden crispy fries tossed in signature Halalholic spice</span>
+            </div>
+            <span class="item-price-tag">$4.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get Cheese Fries?" data-slide-target="7">
+            <div class="item-name-group">
+              <span class="item-name">Cheese Fries</span>
+              <span class="item-sub">Hot seasoned fries smothered in melted cheddar cheese sauce</span>
+            </div>
+            <span class="item-price-tag">$5.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get Mozzarella Sticks?" data-slide-target="7">
+            <div class="item-name-group">
+              <span class="item-name">Mozzarella Sticks</span>
+              <span class="item-sub">Crispy golden sticks with warm marinara dipping sauce</span>
+            </div>
+            <span class="item-price-tag">$6.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get Mac N Cheese Bites?" data-slide-target="7">
+            <div class="item-name-group">
+              <span class="item-name">Mac N Cheese Bites</span>
+              <span class="item-sub">Crispy fried bite-sized mac and cheddar goodness</span>
+            </div>
+            <span class="item-price-tag">$4.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get Onion Rings?" data-slide-target="7">
+            <div class="item-name-group">
+              <span class="item-name">Crispy Onion Rings</span>
+              <span class="item-sub">Golden battered onion rings with house dipping sauce</span>
+            </div>
+            <span class="item-price-tag">$3.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I add Falafel Balls?" data-slide-target="7">
+            <div class="item-name-group">
+              <span class="item-name">Falafel Ball (Single Piece)</span>
+              <span class="item-sub">Handmade fresh crispy falafel ball</span>
+            </div>
+            <span class="item-price-tag">$0.75</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category 8: Mediterranean Fresh Salads -->
+      <div class="menu-category-block" data-slide-target="8">
+        <div class="menu-cat-hero-img">
+          <img src="/assets/food/falafel_salad.jpg" alt="Mediterranean Fresh Salads" />
+          <div class="menu-cat-hero-overlay">
+            <span class="menu-cat-hero-title">🥗 Mediterranean Fresh Salads</span>
+            <span class="menu-cat-badge">100% FRESH</span>
+          </div>
+        </div>
+        <div class="menu-items-list">
+          <div class="menu-item-row" data-prompt="Can I get the Garden Salad?" data-slide-target="8">
+            <div class="item-name-group">
+              <span class="item-name">Garden Salad (Vegetarian)</span>
+              <span class="item-sub">Crisp romaine, tomatoes, cucumbers, olives & white sauce</span>
+            </div>
+            <span class="item-price-tag">$8.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get the Grilled Chicken Salad?" data-slide-target="8">
+            <div class="item-name-group">
+              <span class="item-name">Grilled Chicken Salad</span>
+              <span class="item-sub">Seasoned grilled chicken breast over fresh garden greens</span>
+            </div>
+            <span class="item-price-tag">$9.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get the Lamb Salad?" data-slide-target="8">
+            <div class="item-name-group">
+              <span class="item-name">Lamb Gyro Salad</span>
+              <span class="item-sub">Tender shaved gyro lamb over crisp Mediterranean salad</span>
+            </div>
+            <span class="item-price-tag">$9.99</span>
+          </div>
+          <div class="menu-item-row" data-prompt="Can I get the Fish Salad?" data-slide-target="8">
+            <div class="item-name-group">
+              <span class="item-name">Fish Salad</span>
+              <span class="item-sub">Crispy fish fillet over mixed greens with lemon herb dressing</span>
             </div>
             <span class="item-price-tag">$9.99</span>
           </div>
