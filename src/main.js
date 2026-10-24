@@ -21,6 +21,13 @@ import {
   setOnPlaybackEnd,
 } from './voice/audioOutput.js';
 import { startLipSync, stopLipSync } from './voice/lipSync.js';
+import { getCampusTimeContext } from './voice/timeEngine.js';
+
+// Helper for dynamic real-time caption
+function getDynamicIdleCaption() {
+  const timeCtx = getCampusTimeContext();
+  return `Yo 'Cuse! It's ${timeCtx.formattedTime} (${timeCtx.slotName}) — what's the major, what's the crave? Tap below to talk to Mo! 🔥`;
+}
 
 // ── 1. Bootstrap ──────────────────────────────────────────────────────────────
 const app = new App(document.body, { Mo });
@@ -30,7 +37,7 @@ Mo.setExpression('happy');
 Mo.setState('idle');
 Mo.start();
 app.setState('idle');
-app.setCaption(CONFIG.character.idleCaption);
+app.setCaption(getDynamicIdleCaption());
 
 // Pre-create AudioContext
 initOutputAudio();
@@ -42,9 +49,9 @@ let _isActive  = false;
 let _isTalking = false;
 
 // ── 3. Natural variation helpers ──────────────────────────────────────────────
-// Mo never says the same thing twice — these pools are rotated to keep
-// every response feeling spontaneous, comedic, and human, not scripted.
-const GREETING_PROMPTS = [
+// Mo never says the same thing twice — these pools are rotated and dynamically
+// stamped with the real-time clock to keep every response spontaneous, comedic, and hyper-aware.
+const FALLBACK_GREETINGS = [
   "You're Mo, the fast-talking Syracuse classmate who acts like he runs Halalholic. Greet your fellow student with a punchy 1-sentence one-liner asking what major they're studying or what class they just survived!",
   "A classmate just walked up to the counter looking exhausted from campus lectures. Ask what they're studying or guess their major with your signature warm Mo humor in 1 punchy sentence!",
   "Give a fast, confident, hilarious classmate welcome as Mo asking what class took their soul today in 1 short punchy line!",
@@ -52,25 +59,32 @@ const GREETING_PROMPTS = [
   "Someone's here looking hungry after classes. Hit them with Mo's witty humor asking what exam or lecture they just escaped from — 1 punchy line!",
   "Welcome your fellow Syracuse student in fast-talking, hilarious Mo style — ask what major they're grinding in and what food can rescue them today — 1 sentence!",
 ];
-const LISTENING_CAPTIONS = [
-  "What's the major, what's the crave, habibi?",
-  "What class took your soul today?",
-  "Talk to Mo — spill the campus tea!",
-  "What's the play? Solo feast or squad bucket?",
-  "Need brain fuel or comfort carbs, habibi?",
-  "Lay it on me — craving platters, gyros, or wings?",
-  "Sprint-to-class rush or full comfort feast?",
-  "I'm all ears, habibi — let's fuel up!",
-];
-let _greetingIdx = Math.floor(Math.random() * GREETING_PROMPTS.length);
+let _greetingIdx = Math.floor(Math.random() * 10);
 let _captionIdx  = 0;
+
 function nextGreeting() {
-  const msg = GREETING_PROMPTS[_greetingIdx % GREETING_PROMPTS.length];
+  const timeCtx = getCampusTimeContext();
+  const pool = (timeCtx.greetingHooks && timeCtx.greetingHooks.length > 0)
+    ? timeCtx.greetingHooks
+    : FALLBACK_GREETINGS;
+  const msg = pool[_greetingIdx % pool.length];
   _greetingIdx++;
   return msg;
 }
+
 function nextListeningCaption() {
-  const msg = LISTENING_CAPTIONS[_captionIdx % LISTENING_CAPTIONS.length];
+  const timeCtx = getCampusTimeContext();
+  const contextualCaptions = [
+    `What's hitting at ${timeCtx.formattedTime}, habibi?`,
+    `Talk to me — what are you craving?`,
+    `I'm listening, habibi. Make it legendary.`,
+    `What's the play? Solo feast or squad?`,
+    `Go ahead, habibi. No judgment here!`,
+    `Lay it on me — craving platters or wings?`,
+    `Speak your truth, habibi!`,
+    `I'm all ears — let's fuel up!`,
+  ];
+  const msg = contextualCaptions[_captionIdx % contextualCaptions.length];
   _captionIdx++;
   return msg;
 }
@@ -214,23 +228,23 @@ async function startVoiceSession(initialPrompt = null) {
         Mo.setExpression('angry'); // Mock-offended
         Mo.setPose('arms_crossed');
         Mo.triggerLaugh();
-      } else if (lower.includes('flavor than your dining hall') || lower.includes('personality trait') || lower.includes('respect') || lower.includes('iconic') || lower.includes('certified classic') || lower.includes('dr. mo') || lower.includes('came as a student') || lower.includes('whitman') || lower.includes('cs major') || lower.includes('roi') || lower.includes('semicolon')) {
+      } else if (lower.includes('flavor than your dining hall') || lower.includes('personality trait') || lower.includes('respect') || lower.includes('iconic') || lower.includes('certified classic') || lower.includes('dr. mo') || lower.includes('came as a student')) {
         Mo.setExpression('confident'); // Smug, proud & iconic
         Mo.setPose('arms_crossed');
-      } else if (lower.includes('holicbucket') || lower.includes('squad') || lower.includes('group project') || lower.includes('sharing is caring') || lower.includes('extra holic') || lower.includes('feast') || lower.includes('game day') || lower.includes('carrier dome') || lower.includes('dome')) {
-        Mo.setExpression('excited'); // Excited & game-day hype
+      } else if (lower.includes('holicbucket') || lower.includes('squad') || lower.includes('group project') || lower.includes('sharing is caring') || lower.includes('extra holic') || lower.includes('feast')) {
+        Mo.setExpression('excited'); // Excited
         Mo.setPose('dancing');
         Mo.triggerLaugh();
-      } else if (lower.includes('gyro') || lower.includes('running late') || lower.includes('class') || lower.includes('rush') || lower.includes('speed') || lower.includes('architecture') || lower.includes('pre-med')) {
+      } else if (lower.includes('gyro') || lower.includes('running late') || lower.includes('class') || lower.includes('rush') || lower.includes('speed')) {
         Mo.setExpression('confident');
         Mo.setPose('pointing');
       } else if (lower.includes('platter') || lower.includes('earned it') || lower.includes('straight a') || lower.includes('a-plus')) {
         Mo.setExpression('happy');
         Mo.setPose('thumbs_up');
-      } else if (lower.includes('haha') || lower.includes('heh') || lower.includes('lol') || lower.includes('joke') || lower.includes('breakup') || lower.includes('ex ') || lower.includes('ex-') || lower.includes('girlfriend') || lower.includes('dumped') || lower.includes('lettuce')) {
+      } else if (lower.includes('haha') || lower.includes('heh') || lower.includes('lol') || lower.includes('joke') || lower.includes('breakup') || lower.includes('ex ') || lower.includes('ex-') || lower.includes('girlfriend') || lower.includes('dumped')) {
         Mo.setExpression('laughing');
         Mo.triggerLaugh();
-      } else if (lower.includes('bold move') || lower.includes('say less') || lower.includes('trust me') || lower.includes('doctor ordered') || lower.includes('aesthetic')) {
+      } else if (lower.includes('bold move') || lower.includes('say less') || lower.includes('trust me')) {
         Mo.setExpression('wink');
         Mo.triggerLaugh();
       }
@@ -247,11 +261,11 @@ async function startVoiceSession(initialPrompt = null) {
         const lower = text.toLowerCase();
         if (lower.includes('eat you') || lower.includes('bite') || lower.includes('hair') || lower.includes('lettuce') || lower.includes('bread') || lower.includes('robot') || lower.includes('fake') || lower.includes('ai')) {
           Mo.setExpression('angry'); // Mock-offended prep
-        } else if (lower.includes('exam') || lower.includes('study') || lower.includes('lecture') || lower.includes('class') || lower.includes('iconic') || lower.includes('student') || lower.includes('major') || lower.includes('cs') || lower.includes('business') || lower.includes('finance') || lower.includes('engineer')) {
+        } else if (lower.includes('exam') || lower.includes('study') || lower.includes('lecture') || lower.includes('class') || lower.includes('iconic') || lower.includes('student')) {
           Mo.setExpression('confident'); // Smug prep
-        } else if (lower.includes('squad') || lower.includes('friends') || lower.includes('group') || lower.includes('bucket') || lower.includes('party') || lower.includes('game') || lower.includes('dome')) {
+        } else if (lower.includes('squad') || lower.includes('friends') || lower.includes('group') || lower.includes('bucket') || lower.includes('party')) {
           Mo.setExpression('excited'); // Excited prep
-        } else if (lower.includes('breakup') || lower.includes('ex') || lower.includes('dumped') || lower.includes('girlfriend') || lower.includes('boyfriend') || lower.includes('sad') || lower.includes('stress') || lower.includes('tired') || lower.includes('fail')) {
+        } else if (lower.includes('breakup') || lower.includes('ex') || lower.includes('dumped') || lower.includes('girlfriend') || lower.includes('boyfriend') || lower.includes('sad') || lower.includes('stress')) {
           Mo.setExpression('thinking'); // Attentive confidant listening
         } else {
           Mo.setExpression('thinking'); // Thinking
@@ -352,7 +366,7 @@ async function stopVoiceSession() {
   goState('idle');
   Mo.setPose('front');
   Mo.setExpression('happy');
-  app.setCaption(CONFIG.character.idleCaption);
+  app.setCaption(getDynamicIdleCaption());
   app.clearUserCaption();
 }
 

@@ -10,7 +10,7 @@
 
 import { GoogleGenAI } from '@google/genai';
 import { CONFIG }      from '../config.js';
-import { SYSTEM_INSTRUCTION } from './personality.js';
+import { buildSystemInstruction, SYSTEM_INSTRUCTION } from './personality.js';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -52,6 +52,11 @@ export class GeminiVoiceSession {
 
     const ai = new GoogleGenAI({ apiKey });
 
+    // Dynamic Real-Time Campus Context System Instruction
+    const systemPrompt = typeof buildSystemInstruction === 'function'
+      ? buildSystemInstruction()
+      : SYSTEM_INSTRUCTION;
+
     const session = await ai.live.connect({
       model: CONFIG.GEMINI_MODEL,
 
@@ -60,7 +65,7 @@ export class GeminiVoiceSession {
         responseModalities: ['AUDIO'],
 
         systemInstruction: {
-          parts: [{ text: SYSTEM_INSTRUCTION }],
+          parts: [{ text: systemPrompt }],
         },
 
         speechConfig: {
