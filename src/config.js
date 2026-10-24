@@ -28,7 +28,7 @@ export const CONFIG = {
   character: {
     defaultExpression: 'happy',
     defaultState:      'idle',
-    idleCaption:       "Yo! I'm Mo. Tap below and let's get you fed. 🔥",
+    idleCaption:       "Yo Syracuse! I'm Mo. Tap below or shout your crave! 🔥",
   },
 
   // ── Gemini Live model ─────────────────────────────────────────────────────

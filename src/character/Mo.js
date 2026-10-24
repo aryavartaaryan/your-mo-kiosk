@@ -94,7 +94,7 @@ export const Mo = (() => {
           opacity: 0;
           transform-origin: 51.5% 31.8%;
           transform: scaleY(0.9);
-          transition: opacity 0.04s ease;
+          transition: none;
         " />
 
         <!-- Layer 3: 3D Talking Mouth Full Open Viseme (Vowels / Loud Speech) -->
@@ -109,7 +109,7 @@ export const Mo = (() => {
           opacity: 0;
           transform-origin: 51.5% 31.8%;
           transform: scaleY(1.0);
-          transition: opacity 0.04s ease;
+          transition: none;
         " />
 
         <!-- Layer 4: 3D Natural Eyelid Overlay for Organic Blinking -->
@@ -157,6 +157,10 @@ export const Mo = (() => {
     }
   }
 
+  // Coarticulation syllable smoothing
+  let _activeViseme = 'closed'; // 'closed' | 'half' | 'open'
+  let _lastSpeechTs = 0;
+
   // ── Procedural Animation Tick (60 FPS) ──────────────────────────────────────
   function _tick(ts) {
     _phase = ts * 0.001;
@@ -191,26 +195,34 @@ export const Mo = (() => {
       scale(${breathe})
     `;
 
-    // 5. Multi-Frame Real-Time Lip-Sync Interpolation
-    _smoothMouthOpen += (_rawMouthOpen - _smoothMouthOpen) * 0.42;
+    // 5. Dynamic Syllabic Lip-Sync Articulation (Snappy 60 FPS Tracking)
+    _smoothMouthOpen += (_rawMouthOpen - _smoothMouthOpen) * 0.72;
 
     if ($mouthHalf && $mouthOpen) {
-      if (_curState === 'talking' && _smoothMouthOpen > 0.06) {
-        if (_smoothMouthOpen >= 0.38) {
-          // Full open mouth: loud syllables and vowels
-          const sY = 0.90 + (_smoothMouthOpen - 0.38) * 0.25;
-          $mouthOpen.style.opacity = '1';
-          $mouthOpen.style.transform = `scaleY(${sY.toFixed(2)})`;
-          $mouthHalf.style.opacity = '0';
+      if (_curState === 'talking') {
+        const energy = _smoothMouthOpen;
+
+        if (energy > 0.05) {
+          if (energy >= 0.28) {
+            // Full Open Viseme (Loud vowels: A, E, O, stressed syllables)
+            const sY = 0.90 + (energy - 0.28) * 0.35;
+            const sX = 1.0 + (energy - 0.28) * 0.06;
+            $mouthOpen.style.opacity = '1';
+            $mouthOpen.style.transform = `scale(${sX.toFixed(2)}, ${sY.toFixed(2)})`;
+            $mouthHalf.style.opacity = '0';
+          } else {
+            // Half Open Viseme (Consonants, transitions, soft syllables)
+            const sY = 0.88 + (energy - 0.05) * 0.42;
+            $mouthHalf.style.opacity = '1';
+            $mouthHalf.style.transform = `scaleY(${sY.toFixed(2)})`;
+            $mouthOpen.style.opacity = '0';
+          }
         } else {
-          // Half open mouth: gentle syllables and consonants
-          const sY = 0.85 + (_smoothMouthOpen - 0.06) * 0.35;
-          $mouthHalf.style.opacity = '1';
-          $mouthHalf.style.transform = `scaleY(${sY.toFixed(2)})`;
+          // Closed Smile (Resting face on pauses, bilabials: M, B, P)
+          $mouthHalf.style.opacity = '0';
           $mouthOpen.style.opacity = '0';
         }
       } else {
-        // Closed mouth: base resting smile
         $mouthHalf.style.opacity = '0';
         $mouthOpen.style.opacity = '0';
       }

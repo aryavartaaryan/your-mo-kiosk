@@ -12,11 +12,11 @@ import { Mo } from '../character/Mo.js';
 
 // ── Tuning parameters ─────────────────────────────────────────────────────────
 const NOISE_GATE   = 0.003;  // RMS below this → treated as silence (0)
-const ATTACK       = 0.65;   // per-frame blend towards louder signal (fast, snappy onset)
-const RELEASE      = 0.16;   // per-frame blend towards quieter signal (~80ms decay)
-const NORMALIZE_AT = 0.13;   // RMS that maps to mouth fully open (1.0)
-//   Gemini 24kHz TTS speech RMS typically averages 0.04–0.12.
-//   Setting NORMALIZE_AT to 0.13 ensures natural, full articulation of syllables.
+const ATTACK       = 0.82;   // explosive fast onset on loud vowels (~16ms)
+const RELEASE      = 0.28;   // crisp natural decay between syllables (~60ms)
+const NORMALIZE_AT = 0.095;  // RMS that maps to mouth fully open (1.0)
+//   Gemini 24kHz TTS speech RMS averages 0.035–0.095.
+//   Setting NORMALIZE_AT to 0.095 guarantees crisp, full dynamic syllabic range.
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let _rafId    = null;

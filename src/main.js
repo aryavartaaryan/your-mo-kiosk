@@ -17,6 +17,7 @@ import {
   clearAudioQueue,
   getAnalyserNode,
   getRemainingPlaybackMs,
+  isOutputPlaying,
   setOnPlaybackEnd,
 } from './voice/audioOutput.js';
 import { startLipSync, stopLipSync } from './voice/lipSync.js';
@@ -219,18 +220,27 @@ async function startVoiceSession(initialPrompt = null) {
 
     // ── Turn Complete: Smooth return to listening ─────────────────────────
     onTurnComplete: () => {
-      const waitMs = getRemainingPlaybackMs() + 260;
-      setOnPlaybackEnd(null);
-      setTimeout(() => {
+      // Listen for exact audio buffer completion from the audio hardware
+      setOnPlaybackEnd(() => {
         if (!_isActive) return;
         _isTalking = false;
         stopLipSync();
-        Mo.setExpression('happy');
-        Mo.setPose('front');
         goState('listening');
         app.setCaption('What else can I get you, habibi?');
         resetIdleTimer();
-      }, waitMs);
+      });
+
+      // Fallback timer if audio has already finished or queue was empty
+      if (!isOutputPlaying()) {
+        const waitMs = getRemainingPlaybackMs() + 200;
+        setTimeout(() => {
+          if (!_isActive || _isTalking) return;
+          stopLipSync();
+          goState('listening');
+          app.setCaption('What else can I get you, habibi?');
+          resetIdleTimer();
+        }, waitMs);
+      }
     },
 
     // ── User Interrupted Mo: Snappy response ──────────────────────────────
