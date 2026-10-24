@@ -68,7 +68,7 @@ function injectStyles(colors) {
       background: radial-gradient(ellipse at 50% 32%, #142822 0%, #08110E 55%, #050908 100%);
     }
 
-    /* ── Full-Screen Cinematic Campus Atmosphere Canvas ── */
+    /* ── Full-Screen Cinematic Campus Atmosphere Canvas (Multi-Slide Engine) ── */
     #kiosk-cinematic-bg {
       position: absolute;
       inset: 0;
@@ -78,6 +78,21 @@ function injectStyles(colors) {
       z-index: 0;
       pointer-events: none;
     }
+
+    .kiosk-bg-slide {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+      will-change: opacity;
+    }
+    .kiosk-bg-slide.active {
+      opacity: 1;
+    }
+
     .kiosk-bg-photo {
       position: absolute;
       inset: -4%;
@@ -85,32 +100,16 @@ function injectStyles(colors) {
       height: 108%;
       object-fit: cover;
       object-position: center 28%;
-      filter: saturate(1.22) contrast(1.12) brightness(0.72);
-      transition: opacity 1.8s ease-in-out;
-    }
-    .kiosk-bg-photo.bg-campus {
-      opacity: 1;
-      animation: bg-cinematic-drift 32s ease-in-out infinite alternate, bg-fade-campus 26s ease-in-out infinite;
-    }
-    .kiosk-bg-photo.bg-food {
-      opacity: 0;
-      animation: bg-cinematic-drift 28s ease-in-out infinite alternate-reverse, bg-fade-food 26s ease-in-out infinite;
-    }
-    @keyframes bg-fade-campus {
-      0%, 42%   { opacity: 1; }
-      50%, 92%  { opacity: 0; }
-      100%      { opacity: 1; }
-    }
-    @keyframes bg-fade-food {
-      0%, 42%   { opacity: 0; }
-      50%, 92%  { opacity: 1; }
-      100%      { opacity: 0; }
+      filter: saturate(1.22) contrast(1.12) brightness(0.70);
+      animation: bg-cinematic-drift 28s ease-in-out infinite alternate;
+      will-change: transform;
     }
     @keyframes bg-cinematic-drift {
       0%   { transform: scale(1) translate(0, 0); }
       50%  { transform: scale(1.06) translate(-1%, -1.2%); }
       100% { transform: scale(1.03) translate(1%, 0.8%); }
     }
+
     .kiosk-bg-glass-overlay {
       position: absolute;
       inset: 0;
@@ -133,6 +132,55 @@ function injectStyles(colors) {
         rgba(2, 6, 5, 0.96) 90%,
         #020504 100%
       );
+    }
+
+    /* ── Ambient Luxury Slide Indicator (Shows Active Featured Dish) ── */
+    #kiosk-slide-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 5px;
+      z-index: 25;
+      pointer-events: auto;
+    }
+    .slide-indicator-track {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 99px;
+      background: rgba(8, 24, 20, 0.78);
+      border: 1px solid rgba(255, 140, 50, 0.35);
+      backdrop-filter: blur(12px);
+    }
+    .indicator-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.35);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+    }
+    .indicator-dot:hover {
+      background: rgba(255, 160, 68, 0.85);
+      transform: scale(1.25);
+    }
+    .indicator-dot.active {
+      width: 18px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #FF6A00, #FFA855);
+      box-shadow: 0 0 10px rgba(255, 106, 0, 0.9);
+    }
+    #slide-feature-tag {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      color: rgba(255, 190, 100, 0.95);
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.8);
+      transition: opacity 0.25s ease;
     }
 
     /* ── Cyber-Varsity Campus Stage Grid Matrix ── */
@@ -1290,6 +1338,23 @@ function injectStyles(colors) {
         font-size: clamp(13px, 1.4vw, 15px);
         min-height: 20px;
       }
+
+      #kiosk-slide-indicator {
+        margin-top: clamp(4px, 0.8vh, 8px);
+      }
+      .slide-indicator-track {
+        padding: 4.5px 12px;
+        gap: 7px;
+      }
+      .indicator-dot {
+        width: 7px; height: 7px;
+      }
+      .indicator-dot.active {
+        width: 20px;
+      }
+      #slide-feature-tag {
+        font-size: clamp(10px, 1.15vw, 12px);
+      }
     }
 
     /* ── Slide-Out Crave Menu Board Drawer ── */
@@ -1518,10 +1583,23 @@ function buildHTML(config) {
 
   return /* html */`
     <div id="app">
-      <!-- Full-Screen Cinematic Campus Atmosphere (Dual Cross-Fade: Campus Life & Gourmet Sizzle) -->
+      <!-- Full-Screen Cinematic Background Slideshow (Full Menu Showcase) -->
       <div id="kiosk-cinematic-bg">
-        <img class="kiosk-bg-photo bg-campus" src="/assets/backgrounds/college_students_hangout.jpg" alt="Syracuse Campus Dining Vibe" />
-        <img class="kiosk-bg-photo bg-food" src="/assets/backgrounds/halal_crave_platter.jpg" alt="Sizzling Halal Crave Platter" />
+        <div class="kiosk-bg-slide active" data-index="0" data-label="🎓 CAMPUS NIGHTS • SYRACUSE 'CUSE">
+          <img class="kiosk-bg-photo" src="/assets/backgrounds/college_students_hangout.jpg" alt="Syracuse Students Hangout" />
+        </div>
+        <div class="kiosk-bg-slide" data-index="1" data-label="🍛 LOADED RICE PLATTERS • $9.99">
+          <img class="kiosk-bg-photo" src="/assets/food/halal_platter.jpg" alt="Loaded Rice Platters" />
+        </div>
+        <div class="kiosk-bg-slide" data-index="2" data-label="🍗 CRISPY SAUCED WINGS • $8.99">
+          <img class="kiosk-bg-photo" src="/assets/food/crispy_wings.jpg" alt="Crispy Sauced Wings" />
+        </div>
+        <div class="kiosk-bg-slide" data-index="3" data-label="🌯 SPEED GYRO WRAPS • $7.99">
+          <img class="kiosk-bg-photo" src="/assets/food/gyro_wrap.jpg" alt="Speed Gyro Wraps" />
+        </div>
+        <div class="kiosk-bg-slide" data-index="4" data-label="⭐ SQUAD HOLICBUCKET 5-IN-1 • $15.99">
+          <img class="kiosk-bg-photo" src="/assets/food/holic_bucket.jpg" alt="Squad HolicBucket" />
+        </div>
         <div class="kiosk-bg-glass-overlay"></div>
         <div class="kiosk-bg-vignette"></div>
       </div>
@@ -1585,6 +1663,18 @@ function buildHTML(config) {
         </div>
       </div>
 
+      <!-- Live Background Slide Indicator (Shows Active Featured Dish) -->
+      <div id="kiosk-slide-indicator">
+        <div class="slide-indicator-track">
+          <span class="indicator-dot active" data-slide="0" title="Campus Nights"></span>
+          <span class="indicator-dot" data-slide="1" title="Loaded Platters"></span>
+          <span class="indicator-dot" data-slide="2" title="Crispy Wings"></span>
+          <span class="indicator-dot" data-slide="3" title="Speed Gyros"></span>
+          <span class="indicator-dot" data-slide="4" title="Squad Bucket"></span>
+        </div>
+        <span id="slide-feature-tag">🎓 CAMPUS NIGHTS • SYRACUSE 'CUSE</span>
+      </div>
+
       <!-- Main Stage: "TRY ASKING MO" Crave Chips + 3D Holographic Stage Pedestal -->
       <section id="kiosk-main-stage">
         <!-- Left Wing (Crave Chips 1 & 2) -->
@@ -1594,7 +1684,7 @@ function buildHTML(config) {
             <span>TRY ASKING MO</span>
           </div>
 
-          <button class="action-wing-card" data-prompt="I have an exam tomorrow, what's a heavy fuel platter?">
+          <button class="action-wing-card" data-prompt="I have an exam tomorrow, what's a heavy fuel platter?" data-slide-target="1">
             <div class="chip-thumb-wrap">
               <img src="/assets/food/halal_platter.jpg" alt="Finals Fuel Platter" />
             </div>
@@ -1608,7 +1698,7 @@ function buildHTML(config) {
             </div>
           </button>
 
-          <button class="action-wing-card" data-prompt="What's hitting today? Tell me your signature pick.">
+          <button class="action-wing-card" data-prompt="What's hitting today? Tell me your signature pick." data-slide-target="2">
             <div class="chip-thumb-wrap">
               <img src="/assets/food/crispy_wings.jpg" alt="Crispy Sauced Wings" />
             </div>
@@ -1657,7 +1747,7 @@ function buildHTML(config) {
             <span>TRY ASKING MO</span>
           </div>
 
-          <button class="action-wing-card" data-prompt="I brought the whole squad. What feeds everyone?">
+          <button class="action-wing-card" data-prompt="I brought the whole squad. What feeds everyone?" data-slide-target="4">
             <div class="chip-thumb-wrap">
               <img src="/assets/food/holic_bucket.jpg" alt="Squad HolicBucket" />
             </div>
@@ -1671,7 +1761,7 @@ function buildHTML(config) {
             </div>
           </button>
 
-          <button class="action-wing-card" data-prompt="I'm running late to class, what's ready in 2 minutes?">
+          <button class="action-wing-card" data-prompt="I'm running late to class, what's ready in 2 minutes?" data-slide-target="3">
             <div class="chip-thumb-wrap">
               <img src="/assets/food/gyro_wrap.jpg" alt="Speed Gyro Rush" />
             </div>
@@ -1731,7 +1821,7 @@ function buildHTML(config) {
       </div>
 
       <!-- Category 1: Loaded Rice Platters -->
-      <div class="menu-category-block">
+      <div class="menu-category-block" data-slide-target="1">
         <div class="menu-cat-hero-img">
           <img src="/assets/food/halal_platter.jpg" alt="Signature Halal Platters" />
           <div class="menu-cat-hero-overlay">
@@ -1740,35 +1830,35 @@ function buildHTML(config) {
           </div>
         </div>
         <div class="menu-items-list">
-          <div class="menu-item-row" data-prompt="Can I get the Chicken Dose Platter?">
+          <div class="menu-item-row" data-prompt="Can I get the Chicken Dose Platter?" data-slide-target="1">
             <div class="item-name-group">
               <span class="item-name">Chicken Dose Platter</span>
               <span class="item-sub">Seasoned basmati rice, spiced chicken, signature white sauce</span>
             </div>
             <span class="item-price-tag">$9.99</span>
           </div>
-          <div class="menu-item-row" data-prompt="Can I get the Lamb Dose Platter?">
+          <div class="menu-item-row" data-prompt="Can I get the Lamb Dose Platter?" data-slide-target="1">
             <div class="item-name-group">
               <span class="item-name">Lamb Dose Platter</span>
               <span class="item-sub">Tender marinated gyro lamb over golden seasoned rice</span>
             </div>
             <span class="item-price-tag">$9.99</span>
           </div>
-          <div class="menu-item-row" data-prompt="Can I get the Mix Combo Dose Platter?">
+          <div class="menu-item-row" data-prompt="Can I get the Mix Combo Dose Platter?" data-slide-target="1">
             <div class="item-name-group">
               <span class="item-name">Mix Combo Dose</span>
               <span class="item-sub">Double protein: Spiced Chicken + Gyro Lamb combo</span>
             </div>
             <span class="item-price-tag">$9.99</span>
           </div>
-          <div class="menu-item-row" data-prompt="Can I get the Falafel Dose Platter?">
+          <div class="menu-item-row" data-prompt="Can I get the Falafel Dose Platter?" data-slide-target="1">
             <div class="item-name-group">
               <span class="item-name">Falafel Dose (Vegetarian)</span>
               <span class="item-sub">Crispy golden handmade falafels & pickled cabbage</span>
             </div>
             <span class="item-price-tag">$9.99</span>
           </div>
-          <div class="menu-item-row" data-prompt="Can you make my platter Extra Holic?">
+          <div class="menu-item-row" data-prompt="Can you make my platter Extra Holic?" data-slide-target="1">
             <div class="item-name-group">
               <span class="item-name">Make It Extra Holic</span>
               <span class="item-sub">Double meat load, extra white sauce & spicy red drizzle</span>
@@ -1779,7 +1869,7 @@ function buildHTML(config) {
       </div>
 
       <!-- Category 2: Speed Gyro Wraps -->
-      <div class="menu-category-block">
+      <div class="menu-category-block" data-slide-target="3">
         <div class="menu-cat-hero-img">
           <img src="/assets/food/gyro_wrap.jpg" alt="Speed Gyro Wraps" />
           <div class="menu-cat-hero-overlay">
@@ -1788,21 +1878,21 @@ function buildHTML(config) {
           </div>
         </div>
         <div class="menu-items-list">
-          <div class="menu-item-row" data-prompt="I need a quick Chicken Gyro.">
+          <div class="menu-item-row" data-prompt="I need a quick Chicken Gyro." data-slide-target="3">
             <div class="item-name-group">
               <span class="item-name">Chicken Gyro Wrap</span>
               <span class="item-sub">Warm toasted flatbread with lettuce, tomato & garlic white sauce</span>
             </div>
             <span class="item-price-tag">$7.99</span>
           </div>
-          <div class="menu-item-row" data-prompt="I need a quick Lamb Gyro.">
+          <div class="menu-item-row" data-prompt="I need a quick Lamb Gyro." data-slide-target="3">
             <div class="item-name-group">
               <span class="item-name">Lamb Gyro Wrap</span>
               <span class="item-sub">Classic shaved gyro with pickled red cabbage & white sauce</span>
             </div>
             <span class="item-price-tag">$7.99</span>
           </div>
-          <div class="menu-item-row" data-prompt="Can I get the Mix Gyro?">
+          <div class="menu-item-row" data-prompt="Can I get the Mix Gyro?" data-slide-target="3">
             <div class="item-name-group">
               <span class="item-name">Mix Gyro Wrap</span>
               <span class="item-sub">Chicken + lamb double protein wrap</span>
@@ -1813,7 +1903,7 @@ function buildHTML(config) {
       </div>
 
       <!-- Category 3: Squad HolicBucket -->
-      <div class="menu-category-block">
+      <div class="menu-category-block" data-slide-target="4">
         <div class="menu-cat-hero-img">
           <img src="/assets/food/holic_bucket.jpg" alt="Squad HolicBucket 5-in-1" />
           <div class="menu-cat-hero-overlay">
@@ -1822,14 +1912,14 @@ function buildHTML(config) {
           </div>
         </div>
         <div class="menu-items-list">
-          <div class="menu-item-row" data-prompt="We want the HolicBucket for the squad!">
+          <div class="menu-item-row" data-prompt="We want the HolicBucket for the squad!" data-slide-target="4">
             <div class="item-name-group">
               <span class="item-name">HolicBucket 5-in-1 Feast</span>
               <span class="item-sub">Tenders, Buffalo Wings, Waffle Fries, Mozz Sticks & Mac Bites</span>
             </div>
             <span class="item-price-tag">$15.99</span>
           </div>
-          <div class="menu-item-row" data-prompt="Can I order 6 piece Wings?">
+          <div class="menu-item-row" data-prompt="Can I order 6 piece Wings?" data-slide-target="2">
             <div class="item-name-group">
               <span class="item-name">6pc Crispy Wings (Sauced)</span>
               <span class="item-sub">Choice of Mild, Hot Holic, or Garlic Parm</span>
@@ -1886,10 +1976,64 @@ export class App {
     this._debugPanel    = document.getElementById('debug-panel');
     this._menuDrawer    = document.getElementById('menu-drawer');
 
+    this._initBgSlideshow();
     this._bindEvents();
   }
 
   get moContainer() { return document.getElementById('mo-container'); }
+
+  _initBgSlideshow() {
+    this._bgSlides = Array.from(document.querySelectorAll('.kiosk-bg-slide'));
+    this._bgDots   = Array.from(document.querySelectorAll('.indicator-dot'));
+    this._bgTagEl  = document.getElementById('slide-feature-tag');
+    this._curSlideIdx = 0;
+    this._slideTimer = null;
+    this._startSlideTimer();
+
+    this._bgDots.forEach(dot => {
+      dot.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const idx = parseInt(dot.dataset.slide, 10);
+        this.goToSlide(idx);
+      });
+    });
+  }
+
+  _startSlideTimer() {
+    if (this._slideTimer) clearInterval(this._slideTimer);
+    this._slideTimer = setInterval(() => {
+      const nextIdx = (this._curSlideIdx + 1) % (this._bgSlides.length || 1);
+      this.goToSlide(nextIdx, false);
+    }, 7000);
+  }
+
+  goToSlide(idx, resetTimer = true) {
+    if (!this._bgSlides || this._bgSlides.length === 0) return;
+    const targetIdx = Math.max(0, Math.min(idx, this._bgSlides.length - 1));
+    this._curSlideIdx = targetIdx;
+
+    this._bgSlides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === targetIdx);
+    });
+
+    this._bgDots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === targetIdx);
+    });
+
+    const activeSlide = this._bgSlides[targetIdx];
+    if (this._bgTagEl && activeSlide) {
+      const label = activeSlide.dataset.label || '';
+      this._bgTagEl.style.opacity = '0';
+      setTimeout(() => {
+        this._bgTagEl.textContent = label;
+        this._bgTagEl.style.opacity = '1';
+      }, 150);
+    }
+
+    if (resetTimer) {
+      this._startSlideTimer();
+    }
+  }
 
   onTalkPress(fn) { this._onTalkPress = fn; }
   onChipClick(fn) { this._onChipClick = fn; }
@@ -1951,7 +2095,20 @@ export class App {
       card.addEventListener('click', () => {
         card.style.transform = 'translateY(1px) scale(0.96)';
         setTimeout(() => { card.style.transform = ''; }, 200);
+        if (card.dataset.slideTarget !== undefined) {
+          this.goToSlide(parseInt(card.dataset.slideTarget, 10));
+        }
         this._onChipClick?.(card.dataset.prompt);
+      });
+    });
+
+    // Menu Category Hero Cards click to switch slide
+    document.querySelectorAll('.menu-category-block').forEach(block => {
+      const hero = block.querySelector('.menu-cat-hero-img');
+      hero?.addEventListener('click', () => {
+        if (block.dataset.slideTarget !== undefined) {
+          this.goToSlide(parseInt(block.dataset.slideTarget, 10));
+        }
       });
     });
 
@@ -1964,6 +2121,9 @@ export class App {
     document.querySelectorAll('.menu-item-row[data-prompt]').forEach(row => {
       row.style.cursor = 'pointer';
       row.addEventListener('click', () => {
+        if (row.dataset.slideTarget !== undefined) {
+          this.goToSlide(parseInt(row.dataset.slideTarget, 10));
+        }
         this._menuDrawer.classList.remove('open');
         this._onChipClick?.(row.dataset.prompt);
       });
@@ -1996,3 +2156,4 @@ export class App {
     });
   }
 }
+
