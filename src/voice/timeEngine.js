@@ -57,7 +57,7 @@ export function getCampusTimeContext(date = new Date()) {
       `It is ${formattedTime} morning on ${dayOfWeek}. Greet the student like a funny, pranky classmate: ask what is going on today and where they just crawled in from (an 8 AM lecture, morning gym workout, dorm bunk, or some other place?) — 1 punchy sentence, no food pitch!`,
       `Morning check-in at ${formattedTime}! Crack a quick laugh with Mo's pranky charm: ask how they're surviving the cold morning and where they just walked in from (dorm, gym, shift, or somewhere else?) — 1 punchy line!`,
       `It's ${formattedTime} morning. Hit them with Mo's warm brotherly humor: ask what dragged them out of bed so early and where they just came from (class, workout, bed, or some other place?) — 1 sentence!`,
-      `Early morning arrival at ${formattedTime}. Check in like a close friend: ask what's good today and where they just made their way from (dorm, lecture, campus job, or some other place?) — 1 snappy line!`,
+      `Early morning arrival at ${formattedTime}. Check in like a close friend: ask what's good today, where they just made their way from (dorm, lecture, campus job, or some other place?), and what name they go by if they're comfortable sharing — 1 snappy line!`,
     ];
   } else if (timeDec >= 10.5 && timeDec < 14.5) {
     slot = TIME_SLOTS.LUNCH_RUSH;
@@ -68,7 +68,7 @@ export function getCampusTimeContext(date = new Date()) {
     realisticLocations = ['lecture hall', 'basketball pickup courts', 'Schine student center', 'library', 'campus job', 'or some other place'];
     greetingHooks = [
       `It is ${formattedTime} on ${dayOfWeek}. Greet the student like a funny, pranky classmate: ask what's going on today and where they just came from (sprinting from a lecture, pickup hoops at the courts, library, or some other place?) — 1 punchy sentence!`,
-      `Midday arrival at ${formattedTime}! Look who made it! Break the ice with funny classmate energy: ask where they just walked in from (class, the courts, dorm, or somewhere else?) — 1 punchy sentence!`,
+      `Midday arrival at ${formattedTime}! Look who made it! Break the ice with funny classmate energy: ask where they just walked in from (class, the courts, dorm, or somewhere else?) and what to call them if they're cool sharing — 1 punchy sentence!`,
       `It's ${formattedTime} midday. Greet your classmate with spontaneous humor: ask what's happening with their day and where they just escaped from (a professor, the gym, student center, or some other place?) — 1 sentence!`,
       `Lunch hour check-in at ${formattedTime}. Welcome them with charismatic peer wit: ask what is good with them today and where they just came from (classes, courts, work, or some other place?) — 1 snappy line!`,
     ];
@@ -83,7 +83,7 @@ export function getCampusTimeContext(date = new Date()) {
       `It is ${formattedTime} afternoon on ${dayOfWeek}. Greet the student like a funny, pranky classmate: ask what is going on today and where they just came from (a 3-hour lab, design studio, turf fields, waking from a nap, or some other place?) — 1 punchy sentence!`,
       `Afternoon check-in at ${formattedTime}! Welcome your classmate with humorous charm: ask how their day is going and where they just walked over from (studio, the courts, classes, or somewhere else?) — 1 punchy sentence!`,
       `It's ${formattedTime} afternoon. Break the ice naturally: ask what's happening with them today and where they just escaped from (lecture, dorm hibernation, gym, or some other place?) — 1 snappy line!`,
-      `Afternoon arrival at ${formattedTime}. Check in like a close buddy with funny boy energy: ask where they just came from (sports courts, studio grind, library, or some other place?) — 1 punchy line!`,
+      `Afternoon arrival at ${formattedTime}. Check in like a close buddy with funny boy energy: ask where they just came from (sports courts, studio grind, library, or some other place?) and what name they go by if they're comfortable sharing — 1 punchy line!`,
     ];
   } else if (timeDec >= 17.5 && timeDec < 21.5) {
     slot = TIME_SLOTS.DINNER_RUSH;
@@ -96,7 +96,7 @@ export function getCampusTimeContext(date = new Date()) {
     realisticLocations = ['sports practice / gym workout', 'frat / sorority house', 'Euclid Ave apartment', 'campus club meeting', 'late lecture', 'or some other place'];
     greetingHooks = [
       `It is ${formattedTime} evening on ${dayOfWeek}. Greet the student with pranky, charismatic warmth: ask how their whole day went and where they just walked in from (gym lift, sports practice, Euclid house, or some other place?) — 1 punchy sentence!`,
-      `Evening check-in at ${formattedTime}! Welcome them like their favorite funny friend: ask what's going on tonight and where they just wrapped up from (Barnes Center, student club, dorm, or somewhere else?) — 1 punchy sentence!`,
+      `Evening check-in at ${formattedTime}! Welcome them like their favorite funny friend: ask what's going on tonight, where they just wrapped up from (Barnes Center, student club, dorm, or somewhere else?), and what name they go by if they're cool sharing — 1 punchy sentence!`,
       `It's ${formattedTime} dinner hour. Greet your classmate with infectious humor: ask what is good with them tonight and where they just came from (practice, classes, hangout, or some other place?) — 1 snappy line!`,
       `Evening arrival at ${formattedTime}. Check in with brotherly humor: ask what's the plan tonight and where they just came over from (dorm, gym, library, or some other place?) — 1 punchy line!`,
     ];
@@ -113,7 +113,7 @@ export function getCampusTimeContext(date = new Date()) {
       `It is ${formattedTime} late night on ${dayOfWeek}. Greet the student like a funny late-night accomplice: ask what's going on tonight and where they just wandered in from (dorm gaming session, Bird Library basement, late gym lift, or some other place?) — 1 punchy sentence!`,
       `Late-night arrival at ${formattedTime}! Welcome them with pranky, magnetic wit: ask what crazy mission has them out this late and where they came from (the library, a party, dorm, or somewhere else?) — 1 punchy line!`,
       `It's ${formattedTime} night. Hit them with Mo's funny late-night humor: ask what's happening tonight and where they just came from (hackathon, dorm hangout, gym, or some other place?) — 1 snappy sentence!`,
-      `Midnight check-in at ${formattedTime}. Greet them with real peer humor: ask what brought them out into the Syracuse night and where they just walked in from (dorm, library, or some other place?) — 1 punchy line!`,
+      `Midnight check-in at ${formattedTime}. Greet them with real peer humor: ask what brought them out into the Syracuse night, where they just walked in from (dorm, library, or some other place?), and what's their name if they're cool sharing — 1 punchy line!`,
     ];
   } else {
     // 02:00 - 05:00
