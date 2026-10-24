@@ -84,6 +84,8 @@ function nextListeningCaption() {
     `Where did you just walk in from?`,
     `What should I call you, if you're cool sharing?`,
     `Lecture, gym, dorm, or somewhere else?`,
+    `Platters, wraps, or wings? Ask Mo!`,
+    `Tap EXPLORE MENU at top for all items & prices!`,
     `Be 100% real — how was the food today?`,
     `I'm listening, habibi — how was your day?`,
     `Any complaints or feedback for Mo?`,
