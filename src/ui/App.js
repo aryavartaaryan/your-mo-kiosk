@@ -530,71 +530,6 @@ function injectStyles(colors) {
       text-overflow: ellipsis;
     }
 
-    /* ── Sleek Compact Live Campus Ticker (Docked cleanly below header, off Mo's head) ── */
-    #kiosk-live-ticker {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-      margin-top: 3px;
-      margin-bottom: 0;
-      z-index: 20;
-      pointer-events: none;
-      flex-shrink: 0;
-    }
-    .ticker-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 3px 14px;
-      border-radius: 99px;
-      background: rgba(10, 26, 22, 0.88);
-      border: 1px solid rgba(255, 140, 50, 0.38);
-      backdrop-filter: blur(14px);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.45);
-    }
-    .ticker-fire {
-      font-size: 11px;
-      filter: drop-shadow(0 0 5px #FF6A00);
-      animation: flame-flicker 1.8s infinite alternate;
-    }
-    .ticker-text {
-      font-size: 9.5px;
-      font-weight: 800;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: #FFF;
-      font-family: var(--font-display);
-      white-space: nowrap;
-    }
-    .ticker-text strong {
-      color: #FFA044;
-      font-weight: 900;
-    }
-    .ticker-sep {
-      color: rgba(255, 160, 68, 0.4);
-      font-size: 8px;
-    }
-    .ticker-tag {
-      font-size: 9px;
-      font-weight: 800;
-      letter-spacing: 0.8px;
-      color: #72CC38;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-    .ticker-perk {
-      font-size: 9px;
-      font-weight: 800;
-      letter-spacing: 0.8px;
-      color: #FFB055;
-      text-transform: uppercase;
-      background: rgba(255, 160, 68, 0.16);
-      border: 1px solid rgba(255, 160, 68, 0.45);
-      padding: 1.5px 6px;
-      border-radius: 99px;
-      white-space: nowrap;
-    }
-
     /* ── Main Stage Area: Side Wings + 3D Holographic Stage Pedestal ── */
     #kiosk-main-stage {
       position: relative; z-index: 10;
@@ -848,7 +783,7 @@ function injectStyles(colors) {
     /* ── Dynamic Floating Speech Bubble Anchored to Mo ── */
     #mo-speech-bubble {
       position: absolute;
-      top: -10px;
+      top: -76px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 25;
@@ -1463,12 +1398,6 @@ function injectStyles(colors) {
         line-height: 1.35;
       }
 
-      #kiosk-live-ticker {
-        order: 4;
-        margin-top: 4px;
-        margin-bottom: 2px;
-      }
-
       /* Main Stage Area: Full Vertical Scale */
       #kiosk-main-stage {
         flex: 1;
@@ -1503,7 +1432,7 @@ function injectStyles(colors) {
 
       /* Dynamic Floating Speech Bubble */
       #mo-speech-bubble {
-        top: -14px;
+        top: -64px;
         padding: 11px 26px;
         max-width: min(92vw, 620px);
         border-radius: 24px;
@@ -1763,28 +1692,6 @@ function injectStyles(colors) {
         order: 3;
       }
 
-      /* Sleek live ticker: elegant horizontal pill docked directly under header, leaving Mo 100% free */
-      #kiosk-live-ticker {
-        margin-top: 3px;
-        margin-bottom: 0;
-        z-index: 10;
-      }
-      .ticker-pill {
-        padding: 3px 16px;
-        gap: 8px;
-        background: rgba(8, 26, 20, 0.9);
-      }
-      .ticker-fire {
-        font-size: 11px;
-      }
-      .ticker-text {
-        font-size: 9px;
-        letter-spacing: 1px;
-      }
-      .ticker-tag, .ticker-perk {
-        font-size: 8.5px;
-      }
-
       /* Ambient Luxury Slide Indicator: Float gracefully at bottom-left corner */
       /* Frees up the entire center stage above Mo while keeping all 9 dots & titles interactive */
       #kiosk-slide-indicator {
@@ -1863,14 +1770,14 @@ function injectStyles(colors) {
         position: relative;
       }
       #mo-stage-wrapper {
-        width: min(78vh, 660px);
-        height: min(78vh, 660px);
+        width: min(74vh, 620px);
+        height: min(74vh, 620px);
         position: relative;
-        margin-top: 14px;
+        margin-top: 26px;
       }
       #mo-container {
-        transform: scale(1.24);
-        transform-origin: 50% 86%;
+        transform: scale(1.18);
+        transform-origin: 50% 90%;
       }
       #mo-stage-pedestal {
         bottom: -4px;
@@ -1907,7 +1814,7 @@ function injectStyles(colors) {
 
       /* Speech Bubble: Cleanly elevated above Mo's head with ZERO overlap and 100% visibility */
       #mo-speech-bubble {
-        top: -24px;
+        top: -82px;
         left: 50%;
         transform: translateX(-50%);
         padding: 9px 24px;
@@ -1980,26 +1887,17 @@ function injectStyles(colors) {
       .mo-story-text {
         font-size: 10.5px;
       }
-      #kiosk-live-ticker {
-        margin-top: 2px;
-      }
-      .ticker-pill {
-        padding: 2px 10px;
-      }
-      .ticker-text {
-        font-size: 8.5px;
-      }
       #mo-stage-wrapper {
         width: min(72vh, 560px);
         height: min(72vh, 560px);
-        margin-top: 4px;
+        margin-top: 18px;
       }
       #mo-container {
-        transform: scale(1.20);
-        transform-origin: 50% 86%;
+        transform: scale(1.15);
+        transform-origin: 50% 90%;
       }
       #mo-speech-bubble {
-        top: -18px;
+        top: -70px;
         padding: 6px 18px;
         z-index: 40;
       }
@@ -2573,18 +2471,6 @@ function buildHTML(config) {
           </div>
         </div>
       </header>
-
-      <!-- Sleek Campus Live Social Ticker (Docked cleanly below header, completely off Mo's head) -->
-      <div id="kiosk-live-ticker">
-        <div class="ticker-pill">
-          <span class="ticker-fire">🔥</span>
-          <span class="ticker-text"><strong>1,840+ PLATTERS</strong> ORDERED TODAY ON 'CUSE CAMPUS</span>
-          <span class="ticker-sep">•</span>
-          <span class="ticker-tag">⚡ 2-MIN SPEED RUSH</span>
-          <span class="ticker-sep">•</span>
-          <span class="ticker-perk">⭐ FREE SAUCE W/ STUDENT ID</span>
-        </div>
-      </div>
 
       <!-- Live Background Slide Indicator (Shows Active Featured Dish) -->
       <div id="kiosk-slide-indicator">
