@@ -108,16 +108,16 @@ export const Mo = (() => {
           pointer-events: none;
           user-select: none;
           z-index: 3;
-          transform-origin: 51.06% 32.08%;
+          transform-origin: 51.0% 31.83%;
           will-change: transform;
         ">
-          <img id="mo-viseme-aa" src="${ASSETS.visemes.aa}" alt="AA" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.06% 32.08%; pointer-events: none;" />
-          <img id="mo-viseme-ee" src="${ASSETS.visemes.ee}" alt="EE" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.06% 32.08%; pointer-events: none;" />
-          <img id="mo-viseme-oh" src="${ASSETS.visemes.oh}" alt="OH" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.06% 32.08%; pointer-events: none;" />
-          <img id="mo-viseme-ou" src="${ASSETS.visemes.ou}" alt="OU" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.06% 32.08%; pointer-events: none;" />
-          <img id="mo-viseme-dental" src="${ASSETS.visemes.dental}" alt="DENTAL" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.06% 32.08%; pointer-events: none;" />
-          <img id="mo-viseme-fv" src="${ASSETS.visemes.fv}" alt="FV" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.06% 32.08%; pointer-events: none;" />
-          <img id="mo-viseme-mbp" src="${ASSETS.visemes.mbp}" alt="MBP" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.06% 32.08%; pointer-events: none;" />
+          <img id="mo-viseme-aa" src="${ASSETS.visemes.aa}" alt="AA" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.0% 31.83%; pointer-events: none;" />
+          <img id="mo-viseme-ee" src="${ASSETS.visemes.ee}" alt="EE" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.0% 31.83%; pointer-events: none;" />
+          <img id="mo-viseme-oh" src="${ASSETS.visemes.oh}" alt="OH" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.0% 31.83%; pointer-events: none;" />
+          <img id="mo-viseme-ou" src="${ASSETS.visemes.ou}" alt="OU" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.0% 31.83%; pointer-events: none;" />
+          <img id="mo-viseme-dental" src="${ASSETS.visemes.dental}" alt="DENTAL" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.0% 31.83%; pointer-events: none;" />
+          <img id="mo-viseme-fv" src="${ASSETS.visemes.fv}" alt="FV" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.0% 31.83%; pointer-events: none;" />
+          <img id="mo-viseme-mbp" src="${ASSETS.visemes.mbp}" alt="MBP" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.0% 31.83%; pointer-events: none;" />
         </div>
 
         <!-- Layer 3: 3D Natural Eyelid Overlay for Organic Blinking -->
@@ -240,56 +240,57 @@ export const Mo = (() => {
       $shadow.style.transform = `translateX(${shadowX.toFixed(2)}px) scale(${shadowScale.toFixed(3)})`;
     }
 
-    // 6. Modern AI Avatar Phonetic Lip-Sync & Dual-Buffer Morphing Engine
+    // 6. True Living Anatomical Mouth Opening & Closing Engine
     _smoothAperture += (_rawAperture - _smoothAperture) * 0.88;
     _smoothSpread   += (_rawSpread - _smoothSpread) * 0.35;
 
-    // Advance morph alpha: 0.0 -> 1.0 in ~50ms (3 frames at 60 FPS)
-    _morphAlpha = Math.min(1.0, _morphAlpha + 0.28);
+    // Advance morph alpha: 0.0 -> 1.0 in ~45ms
+    _morphAlpha = Math.min(1.0, _morphAlpha + 0.32);
 
     if ($mouthGroup) {
-      const isSpeaking = _curState === 'talking' && _smoothAperture > 0.032;
+      const openAmount = Math.max(0, Math.min(1.0, _smoothAperture));
+      const isSpeaking = _curState === 'talking' && openAmount > 0.038;
 
-      // Helper function to calculate parametric muscle scaling for any viseme
-      const getScale = (visemeKey, ap) => {
-        let sx = 1.0, sy = 1.0;
+      // Vertical mouth opening: scales from 0.05 (closed slit) to 1.15 (wide open)
+      // This physically pulls the lips apart vertically with acoustic volume!
+      const verticalAperture = Math.max(0.04, openAmount * 1.15);
+
+      // Chin / Jaw drop: drops the skeletal jaw down by up to 3.5px with opening
+      const jawDropY = openAmount * 3.4;
+      $mouthGroup.style.transform = `translateY(${jawDropY.toFixed(2)}px)`;
+
+      // Dynamic opacity: rapid fade-in as lips part, complete fade to 0 when closed
+      const mouthOpacity = Math.min(1.0, (openAmount - 0.038) / 0.06);
+
+      const getScale = (visemeKey) => {
+        let sx = 1.0;
+        let sy = verticalAperture;
+
         if (visemeKey === 'aa') {
-          sy = 0.94 + ap * 0.44;
-          sx = 0.98 - ap * 0.04;
+          sy = verticalAperture * 1.25;
+          sx = 1.0 - openAmount * 0.04;
         } else if (visemeKey === 'oh') {
-          sy = 0.94 + ap * 0.34;
-          sx = 0.93 - ap * 0.09;
+          sy = verticalAperture * 1.12;
+          sx = 0.94 - openAmount * 0.08;
         } else if (visemeKey === 'ou') {
-          sy = 0.92 + ap * 0.28;
-          sx = 0.86 - ap * 0.12;
+          sy = verticalAperture * 0.96;
+          sx = 0.86 - openAmount * 0.12;
         } else if (visemeKey === 'ee') {
-          sy = 0.90 + ap * 0.16;
-          sx = 1.05 + ap * 0.18;
+          sy = verticalAperture * 0.85;
+          sx = 1.04 + openAmount * 0.16;
         } else if (visemeKey === 'dental') {
-          sy = 0.88 + ap * 0.22;
-          sx = 1.01 + ap * 0.06;
+          sy = verticalAperture * 0.80;
+          sx = 1.01 + openAmount * 0.05;
         } else if (visemeKey === 'fv') {
-          sy = 0.86 + ap * 0.18;
+          sy = verticalAperture * 0.75;
           sx = 0.98;
         } else if (visemeKey === 'mbp') {
-          sy = 0.84 + ap * 0.12;
+          sy = verticalAperture * 0.45;
           sx = 0.98;
         }
         return { sx, sy };
       };
 
-      // Anatomical Jaw-Drop Transform
-      let jawDropY = 0;
-      if (isSpeaking && _primaryViseme !== 'rest') {
-        if (_primaryViseme === 'aa') jawDropY = _smoothAperture * 3.4;
-        else if (_primaryViseme === 'oh') jawDropY = _smoothAperture * 2.6;
-        else if (_primaryViseme === 'ou') jawDropY = _smoothAperture * 1.8;
-        else if (_primaryViseme === 'ee' || _primaryViseme === 'dental') jawDropY = _smoothAperture * 1.2;
-        else jawDropY = _smoothAperture * 0.6;
-      }
-      $mouthGroup.style.transform = `translateY(${jawDropY.toFixed(2)}px)`;
-
-      // Render 7 visemes with Dual-Buffer Morphing (ZERO pop / ZERO ghosting)
       for (let i = 0; i < VISEME_KEYS.length; i++) {
         const key = VISEME_KEYS[i];
         const el = $visemeEls[key];
@@ -297,17 +298,14 @@ export const Mo = (() => {
 
         if (isSpeaking) {
           if (key === _primaryViseme) {
-            // Incoming active viseme: on top (zIndex 3), fades in from 0 -> 1
-            const { sx, sy } = getScale(key, _smoothAperture);
-            const fade = _secondaryViseme === 'rest' ? Math.min(1.0, (_smoothAperture - 0.032) / 0.05) : 1.0;
-            const op = _morphAlpha * fade;
+            const { sx, sy } = getScale(key);
+            const op = _morphAlpha * mouthOpacity;
             el.style.zIndex = '3';
             el.style.opacity = op.toFixed(3);
             el.style.transform = `scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`;
           } else if (key === _secondaryViseme && _morphAlpha < 1.0) {
-            // Outgoing viseme: underneath (zIndex 2), remains opaque to mask base smile while primary fades in
-            const { sx, sy } = getScale(key, _smoothAperture);
-            const op = (1.0 - _morphAlpha);
+            const { sx, sy } = getScale(key);
+            const op = (1.0 - _morphAlpha) * mouthOpacity;
             el.style.zIndex = '2';
             el.style.opacity = op.toFixed(3);
             el.style.transform = `scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`;
@@ -316,7 +314,6 @@ export const Mo = (() => {
             el.style.opacity = '0';
           }
         } else {
-          // Closed resting smile
           el.style.zIndex = '1';
           el.style.opacity = '0';
         }

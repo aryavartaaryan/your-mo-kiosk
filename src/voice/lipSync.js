@@ -9,10 +9,11 @@
 import { Mo } from '../character/Mo.js';
 
 // ── Tuning parameters ─────────────────────────────────────────────────────────
-const NOISE_GATE      = 0.0035; // RMS threshold for silence (resting smile)
-const ATTACK_RATE     = 0.90;   // Instantaneous jaw onset (<16ms, zero perceptual delay)
-const RELEASE_RATE    = 0.24;   // Natural phonetic syllable closure (~65ms decay)
-const NORMALIZE_PEAK  = 0.082;  // Calibrated to Gemini Live 24kHz vocal stream
+const NOISE_FLOOR     = 0.0055; // Reverb/silence baseline cutoff
+const PEAK_LEVEL      = 0.075;  // Typical loud vowel RMS level
+const ATTACK_RATE     = 0.88;   // Snappy jaw opening on vowel/syllable onset
+const RELEASE_RATE    = 0.38;   // Rapid jaw closure on syllable offsets & stops (closes in ~35ms)
+const GAMMA_CONTRAST  = 1.65;   // Contrast expander: forces valleys to zero so mouth shuts between words
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let _rafId          = null;
@@ -74,13 +75,15 @@ export function startLipSync(analyserNode) {
 
     // 3. Phonetic Target Classification
     let candidateViseme = 'rest';
-    let rawSignal = 0;
+    let rawNormalized = 0;
 
-    if (rms < NOISE_GATE) {
+    if (rms <= NOISE_FLOOR) {
       candidateViseme = 'rest';
-      rawSignal = 0;
+      rawNormalized = 0;
     } else {
-      rawSignal = Math.max(rms, (_sibSmooth / 255) * 0.045);
+      const vocalRms = (rms - NOISE_FLOOR) / (PEAK_LEVEL - NOISE_FLOOR);
+      const sibilant = _sibSmooth > 85 ? (_sibSmooth - 85) / 160 * 0.35 : 0;
+      rawNormalized = Math.max(vocalRms, sibilant);
 
       if (_sibSmooth > 92 && _sibSmooth > _f1Smooth * 1.15) {
         // Sibilants: /s, z, t, d, th, ch/ (teeth clenched dental)
@@ -114,7 +117,21 @@ export function startLipSync(analyserNode) {
       }
     }
 
-    // 4. Syllabic Dwell & Coarticulation Debouncing
+    rawNormalized = Math.max(0, Math.min(1.0, rawNormalized));
+
+    // 4. Dynamic Contrast Envelope Follower
+    // Power curve (gamma 1.65) pushes inter-word dips to 0 so the mouth completely shuts,
+    // while driving loud vowels to full aperture.
+    const targetAperture = Math.pow(rawNormalized, GAMMA_CONTRAST);
+    const rate           = targetAperture > _envelope ? ATTACK_RATE : RELEASE_RATE;
+    _envelope           += rate * (targetAperture - _envelope);
+
+    // If envelope dips below 0.04, snap candidate to rest (shut mouth)
+    if (_envelope < 0.04) {
+      candidateViseme = 'rest';
+    }
+
+    // 5. Syllabic Dwell & Coarticulation Debouncing
     const isVowel = candidateViseme === 'aa' || candidateViseme === 'oh' || candidateViseme === 'ee' || candidateViseme === 'ou';
     const targetDwell = isVowel ? 5 : 3;
 
@@ -122,7 +139,7 @@ export function startLipSync(analyserNode) {
       _activeViseme = 'rest';
       _dwellCount   = 0;
     } else if (candidateViseme !== _activeViseme) {
-      if (_dwellCount <= 0 || (candidateViseme === 'aa' && rms > 0.045)) {
+      if (_dwellCount <= 0 || (candidateViseme === 'aa' && _envelope > 0.45)) {
         _activeViseme = candidateViseme;
         _dwellCount   = targetDwell;
       } else {
@@ -131,11 +148,6 @@ export function startLipSync(analyserNode) {
     } else {
       _dwellCount = Math.max(0, _dwellCount - 1);
     }
-
-    // 5. Envelope Follower (Zero-Lag Attack, Organic Phonetic Release)
-    const target = Math.min(1.0, rawSignal / NORMALIZE_PEAK);
-    const rate   = target > _envelope ? ATTACK_RATE : RELEASE_RATE;
-    _envelope   += rate * (target - _envelope);
 
     // 6. Conversational Cadence (smooth pacing signal for head nod & emphasis)
     _cadence += 0.22 * (_envelope - _cadence);
