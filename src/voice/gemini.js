@@ -35,10 +35,11 @@ function base64ToInt16(b64) {
 export class GeminiVoiceSession {
   /** @param {Record<string, Function>} callbacks */
   constructor(callbacks = {}) {
-    this._cb              = callbacks;
-    this._session         = null;
-    this._latencyMark     = null;
-    this._waitingForAudio = false;
+    this._cb               = callbacks;
+    this._session          = null;
+    this._latencyMark      = null;
+    this._waitingForAudio  = false;
+    this._pendingTextQueue = [];
   }
 
   async connect() {
@@ -51,7 +52,7 @@ export class GeminiVoiceSession {
 
     const ai = new GoogleGenAI({ apiKey });
 
-    this._session = await ai.live.connect({
+    const session = await ai.live.connect({
       model: CONFIG.GEMINI_MODEL,
 
       config: {
@@ -86,12 +87,17 @@ export class GeminiVoiceSession {
       },
 
       callbacks: {
-        onopen:    ()    => this._handleOpen(),
+        // Note: SDK fires onopen before session setup is complete.
+        // We trigger _handleOpen below AFTER the session is fully resolved.
+        onopen:    ()    => {},
         onmessage: (msg) => this._handleMessage(msg),
         onerror:   (err) => this._handleError(err),
         onclose:   (ev)  => this._handleClose(ev),
       },
     });
+
+    this._session = session;
+    this._handleOpen();
   }
 
   /**
@@ -118,7 +124,11 @@ export class GeminiVoiceSession {
    * @param {string} text
    */
   sendTextMessage(text) {
-    if (!this._session) return;
+    if (!this._session) {
+      console.log('[Gemini] Session connecting — queueing text turn:', text);
+      this._pendingTextQueue.push(text);
+      return;
+    }
     try {
       this._latencyMark     = performance.now();
       this._waitingForAudio = true;
@@ -134,6 +144,7 @@ export class GeminiVoiceSession {
   close() {
     try { this._session?.close(); } catch {}
     this._session = null;
+    this._pendingTextQueue = [];
   }
 
   // ── Private ───────────────────────────────────────────────────────────────
@@ -141,6 +152,11 @@ export class GeminiVoiceSession {
   _handleOpen() {
     console.log(`[Gemini] Connected ✓  model=${CONFIG.GEMINI_MODEL}  voice=${CONFIG.VOICE_NAME}`);
     this._cb.onOpen?.();
+    while (this._pendingTextQueue.length > 0) {
+      const queued = this._pendingTextQueue.shift();
+      console.log('[Gemini] Flushing queued text turn:', queued);
+      this.sendTextMessage(queued);
+    }
   }
 
   _handleMessage(msg) {

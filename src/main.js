@@ -80,13 +80,14 @@ app.onTalkPress(async () => {
 
 // Interactive College Action Cards for instant one-tap student engagement
 app.onChipClick(async (prompt) => {
+  app.setUserCaption(prompt);
+  goState('thinking');
+  Mo.setPose('thinking');
+  Mo.setExpression('thinking');
+
   if (!_isActive) {
     await startVoiceSession(prompt);
   } else {
-    app.setUserCaption(prompt);
-    goState('thinking');
-    Mo.setPose('thinking');
-    Mo.setExpression('thinking');
     _session?.sendTextMessage(prompt);
   }
 });

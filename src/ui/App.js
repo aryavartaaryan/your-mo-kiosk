@@ -1,14 +1,14 @@
 // src/ui/App.js
 // ─────────────────────────────────────────────────────────────────────────────
-// Halalholic Kiosk UI Shell v10.0 — Syracuse University Flagship World-Class Edition
-// Ultra-Premium US QSR Collegiate Kiosk:
+// Halalholic Kiosk UI Shell v11.0 — "Meet Mo" Dedicated Kiosk Edition
+// Engineered exclusively for physical touchscreen kiosks (Portrait & Landscape):
+//   • "Meet Mo" hero identity adapted from premier AI kiosk avatars (Humion)
+//   • Dedicated "TRY ASKING MO" quick-touch Crave Chips with gourmet food thumbnails
+//   • Full adaptive dual-kiosk engine: Portrait (Vertical Tower) & Landscape (Countertop)
 //   • Grounded 3D Holographic Stage Pedestal & realistic floor occlusion shadow
-//   • Monumental horizontal varsity stadium arch (HALALHOLIC) with zero collisions
-//   • High-Energy Crave Chips with real food photography thumbnails & neon badges
-//   • Dynamic floating speech bubble anchored to Mo with live acoustic EQ waves
-//   • Perfectly centered circular Sonic Reactor ("Tap to Talk") with concentric waves
-//   • Seamless peripheral campus lifestyle & food craving interactive vignettes
-//   • Unified frosted obsidian luxury navigation header
+//   • Dynamic comic speech bubble anchored directly above Mo with acoustic EQ wave
+//   • Centered circular Sonic Reactor ("Tap to Talk") with concentric acoustic waves
+//   • Touch-first ergonomics: oversized targets, zero zoom/selection, instant haptic response
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { CONFIG } from '../config.js';
@@ -17,16 +17,21 @@ function injectStyles(colors) {
   const css = /* css */`
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Space+Grotesk:wght@700;800;900&display=swap');
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
 
     :root {
       --c-primary:        ${colors.primary};
       --c-secondary:      ${colors.secondary};
       --c-accent:         ${colors.accent};
-      --c-bg:             #070D0B;
-      --c-surface:        #0E201C;
-      --c-surface-glass:  rgba(14, 30, 26, 0.88);
-      --c-card-glass:     rgba(14, 32, 28, 0.86);
+      --c-bg:             #060B09;
+      --c-surface:        #0D1E1A;
+      --c-surface-glass:  rgba(13, 30, 26, 0.90);
+      --c-card-glass:     rgba(14, 32, 28, 0.88);
       --c-text:           ${colors.text};
       --c-muted:          ${colors.textMuted};
       --font-display:     'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
@@ -42,6 +47,7 @@ function injectStyles(colors) {
       font-family: var(--font-ui);
       -webkit-font-smoothing: antialiased;
       user-select: none;
+      -webkit-user-select: none;
     }
 
     body {
@@ -59,7 +65,7 @@ function injectStyles(colors) {
       height: 100vh;
       position: relative;
       overflow: hidden;
-      background: radial-gradient(ellipse at 50% 36%, #152A23 0%, #08110E 55%, #050A08 100%);
+      background: radial-gradient(ellipse at 50% 32%, #142822 0%, #08110E 55%, #050908 100%);
     }
 
     /* ── Cyber-Varsity Campus Stage Grid Matrix ── */
@@ -67,69 +73,13 @@ function injectStyles(colors) {
       position: absolute;
       inset: 0;
       background-image:
-        linear-gradient(rgba(255, 110, 20, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 110, 20, 0.04) 1px, transparent 1px);
+        linear-gradient(rgba(255, 110, 20, 0.038) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 110, 20, 0.038) 1px, transparent 1px);
       background-size: 54px 54px;
       mask-image: radial-gradient(ellipse at 50% 46%, black 35%, transparent 80%);
       -webkit-mask-image: radial-gradient(ellipse at 50% 46%, black 35%, transparent 80%);
       pointer-events: none;
       z-index: 0;
-    }
-
-    /* ── Monumental Architectural Brand Identity: Varsity Stadium Horizon Banner ── */
-    #bg-brand-backdrop {
-      position: absolute;
-      top: 15%;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      pointer-events: none;
-      user-select: none;
-      z-index: 1;
-      width: 100%;
-      max-width: 1200px;
-    }
-
-    #bg-brand-backdrop .bg-title-crest {
-      font-family: var(--font-display);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 4.5px;
-      color: #FFA044;
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 2px;
-      opacity: 0.95;
-      text-shadow: 0 0 16px rgba(255, 160, 68, 0.7);
-    }
-
-    #bg-brand-backdrop .bg-title-text {
-      font-family: var(--font-display);
-      font-size: clamp(58px, 8.8vw, 115px);
-      font-weight: 900;
-      letter-spacing: 0.22em;
-      line-height: 0.92;
-      text-transform: uppercase;
-      color: transparent;
-      -webkit-text-stroke: 2.5px rgba(255, 120, 30, 0.42);
-      background: linear-gradient(180deg, rgba(255,255,255,0.38) 0%, rgba(255,115,20,0.22) 55%, rgba(10,36,32,0.02) 100%);
-      -webkit-background-clip: text;
-      filter: drop-shadow(0 0 42px rgba(255, 106, 0, 0.35));
-      white-space: nowrap;
-    }
-
-    #bg-brand-backdrop .bg-title-sub {
-      font-size: 10.5px;
-      font-weight: 700;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: rgba(255, 160, 68, 0.65);
-      margin-top: 4px;
     }
 
     /* ── Ambient Radial Saffron Warmth Behind Mascot ── */
@@ -141,8 +91,8 @@ function injectStyles(colors) {
       width: min(72vh, 620px);
       height: min(72vh, 620px);
       background: radial-gradient(circle,
-        rgba(255, 120, 20, 0.24) 0%,
-        rgba(255, 80, 0, 0.09) 38%,
+        rgba(255, 120, 20, 0.22) 0%,
+        rgba(255, 80, 0, 0.08) 38%,
         rgba(10, 36, 32, 0.03) 65%,
         transparent 75%
       );
@@ -170,14 +120,14 @@ function injectStyles(colors) {
       100% { transform: translateY(-105vh) scale(0.2); opacity: 0; }
     }
 
-    /* ── Header: Unified Luxury Frosted Navigation Bar ── */
+    /* ── Header: Unified Kiosk Navigation Bar ── */
     #header {
       position: relative; z-index: 30;
       width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 16px 36px 0;
+      padding: 14px 32px 0;
       flex-shrink: 0;
     }
 
@@ -187,8 +137,8 @@ function injectStyles(colors) {
       gap: 9px;
       padding: 8px 18px;
       border-radius: 99px;
-      background: rgba(14, 32, 28, 0.88);
-      border: 1.5px solid rgba(255, 120, 40, 0.35);
+      background: rgba(14, 32, 28, 0.90);
+      border: 1.5px solid rgba(255, 120, 40, 0.38);
       backdrop-filter: blur(16px);
       box-shadow: 0 4px 20px rgba(0,0,0,0.4);
       flex-shrink: 0;
@@ -198,16 +148,16 @@ function injectStyles(colors) {
       filter: drop-shadow(0 0 8px #FF6A00);
     }
     #header-campus-pill .campus-text {
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 1.2px;
+      font-size: 11.5px;
+      font-weight: 900;
+      letter-spacing: 1.4px;
       color: #FFF;
       text-transform: uppercase;
       font-family: var(--font-display);
     }
     #header-campus-pill .sub-tag {
       color: #FFA044;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 10px;
     }
 
@@ -217,12 +167,11 @@ function injectStyles(colors) {
       gap: 8px;
       padding: 7px 18px;
       border-radius: 99px;
-      background: rgba(14, 32, 28, 0.76);
-      border: 1px solid rgba(255, 140, 50, 0.3);
+      background: rgba(14, 32, 28, 0.80);
+      border: 1px solid rgba(255, 140, 50, 0.32);
       backdrop-filter: blur(16px);
       box-shadow: 0 4px 18px rgba(0,0,0,0.3);
       pointer-events: none;
-      user-select: none;
     }
     #header-center-emblem .emblem-bolt {
       color: #FFA044;
@@ -231,9 +180,9 @@ function injectStyles(colors) {
     }
     #header-center-emblem .emblem-text {
       font-family: var(--font-display);
-      font-size: 10.5px;
+      font-size: 11px;
       font-weight: 800;
-      letter-spacing: 1.8px;
+      letter-spacing: 2px;
       color: #FFF;
       text-transform: uppercase;
     }
@@ -251,33 +200,32 @@ function injectStyles(colors) {
       gap: 12px;
     }
 
-    /* Crave Menu Launcher */
     #menu-board-btn {
       display: flex;
       align-items: center;
       gap: 9px;
       padding: 8px 18px;
       border-radius: 99px;
-      background: linear-gradient(135deg, rgba(255, 106, 0, 0.32) 0%, rgba(14, 36, 32, 0.92) 100%);
-      border: 1.5px solid rgba(255, 120, 40, 0.5);
+      background: linear-gradient(135deg, rgba(255, 106, 0, 0.34) 0%, rgba(14, 36, 32, 0.94) 100%);
+      border: 1.5px solid rgba(255, 120, 40, 0.52);
       color: #FFF;
-      font-size: 11px;
+      font-size: 11.5px;
       font-weight: 800;
       letter-spacing: 1.2px;
       text-transform: uppercase;
       cursor: pointer;
       backdrop-filter: blur(16px);
-      box-shadow: 0 4px 22px rgba(255, 106, 0, 0.32), inset 0 1px 1px rgba(255,255,255,0.25);
-      transition: all 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 4px 22px rgba(255, 106, 0, 0.34), inset 0 1px 1px rgba(255,255,255,0.25);
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     #menu-board-btn:hover {
-      background: linear-gradient(135deg, rgba(255, 106, 0, 0.48) 0%, rgba(18, 54, 48, 0.96) 100%);
+      background: linear-gradient(135deg, rgba(255, 106, 0, 0.5) 0%, rgba(18, 54, 48, 0.96) 100%);
       border-color: #FFA044;
       transform: translateY(-2px) scale(1.03);
-      box-shadow: 0 8px 32px rgba(255, 106, 0, 0.6), inset 0 1px 2px rgba(255,255,255,0.4);
+      box-shadow: 0 8px 32px rgba(255, 106, 0, 0.62), inset 0 1px 2px rgba(255,255,255,0.4);
     }
     #menu-board-btn:active {
-      transform: translateY(1px) scale(0.98);
+      transform: translateY(1px) scale(0.97);
     }
     #menu-board-btn .menu-btn-icon {
       font-size: 14px;
@@ -310,7 +258,7 @@ function injectStyles(colors) {
       letter-spacing: 1px;
       text-transform: uppercase;
       background: var(--c-surface-glass);
-      border: 1.5px solid rgba(255,255,255,0.14);
+      border: 1.5px solid rgba(255,255,255,0.15);
       backdrop-filter: blur(14px);
       color: var(--c-muted);
       transition: all 0.35s ease;
@@ -321,7 +269,7 @@ function injectStyles(colors) {
       border-radius: 50%;
       background: currentColor;
     }
-    #status-pill.state-idle      { color: #72CC38; border-color: rgba(114, 204, 56, 0.35); }
+    #status-pill.state-idle      { color: #72CC38; border-color: rgba(114, 204, 56, 0.38); }
     #status-pill.state-listening {
       color: #FF8A30;
       border-color: #FF8A30;
@@ -345,6 +293,69 @@ function injectStyles(colors) {
       50%       { transform: scale(0.4); opacity: 0.25; }
     }
 
+    /* ── "Meet Mo" Hero Identity Banner (Adapted from "Meet Alex") ── */
+    #kiosk-hero-banner {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 6px 20px 0;
+      pointer-events: none;
+    }
+    .hero-live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 4px 14px;
+      border-radius: 99px;
+      background: rgba(14, 34, 28, 0.92);
+      border: 1px solid rgba(255, 120, 40, 0.4);
+      margin-bottom: 6px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+    }
+    .hero-live-badge .badge-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #72CC38;
+      box-shadow: 0 0 8px #72CC38;
+      animation: dot-pulse 1s infinite alternate;
+    }
+    .hero-live-badge span {
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 1.8px;
+      color: #FFA044;
+      text-transform: uppercase;
+      font-family: var(--font-display);
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(34px, 4.4vw, 54px);
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      line-height: 1.05;
+      color: #FFF;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.8), 0 0 35px rgba(255, 106, 0, 0.35);
+      margin-bottom: 4px;
+    }
+    .hero-title .title-accent {
+      color: #FF7B1A;
+      background: linear-gradient(135deg, #FF9944 0%, #FF6A00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-subtitle {
+      font-size: clamp(12px, 1.25vw, 14.5px);
+      font-weight: 600;
+      color: rgba(247, 243, 233, 0.85);
+      max-width: 620px;
+      line-height: 1.45;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.7);
+    }
+
     /* ── Main Stage Area: Side Wings + 3D Holographic Stage Pedestal ── */
     #kiosk-main-stage {
       position: relative; z-index: 10;
@@ -353,22 +364,40 @@ function injectStyles(colors) {
       align-items: center;
       justify-content: center;
       width: 100%;
-      max-width: 1240px;
-      padding: 0 28px;
+      max-width: 1260px;
+      padding: 0 24px;
       min-height: 0;
     }
 
-    /* ── Side Flanking Action Wings (High-Energy Crave Chips) ── */
+    /* ── Side Flanking Action Wings ("TRY ASKING MO" Section) ── */
     .action-wing {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
       width: 260px;
       flex-shrink: 0;
       z-index: 15;
     }
     .action-wing-left  { align-items: flex-end; }
     .action-wing-right { align-items: flex-start; }
+
+    .kiosk-wing-label {
+      font-family: var(--font-display);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #FFA044;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 4px;
+      opacity: 0.9;
+    }
+    .kiosk-wing-label .label-bolt {
+      color: #FF6A00;
+      filter: drop-shadow(0 0 6px #FF6A00);
+    }
 
     .action-wing-card {
       width: 100%;
@@ -382,10 +411,9 @@ function injectStyles(colors) {
       cursor: pointer;
       backdrop-filter: blur(18px);
       box-shadow: 0 10px 32px rgba(0,0,0,0.48), inset 0 1px 1px rgba(255,255,255,0.12);
-      transition: all 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
       text-align: left;
       user-select: none;
-      -webkit-tap-highlight-color: transparent;
     }
     .action-wing-card:hover {
       background: rgba(20, 48, 42, 0.96);
@@ -394,12 +422,12 @@ function injectStyles(colors) {
       box-shadow: 0 14px 42px rgba(255, 106, 0, 0.45), inset 0 1px 2px rgba(255,255,255,0.25);
     }
     .action-wing-card:active {
-      transform: translateY(1px) scale(0.97);
+      transform: translateY(1px) scale(0.96);
     }
 
     /* Food Micro-Thumbnail Wrap */
     .chip-thumb-wrap {
-      width: 50px; height: 50px;
+      width: 48px; height: 48px;
       border-radius: 50%;
       border: 2px solid rgba(255, 160, 68, 0.55);
       overflow: hidden;
@@ -439,6 +467,20 @@ function injectStyles(colors) {
       color: #000;
       box-shadow: 0 0 8px rgba(255, 106, 0, 0.5);
     }
+    .chip-price-tag {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 900;
+      color: #FFA044;
+      background: rgba(255, 160, 68, 0.16);
+      border: 1px solid rgba(255, 160, 68, 0.45);
+      padding: 1.5px 7px;
+      border-radius: 99px;
+      letter-spacing: 0.5px;
+      text-shadow: 0 0 8px rgba(255, 160, 68, 0.4);
+      margin-left: auto;
+      flex-shrink: 0;
+    }
     .chip-title {
       font-size: 13.5px;
       font-weight: 800;
@@ -472,8 +514,8 @@ function injectStyles(colors) {
 
     #mo-stage-wrapper {
       position: relative;
-      width: min(58vh, 500px);
-      height: min(58vh, 500px);
+      width: min(56vh, 480px);
+      height: min(56vh, 480px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -488,7 +530,7 @@ function injectStyles(colors) {
       justify-content: center;
     }
 
-    /* ── 3D Holographic Stage Pedestal (Grounds Mo on the Floor) ── */
+    /* ── 3D Holographic Stage Pedestal ── */
     #mo-stage-pedestal {
       position: absolute;
       bottom: 6px;
@@ -515,16 +557,17 @@ function injectStyles(colors) {
     }
     .stage-disc-inner {
       position: absolute;
-      top: 15%; left: 15%; right: 15%; bottom: 15%;
+      top: 18%; left: 18%; right: 18%; bottom: 18%;
       border-radius: 50%;
-      background: radial-gradient(ellipse at 50% 50%, rgba(255, 180, 80, 0.4) 0%, rgba(255, 106, 0, 0.12) 60%, transparent 80%);
-      border: 1px dashed rgba(255, 210, 110, 0.6);
+      background: radial-gradient(ellipse at 50% 50%, rgba(255, 200, 100, 0.45) 0%, rgba(255, 110, 0, 0.15) 55%, transparent 75%);
+      border: 1.5px solid rgba(255, 210, 120, 0.75);
+      box-shadow: 0 0 25px rgba(255, 140, 40, 0.6), inset 0 0 15px rgba(255, 160, 60, 0.4);
       transform: perspective(400px) rotateX(68deg);
-      animation: stage-spin 25s linear infinite;
+      animation: stage-pulse 3.5s ease-in-out infinite alternate;
     }
-    @keyframes stage-spin {
-      from { transform: perspective(400px) rotateX(68deg) rotate(0deg); }
-      to   { transform: perspective(400px) rotateX(68deg) rotate(360deg); }
+    @keyframes stage-pulse {
+      0%   { opacity: 0.8; box-shadow: 0 0 20px rgba(255, 140, 40, 0.5), inset 0 0 12px rgba(255, 160, 60, 0.3); }
+      100% { opacity: 1;   box-shadow: 0 0 35px rgba(255, 140, 40, 0.8), inset 0 0 22px rgba(255, 200, 80, 0.6); }
     }
     .stage-disc-spotlight {
       position: absolute;
@@ -553,7 +596,7 @@ function injectStyles(colors) {
     /* ── Dynamic Floating Speech Bubble Anchored to Mo ── */
     #mo-speech-bubble {
       position: absolute;
-      top: -8px;
+      top: -10px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 25;
@@ -594,7 +637,7 @@ function injectStyles(colors) {
     }
 
     #speech-text {
-      font-size: clamp(13.5px, 1.4vw, 15.5px);
+      font-size: clamp(13px, 1.35vw, 15.5px);
       font-weight: 700;
       line-height: 1.35;
       color: #FFF;
@@ -633,7 +676,7 @@ function injectStyles(colors) {
       100% { height: 16px; }
     }
 
-    /* ── Seamless Peripheral Campus Lifestyle & Food Vignettes ── */
+    /* ── Peripheral Campus Lifestyle & Food Vignettes (Landscape Only) ── */
     #bg-student-vignettes {
       position: absolute;
       inset: 0;
@@ -657,18 +700,15 @@ function injectStyles(colors) {
       pointer-events: auto;
       cursor: pointer;
     }
-
     .bg-vignette-card:hover {
       transform: translateY(-4px) scale(1.04) !important;
       border-color: #FFA044;
       box-shadow: 0 20px 55px rgba(0,0,0,0.85), 0 0 38px rgba(255, 106, 0, 0.48);
     }
-
     .bg-vignette-card.left-card {
       bottom: 80px;
       left: 32px;
     }
-
     .bg-vignette-card.right-card {
       bottom: 80px;
       right: 32px;
@@ -681,7 +721,6 @@ function injectStyles(colors) {
       border-radius: 12px;
       overflow: hidden;
     }
-
     .vignette-img-wrap img {
       width: 100%;
       height: 100%;
@@ -689,7 +728,6 @@ function injectStyles(colors) {
       filter: saturate(1.15) contrast(1.08);
       transition: transform 0.4s ease;
     }
-
     .bg-vignette-card:hover .vignette-img-wrap img {
       transform: scale(1.06);
     }
@@ -711,7 +749,6 @@ function injectStyles(colors) {
       text-transform: uppercase;
       color: #FFA044;
     }
-
     .vignette-badge .badge-dot {
       width: 5px; height: 5px;
       border-radius: 50%;
@@ -727,8 +764,8 @@ function injectStyles(colors) {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 0 24px 20px;
+      gap: 6px;
+      padding: 0 24px 18px;
       flex-shrink: 0;
       width: 100%;
       max-width: 600px;
@@ -756,16 +793,26 @@ function injectStyles(colors) {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
       position: relative;
-      width: 220px;
+      width: 100%;
       height: auto;
     }
 
-    /* Concentric Dynamic Acoustic Pulse Rings (Centered with Precision) */
+    /* Dedicated Touch Plate containing Button & Concentric Rings */
+    .orb-plate {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 88px;
+      height: 88px;
+    }
+
+    /* Concentric Dynamic Acoustic Pulse Rings (Anchored to .orb-plate Center) */
     .orb-pulse-ring {
       position: absolute;
-      top: 44px; left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       border-radius: 50%;
       border: 1.5px solid rgba(255, 130, 40, 0.45);
@@ -789,10 +836,10 @@ function injectStyles(colors) {
       100% { transform: translate(-50%, -50%) scale(1.25); opacity: 0; }
     }
 
-    /* Concentric Rotating Holographic Neon Cyber-Halo (Centered with Precision) */
+    /* Concentric Rotating Holographic Neon Cyber-Halo */
     .orb-cyber-halo {
       position: absolute;
-      top: 44px; left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       width: 104px; height: 104px;
       border-radius: 50%;
@@ -830,8 +877,7 @@ function injectStyles(colors) {
         inset 0 3px 6px rgba(255, 255, 255, 0.95),
         inset 0 -6px 14px rgba(0, 0, 0, 0.7),
         0 0 0 4px rgba(255, 120, 40, 0.24);
-      transition: all 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
-      -webkit-tap-highlight-color: transparent;
+      transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
       user-select: none;
     }
     #talk-cta-btn:hover {
@@ -930,30 +976,304 @@ function injectStyles(colors) {
       animation: dot-pulse 1s infinite alternate;
     }
 
-    /* Responsive Adaptation for Tablets / Narrow Screens */
-    @media (max-width: 960px) {
-      #kiosk-main-stage {
-        flex-direction: column;
-        padding: 0 16px;
-      }
-      .action-wing {
-        flex-direction: row;
-        width: 100%;
-        justify-content: center;
-      }
-      .action-wing-left, .action-wing-right {
+    /* ─────────────────────────────────────────────────────────────────────────────
+       DEDICATED FULL-CANVAS PORTRAIT KIOSK ARCHITECTURE
+       Engineered to dynamically fill 1080×1920 (and any portrait touchscreen display)
+       with life-sized 3D mascot presence, zero bottom void, and touch ergonomics
+       ───────────────────────────────────────────────────────────────────────────── */
+    @media (orientation: portrait), (max-aspect-ratio: 1.05/1) {
+      #app {
+        height: 100vh;
+        width: 100vw;
+        justify-content: space-between;
         align-items: center;
+        overflow: hidden;
+        padding-bottom: 24px;
       }
-      .action-wing-card {
-        width: auto;
-        min-width: 180px;
+
+      /* Unified Header scaled for standing eye-level readability */
+      #header {
+        padding: clamp(16px, 2.2vh, 32px) clamp(20px, 3.8vw, 44px) 0;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      #header-campus-pill {
+        padding: 10px 22px;
+        gap: 10px;
+      }
+      #header-campus-pill .flame-icon {
+        font-size: 18px;
+      }
+      #header-campus-pill .campus-text {
+        font-size: clamp(12.5px, 1.4vw, 15px);
+        letter-spacing: 1.6px;
+      }
+      #header-campus-pill .sub-tag {
+        font-size: clamp(10.5px, 1.2vw, 12.5px);
+      }
+
+      /* Streamline portrait header by hiding center emblem for clean dual-anchor luxury layout */
+      #header-center-emblem {
+        display: none !important;
+      }
+
+      #menu-board-btn {
+        padding: 10px 24px;
+        font-size: clamp(12px, 1.3vw, 14px);
+      }
+      #status-pill {
+        padding: 10px 22px;
+        font-size: clamp(12px, 1.3vw, 13.5px);
+      }
+
+      /* Hero Greeting Banner ("Meet Mo") */
+      #kiosk-hero-banner {
+        padding: clamp(8px, 1.4vh, 20px) 24px 0;
+        margin-top: 2px;
+      }
+      .hero-live-badge {
+        padding: 5px 16px;
+        margin-bottom: 8px;
+      }
+      .hero-live-badge span {
+        font-size: clamp(10px, 1.1vw, 12px);
+        letter-spacing: 2px;
+      }
+      .hero-title {
+        font-size: clamp(44px, 5.2vw, 68px);
+        letter-spacing: -0.01em;
+        margin-bottom: 6px;
+      }
+      .hero-subtitle {
+        font-size: clamp(14.5px, 1.7vw, 19px);
+        max-width: 820px;
+        line-height: 1.48;
+      }
+
+      /* Main Stage Area: Full Vertical Scale */
+      #kiosk-main-stage {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+        width: 100%;
+        max-width: 980px;
+        padding: 0 clamp(16px, 3vw, 36px);
+        min-height: 0;
+        gap: 12px;
+      }
+
+      /* Life-Sized 3D Avatar Stage */
+      #stage-area {
+        order: 1;
+        width: 100%;
+        height: auto;
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
       }
       #mo-stage-wrapper {
-        width: min(42vh, 355px);
-        height: min(42vh, 355px);
+        width: min(88vw, 760px);
+        height: min(44vh, 760px);
+        position: relative;
+      }
+
+      /* Dynamic Floating Speech Bubble */
+      #mo-speech-bubble {
+        top: -14px;
+        padding: 11px 26px;
+        max-width: min(92vw, 620px);
+        border-radius: 24px;
+        box-shadow: 0 16px 45px rgba(0,0,0,0.7), 0 0 30px rgba(255, 106, 0, 0.35);
+      }
+      #speech-text {
+        font-size: clamp(15px, 1.7vw, 19px);
+        max-width: 500px;
+      }
+      .speech-eq .eq-bar {
+        width: 3.5px;
+        height: 6px;
+      }
+      .speech-bubble-tail {
+        bottom: -11px;
+        border-left-width: 11px;
+        border-right-width: 11px;
+        border-top-width: 11px;
+      }
+
+      #mo-stage-pedestal {
+        bottom: 8px;
+        width: 82%;
+        height: 56px;
+      }
+      .stage-contact-shadow {
+        bottom: 14px;
+        width: 52%;
+        height: 22px;
+      }
+
+      /* "TRY ASKING MO" Crave Action Grid (2x2 Full Touch Cards) */
+      .action-wing {
+        width: 100%;
+        max-width: 960px;
+        flex-direction: row;
+        gap: clamp(10px, 1.6vw, 16px);
+      }
+      .action-wing-left  { order: 2; }
+      .action-wing-right { order: 3; }
+      .action-wing-left, .action-wing-right { align-items: stretch; }
+
+      .kiosk-wing-label {
+        display: none;
+      }
+
+      .action-wing-card {
+        flex: 1;
+        min-width: 0;
+        min-height: clamp(84px, 9.5vh, 114px);
+        padding: clamp(10px, 1.4vh, 16px) clamp(12px, 1.8vw, 20px);
+        gap: clamp(10px, 1.5vw, 16px);
+        border-radius: clamp(16px, 2vw, 22px);
+        border-width: 2px;
+      }
+      .chip-thumb-wrap {
+        width: clamp(52px, 6.5vw, 76px);
+        height: clamp(52px, 6.5vw, 76px);
+        border-width: 2.5px;
+      }
+      .chip-badge {
+        font-size: clamp(8.5px, 1vw, 11px);
+        padding: 2.5px 8px;
+      }
+      .chip-price-tag {
+        font-size: clamp(10.5px, 1.25vw, 13.5px);
+        padding: 2px 8.5px;
+      }
+      .chip-title {
+        font-size: clamp(14px, 1.7vw, 18.5px);
+      }
+      .chip-sub {
+        font-size: clamp(11px, 1.3vw, 14px);
+      }
+
+      /* Bottom Voice Console: Ergonomic Waist/Chest Touch Height */
+      #bottom-kiosk-bar {
+        order: 4;
+        padding: 0 24px clamp(12px, 2vh, 32px);
+        width: 100%;
+        max-width: 720px;
+        gap: 8px;
+      }
+      #talk-orb-container {
+        width: 100%;
+        max-width: 380px;
+        gap: 0;
+      }
+      .orb-plate {
+        width: clamp(96px, 10.5vh, 118px);
+        height: clamp(96px, 10.5vh, 118px);
+      }
+      #talk-cta-btn {
+        width: 100%;
+        height: 100%;
+        border-width: 4px;
+        box-shadow:
+          0 16px 48px rgba(255, 106, 0, 0.9),
+          0 4px 14px rgba(0,0,0,0.6),
+          inset 0 4px 8px rgba(255, 255, 255, 1),
+          inset 0 -8px 16px rgba(0, 0, 0, 0.7);
+      }
+      #talk-cta-btn svg {
+        width: clamp(36px, 4.2vh, 44px);
+        height: clamp(36px, 4.2vh, 44px);
+      }
+      .orb-pulse-ring {
+        top: 50%; left: 50%;
+      }
+      .orb-pulse-ring.ring-1 {
+        width: clamp(122px, 13.5vh, 150px);
+        height: clamp(122px, 13.5vh, 150px);
+      }
+      .orb-pulse-ring.ring-2 {
+        width: clamp(148px, 16.5vh, 184px);
+        height: clamp(148px, 16.5vh, 184px);
+      }
+      .orb-pulse-ring.ring-3 {
+        width: clamp(174px, 19.5vh, 218px);
+        height: clamp(174px, 19.5vh, 218px);
+      }
+      .orb-cyber-halo {
+        top: 50%; left: 50%;
+        width: clamp(116px, 12.8vh, 142px);
+        height: clamp(116px, 12.8vh, 142px);
+      }
+
+      #talk-cta-label-group {
+        margin-top: clamp(16px, 2.2vh, 26px);
+        gap: 5px;
+      }
+      #talk-cta-label {
+        font-size: clamp(15px, 1.8vw, 19px);
+        letter-spacing: 2.5px;
+      }
+      #talk-cta-sub {
+        font-size: clamp(11px, 1.2vw, 13px);
+        letter-spacing: 1.2px;
+      }
+      #user-sub-caption {
+        font-size: clamp(13px, 1.4vw, 15px);
+        min-height: 20px;
+      }
+
+      /* Attracting College Lifestyle & Halal Craving Portals (Syracuse Campus Energy) */
+      #bg-student-vignettes {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 4;
+        overflow: hidden;
       }
       .bg-vignette-card {
-        display: none;
+        display: block !important;
+        position: absolute;
+        width: clamp(180px, 22vw, 240px);
+        height: clamp(118px, 14.5vw, 160px);
+        border-radius: 20px;
+        padding: 7px;
+        background: rgba(10, 26, 22, 0.88);
+        border: 1.5px solid rgba(255, 130, 50, 0.45);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 16px 48px rgba(0,0,0,0.78), 0 0 32px rgba(255, 106, 0, 0.25);
+        opacity: 0.92;
+        pointer-events: auto;
+        cursor: pointer;
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+      }
+      .bg-vignette-card:hover {
+        transform: translateY(-4px) scale(1.05) !important;
+        border-color: #FFA044;
+        box-shadow: 0 22px 60px rgba(0,0,0,0.85), 0 0 44px rgba(255, 106, 0, 0.5);
+        opacity: 1;
+      }
+      .bg-vignette-card.left-card {
+        top: clamp(130px, 14vh, 200px);
+        left: clamp(20px, 3.5vw, 44px);
+        bottom: auto;
+      }
+      .bg-vignette-card.right-card {
+        top: clamp(130px, 14vh, 200px);
+        right: clamp(20px, 3.5vw, 44px);
+        bottom: auto;
+      }
+      .bg-vignette-card .vignette-badge {
+        font-size: clamp(8.5px, 1vw, 10.5px);
+        padding: 5px 6px 0;
       }
     }
 
@@ -1186,18 +1506,7 @@ function buildHTML(config) {
       <!-- Cyber-Varsity Campus Stage Grid Matrix -->
       <div id="bg-campus-grid"></div>
 
-      <!-- Monumental Architectural Brand Identity: Varsity Stadium Horizon Banner -->
-      <div id="bg-brand-backdrop">
-        <div class="bg-title-crest">
-          <span>★</span>
-          <span>SYRACUSE UNIVERSITY FLAGSHIP • EST. 2024</span>
-          <span>★</span>
-        </div>
-        <div class="bg-title-text">${config.restaurantName.toUpperCase()}</div>
-        <div class="bg-title-sub">AUTHENTIC STREET FOOD • 100% HAND-SLAUGHTERED ZABIHA</div>
-      </div>
-
-      <!-- Seamless Peripheral Campus Lifestyle & Food Vignettes -->
+      <!-- Peripheral Campus Lifestyle & Food Vignettes (Landscape Countertop Only) -->
       <div id="bg-student-vignettes">
         <div class="bg-vignette-card left-card" data-prompt="What's the best late-night meal for Syracuse students?">
           <div class="vignette-img-wrap">
@@ -1225,18 +1534,18 @@ function buildHTML(config) {
       <div id="bg-spotlight"></div>
       ${embers}
 
-      <!-- Unified Luxury Frosted Navigation Header -->
+      <!-- Unified Kiosk Navigation Header -->
       <header id="header">
         <div id="header-campus-pill">
           <span class="flame-icon">🔥</span>
-          <span class="campus-text">SYRACUSE CAMPUS</span>
-          <span class="sub-tag">• 100% ZABIHA</span>
+          <span class="campus-text">HALALHOLIC</span>
+          <span class="sub-tag">• SYRACUSE CAMPUS</span>
         </div>
 
         <div id="header-center-emblem">
           <span class="emblem-bolt">⚡</span>
-          <span class="emblem-text">HALALHOLIC KIOSK #01</span>
-          <span class="emblem-tag">• VOICE ACTIVATED</span>
+          <span class="emblem-text">KIOSK AI HOST</span>
+          <span class="emblem-tag">• 100% ZABIHA</span>
         </div>
 
         <div id="header-nav">
@@ -1252,10 +1561,27 @@ function buildHTML(config) {
         </div>
       </header>
 
-      <!-- Main Stage: High-Energy Crave Chips + 3D Holographic Stage Pedestal -->
+      <!-- "Meet Mo" Hero Identity Banner (Adapted from "Meet Alex") -->
+      <div id="kiosk-hero-banner">
+        <div class="hero-live-badge">
+          <span class="badge-dot"></span>
+          <span>● LIVE AI HOST • SYRACUSE UNIVERSITY FLAGSHIP</span>
+        </div>
+        <h1 class="hero-title">Meet <span class="title-accent">Mo</span></h1>
+        <p class="hero-subtitle">
+          Halalholic's living 3D AI host. Talk to him live right at this kiosk to customize platters, grab 2-min speed wraps, or order squad feasts.
+        </p>
+      </div>
+
+      <!-- Main Stage: "TRY ASKING MO" Crave Chips + 3D Holographic Stage Pedestal -->
       <section id="kiosk-main-stage">
-        <!-- Left Action Wing (2 Crave Chips) -->
+        <!-- Left Wing (Crave Chips 1 & 2) -->
         <aside class="action-wing action-wing-left">
+          <div class="kiosk-wing-label">
+            <span class="label-bolt">⚡</span>
+            <span>TRY ASKING MO</span>
+          </div>
+
           <button class="action-wing-card" data-prompt="I have an exam tomorrow, what's a heavy fuel platter?">
             <div class="chip-thumb-wrap">
               <img src="/assets/food/halal_platter.jpg" alt="Finals Fuel Platter" />
@@ -1263,6 +1589,7 @@ function buildHTML(config) {
             <div class="chip-info-wrap">
               <div class="chip-badge-row">
                 <span class="chip-badge">🔥 EXTRA LOADED</span>
+                <span class="chip-price-tag">$9.99</span>
               </div>
               <span class="chip-title">Finals Fuel Platter</span>
               <span class="chip-sub">Heavy Rice & Double Meat</span>
@@ -1276,6 +1603,7 @@ function buildHTML(config) {
             <div class="chip-info-wrap">
               <div class="chip-badge-row">
                 <span class="chip-badge">⭐ MO'S PICK</span>
+                <span class="chip-price-tag">$8.99</span>
               </div>
               <span class="chip-title">Crispy Sauced Wings</span>
               <span class="chip-sub">Hot Holic Glaze & Garlic Dip</span>
@@ -1310,8 +1638,13 @@ function buildHTML(config) {
           </div>
         </main>
 
-        <!-- Right Action Wing (2 Crave Chips) -->
+        <!-- Right Wing (Crave Chips 3 & 4) -->
         <aside class="action-wing action-wing-right">
+          <div class="kiosk-wing-label">
+            <span class="label-bolt">⚡</span>
+            <span>TRY ASKING MO</span>
+          </div>
+
           <button class="action-wing-card" data-prompt="I brought the whole squad. What feeds everyone?">
             <div class="chip-thumb-wrap">
               <img src="/assets/food/holic_bucket.jpg" alt="Squad HolicBucket" />
@@ -1319,6 +1652,7 @@ function buildHTML(config) {
             <div class="chip-info-wrap">
               <div class="chip-badge-row">
                 <span class="chip-badge">🍗 FEEDS 3-4</span>
+                <span class="chip-price-tag">$15.99</span>
               </div>
               <span class="chip-title">Holic Squad Bucket</span>
               <span class="chip-sub">5-in-1 Feast & Waffle Fries</span>
@@ -1332,6 +1666,7 @@ function buildHTML(config) {
             <div class="chip-info-wrap">
               <div class="chip-badge-row">
                 <span class="chip-badge">⚡ 3-MIN RUSH</span>
+                <span class="chip-price-tag">$7.99</span>
               </div>
               <span class="chip-title">Speed Gyro Rush</span>
               <span class="chip-sub">Toasted Flatbread On-the-Go</span>
@@ -1346,22 +1681,24 @@ function buildHTML(config) {
 
         <!-- Perfectly Centered Sonic Reactor -->
         <div id="talk-orb-container">
-          <div class="orb-pulse-ring ring-1"></div>
-          <div class="orb-pulse-ring ring-2"></div>
-          <div class="orb-pulse-ring ring-3"></div>
-          <div class="orb-cyber-halo"></div>
+          <div class="orb-plate">
+            <div class="orb-pulse-ring ring-1"></div>
+            <div class="orb-pulse-ring ring-2"></div>
+            <div class="orb-pulse-ring ring-3"></div>
+            <div class="orb-cyber-halo"></div>
 
-          <button id="talk-cta-btn" aria-label="Tap to talk with Mo">
-            <svg viewBox="0 0 24 24">
-              <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
-              <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
-            </svg>
-            <div class="orb-internal-eq">
-              <div class="orb-eq-bar"></div>
-              <div class="orb-eq-bar"></div>
-              <div class="orb-eq-bar"></div>
-            </div>
-          </button>
+            <button id="talk-cta-btn" aria-label="Tap to talk with Mo">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+              </svg>
+              <div class="orb-internal-eq">
+                <div class="orb-eq-bar"></div>
+                <div class="orb-eq-bar"></div>
+                <div class="orb-eq-bar"></div>
+              </div>
+            </button>
+          </div>
 
           <div id="talk-cta-label-group">
             <span id="talk-cta-label">TAP TO TALK WITH MO</span>
@@ -1596,10 +1933,10 @@ export class App {
   _bindEvents() {
     this._talkBtn.addEventListener('click', () => this._onTalkPress?.());
 
-    // Symmetrical Crave Chips (Left & Right Wings)
+    // Symmetrical Crave Chips ("TRY ASKING MO")
     document.querySelectorAll('.action-wing-card').forEach(card => {
       card.addEventListener('click', () => {
-        card.style.transform = 'translateY(1px) scale(0.97)';
+        card.style.transform = 'translateY(1px) scale(0.96)';
         setTimeout(() => { card.style.transform = ''; }, 200);
         this._onChipClick?.(card.dataset.prompt);
       });
