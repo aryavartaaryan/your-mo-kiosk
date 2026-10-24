@@ -159,7 +159,21 @@ async function startVoiceSession(initialPrompt = null) {
 
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
   if (!apiKey?.trim()) {
-    app.setCaption('No API key found. Add VITE_GEMINI_API_KEY to your .env file.');
+    if (initialPrompt) {
+      const lower = initialPrompt.toLowerCase();
+      if (lower.includes('feedback') || lower.includes('issue') || lower.includes('complaint')) {
+        app.setCaption("“Talk to me, habibi! How was your food and your visit today? Tell me what went wrong or what complaint you have — I'm right here to fix it for you!”");
+        Mo.setExpression('attentive');
+        Mo.setPose('arms_open');
+        return;
+      } else if (lower.includes('suggest') || lower.includes('wishlist') || lower.includes('dish')) {
+        app.setCaption("“Ayy, I love this! What new dish, crave item, or sauce do you want us to add to the menu? Tell your boy Mo — I pitch ideas straight to the kitchen!”");
+        Mo.setExpression('excited');
+        Mo.setPose('talking');
+        return;
+      }
+    }
+    app.setCaption('No API key found. Add VITE_GEMINI_API_KEY to your .env file to enable live voice.');
     return;
   }
 
@@ -182,12 +196,18 @@ async function startVoiceSession(initialPrompt = null) {
         resetIdleTimer();
         console.log('[Mo] Session live ✓');
 
-        // If triggered via an Action Card, route pose & send prompt
+        // If triggered via an Action Card or Button, route pose & send prompt
         if (initialPrompt) {
           app.setUserCaption(initialPrompt);
           goState('thinking');
           const lower = initialPrompt.toLowerCase();
-          if (lower.includes('exam')) {
+          if (lower.includes('feedback') || lower.includes('issue') || lower.includes('complaint')) {
+            Mo.setPose('arms_open');
+            Mo.setExpression('attentive');
+          } else if (lower.includes('suggest') || lower.includes('wishlist') || lower.includes('dish')) {
+            Mo.setPose('talking');
+            Mo.setExpression('excited');
+          } else if (lower.includes('exam')) {
             Mo.setPose('thumbs_up');
             Mo.setExpression('happy');
           } else if (lower.includes('squad')) {

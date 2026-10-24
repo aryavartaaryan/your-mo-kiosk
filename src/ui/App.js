@@ -967,6 +967,87 @@ function injectStyles(colors) {
       100% { height: 16px; }
     }
 
+    /* ── Interactive Action & Feedback Options Row Directly Below Mo ── */
+    #mo-stage-actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 6px;
+      margin-bottom: 2px;
+      z-index: 25;
+      pointer-events: auto;
+      flex-wrap: wrap;
+    }
+    .stage-action-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6.5px 16px;
+      border-radius: 99px;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      cursor: pointer;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.45);
+    }
+    .stage-feedback-pill {
+      background: linear-gradient(135deg, rgba(20, 68, 54, 0.88) 0%, rgba(10, 32, 28, 0.96) 100%);
+      border: 1.5px solid rgba(114, 204, 56, 0.55);
+      color: #FFF;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 16px rgba(114, 204, 56, 0.22);
+    }
+    .stage-feedback-pill:hover {
+      background: linear-gradient(135deg, rgba(26, 88, 70, 0.95) 0%, rgba(14, 42, 36, 0.98) 100%);
+      border-color: #72CC38;
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 8px 30px rgba(114, 204, 56, 0.5), inset 0 1px 2px rgba(255,255,255,0.3);
+    }
+    .stage-feedback-pill:active {
+      transform: translateY(1px) scale(0.97);
+    }
+    .stage-suggest-pill {
+      background: linear-gradient(135deg, rgba(62, 36, 12, 0.88) 0%, rgba(28, 16, 6, 0.96) 100%);
+      border: 1.5px solid rgba(255, 140, 50, 0.55);
+      color: #FFF;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 16px rgba(255, 140, 50, 0.22);
+    }
+    .stage-suggest-pill:hover {
+      background: linear-gradient(135deg, rgba(82, 48, 16, 0.95) 0%, rgba(38, 20, 8, 0.98) 100%);
+      border-color: #FFA044;
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 8px 30px rgba(255, 140, 50, 0.5), inset 0 1px 2px rgba(255,255,255,0.3);
+    }
+    .stage-suggest-pill:active {
+      transform: translateY(1px) scale(0.97);
+    }
+    .stage-action-pill .pill-icon {
+      font-size: 13px;
+      line-height: 1;
+    }
+    .stage-action-pill .pill-badge {
+      font-size: 8.5px;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      padding: 2px 7px;
+      border-radius: 99px;
+    }
+    .stage-feedback-pill .pill-badge {
+      background: linear-gradient(90deg, #72CC38 0%, #9EE44D 100%);
+      color: #05140D;
+      box-shadow: 0 0 10px rgba(114, 204, 56, 0.65);
+    }
+    .stage-suggest-pill .pill-badge {
+      background: linear-gradient(90deg, #FF6A00 0%, #FFA044 100%);
+      color: #100600;
+      box-shadow: 0 0 10px rgba(255, 120, 30, 0.65);
+    }
+
     /* ── Charismatic Billion-Dollar Tagline Badge Just Below Mo ── */
     #mo-recharge-tagline {
       position: relative;
@@ -1415,6 +1496,20 @@ function injectStyles(colors) {
         height: 22px;
       }
 
+      #mo-stage-actions-row {
+        gap: clamp(10px, 1.4vw, 16px);
+        margin-top: clamp(8px, 1.2vh, 14px);
+        margin-bottom: 4px;
+      }
+      .stage-action-pill {
+        padding: clamp(8px, 1.1vh, 12px) clamp(16px, 2.2vw, 24px);
+        font-size: clamp(11.5px, 1.3vw, 14px);
+      }
+      .stage-action-pill .pill-badge {
+        font-size: clamp(9px, 1.1vw, 11px);
+        padding: 3px 9px;
+      }
+
       #mo-recharge-tagline {
         margin-top: clamp(8px, 1.2vh, 16px);
         padding: clamp(7px, 1vh, 11px) clamp(18px, 2.8vw, 30px);
@@ -1724,6 +1819,15 @@ function injectStyles(colors) {
         width: min(65vh, 520px);
         height: min(65vh, 520px);
         position: relative;
+      }
+      #mo-stage-actions-row {
+        gap: 10px;
+        margin-top: 4px;
+        margin-bottom: 2px;
+      }
+      .stage-action-pill {
+        padding: 5px 14px;
+        font-size: 10.5px;
       }
       #mo-recharge-tagline {
         margin-top: 3px;
@@ -2306,6 +2410,20 @@ function buildHTML(config) {
               <div class="stage-disc-inner"></div>
               <div class="stage-contact-shadow"></div>
             </div>
+          </div>
+
+          <!-- Interactive Action & Feedback Options Row Directly Below Mo -->
+          <div id="mo-stage-actions-row">
+            <button id="stage-feedback-btn" class="stage-action-pill stage-feedback-pill" title="Tell Mo any feedback or complaint">
+              <span class="pill-icon">💬</span>
+              <span class="pill-text">FEEDBACK / COMPLAIN</span>
+              <span class="pill-badge">TELL MO</span>
+            </button>
+            <button id="stage-suggest-btn" class="stage-action-pill stage-suggest-pill" title="Suggest new dishes or items to add to the menu">
+              <span class="pill-icon">💡</span>
+              <span class="pill-text">SUGGEST NEW ITEMS</span>
+              <span class="pill-badge">WISHLIST</span>
+            </button>
           </div>
 
           <!-- Charismatic Billion-Dollar Student Tagline Badge Just Below Mo -->
@@ -2985,6 +3103,14 @@ export class App {
     }, 120);
   }
 
+  setMoSpeech(text, delay = 0) {
+    if (delay > 0) {
+      setTimeout(() => this.setCaption(text), delay);
+    } else {
+      this.setCaption(text);
+    }
+  }
+
   setUserCaption(text) {
     const el = this._userCaptionEl;
     if (!el) return;
@@ -3035,23 +3161,45 @@ export class App {
       this._onChipClick?.("Tell me your backstory Mo, why do you work at Halalholic?");
     });
 
-    // Catchy Header Feedback / Complain Launcher
+    // Feedback & Suggestion Launchers (Directly below Mo & Header)
+    const stageFeedbackBtn = document.getElementById('stage-feedback-btn');
+    const stageSuggestBtn  = document.getElementById('stage-suggest-btn');
     const feedbackKioskBtn = document.getElementById('feedback-kiosk-btn');
+
     const feedbackInquiries = [
-      "“Talk to me, habibi! How was your food and your visit today? Tell me any issue, complaint, or real thoughts — I'm right here to fix it!”",
+      "“Talk to me, habibi! How was your food and your visit today? Tell me what went wrong or what complaint you have — I'm right here to fix it for you!”",
       "“You have my full attention, my brother! Was the food hitting, or did something go wrong? Tell me the unfiltered truth!”",
       "“I'm listening! Tell Mo what happened — food cold, too spicy, long wait, or great vibes? Give me the real talk!”",
       "“Be 100% real with me: any complaints or things we can do better for you? Don't hold back, I run this place for you students!”"
     ];
     let _fbInquiryIdx = 0;
 
-    feedbackKioskBtn?.addEventListener('click', () => {
+    const triggerFeedback = () => {
       const prompt = feedbackInquiries[_fbInquiryIdx % feedbackInquiries.length];
       _fbInquiryIdx++;
-      this.setMoSpeech(prompt, 200);
+      this.setMoSpeech(prompt);
       this._Mo?.setExpression?.('attentive');
       this._Mo?.triggerBlink?.();
-      this._onChipClick?.("Mo, I have some feedback and an issue to talk to you about:");
+      this._onChipClick?.("Mo, I have some feedback and an issue to talk to you about regarding my food and experience:");
+    };
+
+    stageFeedbackBtn?.addEventListener('click', triggerFeedback);
+    feedbackKioskBtn?.addEventListener('click', triggerFeedback);
+
+    const suggestInquiries = [
+      "“Ayy, I love this! What new dish, crave item, or sauce do you want us to add to the menu? Tell your boy Mo — I pitch ideas straight to the kitchen!”",
+      "“Got a dream menu item? Loaded mac fries, smash burger, mango habanero wings? Lay it on me, what should we add?”",
+      "“Student wishlist time! What crave-worthy food is missing from Syracuse campus that Halalholic needs to drop next?”"
+    ];
+    let _sugIdx = 0;
+
+    stageSuggestBtn?.addEventListener('click', () => {
+      const prompt = suggestInquiries[_sugIdx % suggestInquiries.length];
+      _sugIdx++;
+      this.setMoSpeech(prompt);
+      this._Mo?.setExpression?.('excited');
+      this._Mo?.triggerBounce?.();
+      this._onChipClick?.("Mo, I have a suggestion for a new item or dish you should add to the menu:");
     });
 
     // Menu Drawer Toggle & Interactive Item Selection
