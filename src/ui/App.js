@@ -315,6 +315,48 @@ function injectStyles(colors) {
       gap: 12px;
     }
 
+    #feedback-kiosk-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 99px;
+      background: linear-gradient(135deg, rgba(20, 68, 54, 0.76) 0%, rgba(10, 30, 26, 0.94) 100%);
+      border: 1.5px solid rgba(114, 204, 56, 0.50);
+      color: #FFF;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45), 0 0 14px rgba(114, 204, 56, 0.22);
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    #feedback-kiosk-btn:hover {
+      background: linear-gradient(135deg, rgba(26, 88, 70, 0.90) 0%, rgba(14, 40, 34, 0.98) 100%);
+      border-color: #72CC38;
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 8px 30px rgba(114, 204, 56, 0.48), inset 0 1px 2px rgba(255,255,255,0.3);
+    }
+    #feedback-kiosk-btn:active {
+      transform: translateY(1px) scale(0.97);
+    }
+    #feedback-kiosk-btn .feedback-btn-icon {
+      font-size: 13.5px;
+      filter: drop-shadow(0 0 6px rgba(114, 204, 56, 0.7));
+    }
+    #feedback-kiosk-btn .feedback-btn-badge {
+      font-size: 8.5px;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      padding: 2px 7px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #72CC38 0%, #9EE44D 100%);
+      color: #05140D;
+      box-shadow: 0 0 10px rgba(114, 204, 56, 0.65);
+    }
+
     #menu-board-btn {
       display: flex;
       align-items: center;
@@ -1259,6 +1301,10 @@ function injectStyles(colors) {
         display: none !important;
       }
 
+      #feedback-kiosk-btn {
+        padding: 10px 20px;
+        font-size: clamp(11px, 1.2vw, 13px);
+      }
       #menu-board-btn {
         padding: 10px 24px;
         font-size: clamp(12px, 1.3vw, 14px);
@@ -1534,6 +1580,15 @@ function injectStyles(colors) {
       #header {
         padding: 14px 32px 0;
         margin-bottom: 2px;
+      }
+      #feedback-kiosk-btn {
+        padding: 6.5px 14px;
+        font-size: 10px;
+        gap: 6px;
+      }
+      #feedback-kiosk-btn .feedback-btn-badge {
+        font-size: 8px;
+        padding: 1.5px 6px;
       }
 
       /* Streamline "Meet Mo" banner: reduced vertical footprint, sleek typography */
@@ -2122,6 +2177,11 @@ function buildHTML(config) {
         </div>
 
         <div id="header-nav">
+          <button id="feedback-kiosk-btn" class="crave-feedback-launcher" title="Share feedback or complaints directly with Mo">
+            <span class="feedback-btn-icon">💬</span>
+            <span class="feedback-btn-text">FEEDBACK / COMPLAIN</span>
+            <span class="feedback-btn-badge">TELL MO</span>
+          </button>
           <button id="menu-board-btn" class="crave-menu-launcher">
             <span class="menu-btn-icon">🔥</span>
             <span class="menu-btn-text">EXPLORE MENU</span>
@@ -2973,6 +3033,25 @@ export class App {
       );
       this._Mo?.triggerSmug?.();
       this._onChipClick?.("Tell me your backstory Mo, why do you work at Halalholic?");
+    });
+
+    // Catchy Header Feedback / Complain Launcher
+    const feedbackKioskBtn = document.getElementById('feedback-kiosk-btn');
+    const feedbackInquiries = [
+      "“Talk to me, habibi! How was your food and your visit today? Tell me any issue, complaint, or real thoughts — I'm right here to fix it!”",
+      "“You have my full attention, my brother! Was the food hitting, or did something go wrong? Tell me the unfiltered truth!”",
+      "“I'm listening! Tell Mo what happened — food cold, too spicy, long wait, or great vibes? Give me the real talk!”",
+      "“Be 100% real with me: any complaints or things we can do better for you? Don't hold back, I run this place for you students!”"
+    ];
+    let _fbInquiryIdx = 0;
+
+    feedbackKioskBtn?.addEventListener('click', () => {
+      const prompt = feedbackInquiries[_fbInquiryIdx % feedbackInquiries.length];
+      _fbInquiryIdx++;
+      this.setMoSpeech(prompt, 200);
+      this._Mo?.setExpression?.('attentive');
+      this._Mo?.triggerBlink?.();
+      this._onChipClick?.("Mo, I have some feedback and an issue to talk to you about:");
     });
 
     // Menu Drawer Toggle & Interactive Item Selection
