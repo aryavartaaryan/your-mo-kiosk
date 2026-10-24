@@ -40,8 +40,10 @@ export const Mo = (() => {
   // Active states
   let _curState  = 'idle';
 
-  // Cadence & Modern AI Avatar Viseme Lip-Sync
-  let _currentViseme   = 'rest';
+  // Cadence & Modern AI Avatar Viseme Lip-Sync (Dual-Buffer Morphing)
+  let _primaryViseme   = 'rest';
+  let _secondaryViseme = 'rest';
+  let _morphAlpha      = 1.0;
   let _rawAperture     = 0;
   let _smoothAperture  = 0;
   let _rawSpread       = 0;
@@ -238,56 +240,84 @@ export const Mo = (() => {
       $shadow.style.transform = `translateX(${shadowX.toFixed(2)}px) scale(${shadowScale.toFixed(3)})`;
     }
 
-    // 6. Modern AI Avatar Phonetic Lip-Sync & Skeletal Jaw Hinge Engine
-    _smoothAperture += (_rawAperture - _smoothAperture) * 0.90;
+    // 6. Modern AI Avatar Phonetic Lip-Sync & Dual-Buffer Morphing Engine
+    _smoothAperture += (_rawAperture - _smoothAperture) * 0.88;
     _smoothSpread   += (_rawSpread - _smoothSpread) * 0.35;
 
+    // Advance morph alpha: 0.0 -> 1.0 in ~50ms (3 frames at 60 FPS)
+    _morphAlpha = Math.min(1.0, _morphAlpha + 0.28);
+
     if ($mouthGroup) {
-      // Anatomical Jaw-Drop Transform (Spring-hinged jaw drop on loud open vowels)
+      const isSpeaking = _curState === 'talking' && _smoothAperture > 0.032;
+
+      // Helper function to calculate parametric muscle scaling for any viseme
+      const getScale = (visemeKey, ap) => {
+        let sx = 1.0, sy = 1.0;
+        if (visemeKey === 'aa') {
+          sy = 0.94 + ap * 0.44;
+          sx = 0.98 - ap * 0.04;
+        } else if (visemeKey === 'oh') {
+          sy = 0.94 + ap * 0.34;
+          sx = 0.93 - ap * 0.09;
+        } else if (visemeKey === 'ou') {
+          sy = 0.92 + ap * 0.28;
+          sx = 0.86 - ap * 0.12;
+        } else if (visemeKey === 'ee') {
+          sy = 0.90 + ap * 0.16;
+          sx = 1.05 + ap * 0.18;
+        } else if (visemeKey === 'dental') {
+          sy = 0.88 + ap * 0.22;
+          sx = 1.01 + ap * 0.06;
+        } else if (visemeKey === 'fv') {
+          sy = 0.86 + ap * 0.18;
+          sx = 0.98;
+        } else if (visemeKey === 'mbp') {
+          sy = 0.84 + ap * 0.12;
+          sx = 0.98;
+        }
+        return { sx, sy };
+      };
+
+      // Anatomical Jaw-Drop Transform
       let jawDropY = 0;
-      if (_curState === 'talking' && _currentViseme !== 'rest') {
-        if (_currentViseme === 'aa') jawDropY = _smoothAperture * 3.2;
-        else if (_currentViseme === 'oh') jawDropY = _smoothAperture * 2.2;
-        else if (_currentViseme === 'ee' || _currentViseme === 'dental') jawDropY = _smoothAperture * 1.0;
+      if (isSpeaking && _primaryViseme !== 'rest') {
+        if (_primaryViseme === 'aa') jawDropY = _smoothAperture * 3.4;
+        else if (_primaryViseme === 'oh') jawDropY = _smoothAperture * 2.6;
+        else if (_primaryViseme === 'ou') jawDropY = _smoothAperture * 1.8;
+        else if (_primaryViseme === 'ee' || _primaryViseme === 'dental') jawDropY = _smoothAperture * 1.2;
         else jawDropY = _smoothAperture * 0.6;
       }
       $mouthGroup.style.transform = `translateY(${jawDropY.toFixed(2)}px)`;
 
-      // Parametric Elastic Scaling on Active Viseme
-      let sx = 1.0, sy = 1.0;
-      if (_currentViseme === 'aa') {
-        sy = 0.95 + _smoothAperture * 0.38;
-        sx = 1.00 + _smoothAperture * 0.08;
-      } else if (_currentViseme === 'ee') {
-        sy = 0.92 + _smoothAperture * 0.16;
-        sx = 1.04 + _smoothAperture * 0.16;
-      } else if (_currentViseme === 'oh') {
-        sy = 0.94 + _smoothAperture * 0.28;
-        sx = 0.96 - _smoothAperture * 0.08;
-      } else if (_currentViseme === 'ou') {
-        sy = 0.92 + _smoothAperture * 0.22;
-        sx = 0.88 - _smoothAperture * 0.12;
-      } else if (_currentViseme === 'dental') {
-        sy = 0.90 + _smoothAperture * 0.18;
-        sx = 1.00 + _smoothAperture * 0.08;
-      } else if (_currentViseme === 'fv') {
-        sy = 0.88 + _smoothAperture * 0.15;
-        sx = 0.98;
-      } else if (_currentViseme === 'mbp') {
-        sy = 0.85 + _smoothAperture * 0.10;
-        sx = 0.98;
-      }
-
-      // Viseme Rendering: Solid Opacity (ZERO ghosting / double-mouth artifact)
+      // Render 7 visemes with Dual-Buffer Morphing (ZERO pop / ZERO ghosting)
       for (let i = 0; i < VISEME_KEYS.length; i++) {
         const key = VISEME_KEYS[i];
         const el = $visemeEls[key];
         if (!el) continue;
 
-        if (_curState === 'talking' && _currentViseme === key && _smoothAperture > 0.035) {
-          el.style.opacity = '1';
-          el.style.transform = `scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`;
+        if (isSpeaking) {
+          if (key === _primaryViseme) {
+            // Incoming active viseme: on top (zIndex 3), fades in from 0 -> 1
+            const { sx, sy } = getScale(key, _smoothAperture);
+            const fade = _secondaryViseme === 'rest' ? Math.min(1.0, (_smoothAperture - 0.032) / 0.05) : 1.0;
+            const op = _morphAlpha * fade;
+            el.style.zIndex = '3';
+            el.style.opacity = op.toFixed(3);
+            el.style.transform = `scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`;
+          } else if (key === _secondaryViseme && _morphAlpha < 1.0) {
+            // Outgoing viseme: underneath (zIndex 2), remains opaque to mask base smile while primary fades in
+            const { sx, sy } = getScale(key, _smoothAperture);
+            const op = (1.0 - _morphAlpha);
+            el.style.zIndex = '2';
+            el.style.opacity = op.toFixed(3);
+            el.style.transform = `scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`;
+          } else {
+            el.style.zIndex = '1';
+            el.style.opacity = '0';
+          }
         } else {
+          // Closed resting smile
+          el.style.zIndex = '1';
           el.style.opacity = '0';
         }
       }
@@ -356,32 +386,52 @@ export const Mo = (() => {
   function setState(state) {
     _curState = state;
     if (state !== 'talking') {
-      _rawAperture    = 0;
-      _smoothAperture = 0;
-      _rawSpread      = 0;
-      _smoothSpread   = 0;
-      _currentViseme  = 'rest';
+      _rawAperture     = 0;
+      _smoothAperture  = 0;
+      _rawSpread       = 0;
+      _smoothSpread    = 0;
+      _primaryViseme   = 'rest';
+      _secondaryViseme = 'rest';
+      _morphAlpha      = 1.0;
       _cadence         = 0;
       _smoothCadence   = 0;
       if ($mouthGroup) $mouthGroup.style.transform = 'translateY(0px)';
       for (let i = 0; i < VISEME_KEYS.length; i++) {
         const el = $visemeEls[VISEME_KEYS[i]];
-        if (el) el.style.opacity = '0';
+        if (el) {
+          el.style.opacity = '0';
+          el.style.zIndex = '1';
+        }
       }
     }
   }
 
   function setViseme({ viseme = 'rest', aperture = 0, spread = 0, cadence = 0 } = {}) {
-    _currentViseme = viseme;
-    _rawAperture   = Math.max(0, Math.min(1, aperture));
-    _rawSpread     = Math.max(-1, Math.min(1, spread));
-    _cadence       = Math.max(0, Math.min(1, cadence));
+    _rawAperture = Math.max(0, Math.min(1, aperture));
+    _rawSpread   = Math.max(-1, Math.min(1, spread));
+    _cadence     = Math.max(0, Math.min(1, cadence));
+
+    if (viseme !== _primaryViseme) {
+      if (_primaryViseme !== 'rest') {
+        _secondaryViseme = _primaryViseme;
+        _morphAlpha = 0.0;
+      } else {
+        _secondaryViseme = 'rest';
+        _morphAlpha = 0.0;
+      }
+      _primaryViseme = viseme;
+    }
   }
 
   function setMouthOpen(v) {
     _rawAperture = Math.max(0, Math.min(1, v));
-    if (_curState === 'talking' && _currentViseme === 'rest' && _rawAperture > 0.05) {
-      _currentViseme = _rawAperture > 0.35 ? 'aa' : 'dental';
+    if (_curState === 'talking' && _primaryViseme === 'rest' && _rawAperture > 0.04) {
+      setViseme({
+        viseme: _rawAperture > 0.35 ? 'aa' : 'dental',
+        aperture: _rawAperture,
+        spread: 0,
+        cadence: _cadence,
+      });
     }
   }
 

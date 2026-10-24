@@ -13,7 +13,6 @@ const NOISE_GATE      = 0.0035; // RMS threshold for silence (resting smile)
 const ATTACK_RATE     = 0.90;   // Instantaneous jaw onset (<16ms, zero perceptual delay)
 const RELEASE_RATE    = 0.24;   // Natural phonetic syllable closure (~65ms decay)
 const NORMALIZE_PEAK  = 0.082;  // Calibrated to Gemini Live 24kHz vocal stream
-const DWELL_FRAMES    = 2;      // Minimum frames (~33ms) to dwell on a viseme (prevents flutter)
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let _rafId          = null;
@@ -21,6 +20,9 @@ let _envelope       = 0;        // smoothed speech power envelope
 let _cadence        = 0;        // smoothed conversational pacing
 let _activeViseme   = 'rest';   // current active phonetic viseme
 let _dwellCount     = 0;        // frames remaining for current viseme dwell
+let _f1Smooth       = 0;        // smoothed F1 jaw formant
+let _f2Smooth       = 0;        // smoothed F2 frontness formant
+let _sibSmooth      = 0;        // smoothed sibilance
 
 // ── Public API ────────────────────────────────────────────────────────────────
 
@@ -65,6 +67,11 @@ export function startLipSync(analyserNode) {
       if (freqBuf[b] > sibPeak) sibPeak = freqBuf[b];
     }
 
+    // Coarticulation Exponential Smoothing (eliminates single-sample noisy glitches)
+    _f1Smooth  += 0.55 * (eF1 - _f1Smooth);
+    _f2Smooth  += 0.55 * (eF2 - _f2Smooth);
+    _sibSmooth += 0.60 * (sibPeak - _sibSmooth);
+
     // 3. Phonetic Target Classification
     let candidateViseme = 'rest';
     let rawSignal = 0;
@@ -73,33 +80,33 @@ export function startLipSync(analyserNode) {
       candidateViseme = 'rest';
       rawSignal = 0;
     } else {
-      rawSignal = Math.max(rms, (sibPeak / 255) * 0.045);
+      rawSignal = Math.max(rms, (_sibSmooth / 255) * 0.045);
 
-      if (sibPeak > 95 && sibPeak > eF1 * 1.15) {
+      if (_sibSmooth > 92 && _sibSmooth > _f1Smooth * 1.15) {
         // Sibilants: /s, z, t, d, th, ch/ (teeth clenched dental)
         candidateViseme = 'dental';
-      } else if (sibPeak > 75 && eF1 < 60) {
+      } else if (_sibSmooth > 72 && _f1Smooth < 58) {
         // Labiodentals: /f, v/ (lower lip tuck)
         candidateViseme = 'fv';
-      } else if (eF1 > 75) {
+      } else if (_f1Smooth > 72) {
         // High F1 -> Wide open vowel sounds
-        if (eF2 > 82) {
+        if (_f2Smooth > 80) {
           candidateViseme = 'ee'; // Front vowels (/i, e, æ/ - wide spread)
-        } else if (eF2 < 55) {
+        } else if (_f2Smooth < 54) {
           candidateViseme = 'oh'; // Rounded back vowels (/o, ɔ/ - open oval)
         } else {
           candidateViseme = 'aa'; // Central open vowels (/a, ɑ/ - deep jaw drop)
         }
-      } else if (eF1 > 42) {
+      } else if (_f1Smooth > 40) {
         // Moderate F1 -> Mid/Close vowels
-        if (eF2 < 52) {
+        if (_f2Smooth < 50) {
           candidateViseme = 'ou'; // Tightly rounded /u, w, oo/ (pucker)
-        } else if (eF2 > 70) {
+        } else if (_f2Smooth > 68) {
           candidateViseme = 'ee'; // Spread smile
         } else {
           candidateViseme = 'oh'; // Round oval
         }
-      } else if (rms > 0.0075) {
+      } else if (rms > 0.007) {
         // Low F1 + vocal energy -> Bilabials (/m, b, p/ closed lips)
         candidateViseme = 'mbp';
       } else {
@@ -108,13 +115,16 @@ export function startLipSync(analyserNode) {
     }
 
     // 4. Syllabic Dwell & Coarticulation Debouncing
+    const isVowel = candidateViseme === 'aa' || candidateViseme === 'oh' || candidateViseme === 'ee' || candidateViseme === 'ou';
+    const targetDwell = isVowel ? 5 : 3;
+
     if (candidateViseme === 'rest') {
       _activeViseme = 'rest';
       _dwellCount   = 0;
     } else if (candidateViseme !== _activeViseme) {
-      if (_dwellCount <= 0 || candidateViseme === 'aa') {
+      if (_dwellCount <= 0 || (candidateViseme === 'aa' && rms > 0.045)) {
         _activeViseme = candidateViseme;
-        _dwellCount   = DWELL_FRAMES;
+        _dwellCount   = targetDwell;
       } else {
         _dwellCount--;
       }
@@ -163,6 +173,9 @@ export function stopLipSync() {
   _cadence      = 0;
   _activeViseme = 'rest';
   _dwellCount   = 0;
+  _f1Smooth     = 0;
+  _f2Smooth     = 0;
+  _sibSmooth    = 0;
 
   Mo.setViseme?.({
     viseme:   'rest',
