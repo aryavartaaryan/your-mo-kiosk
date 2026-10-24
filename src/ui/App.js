@@ -462,13 +462,73 @@ function injectStyles(colors) {
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .hero-subtitle {
+    /* ── Catchy Premium Alumni Story Capsule ("I am Mo...") ── */
+    .mo-story-capsule {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 6px 18px;
+      margin-top: 3px;
+      border-radius: 99px;
+      background: rgba(12, 28, 24, 0.90);
+      border: 1px solid rgba(255, 140, 50, 0.40);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45), 0 0 14px rgba(255, 120, 30, 0.14);
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      cursor: pointer;
+      pointer-events: auto;
+      max-width: 94%;
+    }
+    .mo-story-capsule:hover {
+      transform: translateY(-1.5px);
+      background: rgba(16, 36, 30, 0.94);
+      border-color: rgba(255, 160, 60, 0.70);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.55), 0 0 22px rgba(255, 120, 30, 0.28);
+    }
+    .mo-story-capsule:active {
+      transform: translateY(0) scale(0.99);
+    }
+    .story-tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 99px;
+      background: linear-gradient(135deg, rgba(255, 140, 50, 0.26) 0%, rgba(255, 100, 20, 0.16) 100%);
+      border: 1px solid rgba(255, 150, 60, 0.48);
+      flex-shrink: 0;
+    }
+    .story-grad-icon {
+      font-size: 11.5px;
+      line-height: 1;
+    }
+    .story-tag-text {
+      font-family: var(--font-display);
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      color: #FFB366;
+      text-transform: uppercase;
+    }
+    .mo-story-text {
+      font-family: var(--font-ui);
       font-size: clamp(12px, 1.25vw, 14.5px);
       font-weight: 600;
-      color: rgba(247, 243, 233, 0.85);
-      max-width: 620px;
-      line-height: 1.45;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.7);
+      color: #F7F3E9;
+      line-height: 1.35;
+      letter-spacing: 0.1px;
+      margin: 0;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.6);
+    }
+    .mo-story-text .story-name-highlight {
+      color: #FF9944;
+      font-weight: 800;
+      font-family: var(--font-display);
+    }
+    .hero-subtitle {
+      display: none;
     }
 
     /* ── Syracuse Live Social Proof Ticker ── */
@@ -1226,10 +1286,21 @@ function injectStyles(colors) {
         letter-spacing: -0.01em;
         margin-bottom: 6px;
       }
-      .hero-subtitle {
-        font-size: clamp(14.5px, 1.7vw, 19px);
-        max-width: 820px;
-        line-height: 1.48;
+      .mo-story-capsule {
+        padding: clamp(7px, 1vh, 12px) 24px;
+        gap: 12px;
+        margin-top: 4px;
+      }
+      .story-tag-pill {
+        padding: 4px 12px;
+      }
+      .story-tag-text {
+        font-size: clamp(10px, 1.1vw, 12px);
+        letter-spacing: 1.4px;
+      }
+      .mo-story-text {
+        font-size: clamp(14px, 1.6vw, 18px);
+        line-height: 1.4;
       }
 
       /* Main Stage Area: Full Vertical Scale */
@@ -1483,11 +1554,21 @@ function injectStyles(colors) {
         margin-bottom: 2px;
         line-height: 1;
       }
-      .hero-subtitle {
+      .mo-story-capsule {
+        padding: 4.5px 16px;
+        gap: 9px;
+        margin-top: 2px;
+      }
+      .story-tag-pill {
+        padding: 2.5px 8px;
+      }
+      .story-tag-text {
+        font-size: 8.5px;
+        letter-spacing: 1px;
+      }
+      .mo-story-text {
         font-size: clamp(11.5px, 1.1vw, 13px);
-        max-width: 580px;
-        line-height: 1.35;
-        opacity: 0.88;
+        line-height: 1.3;
       }
 
       /* Sleek live ticker: elegant horizontal pill */
@@ -1656,7 +1737,14 @@ function injectStyles(colors) {
       .hero-title {
         font-size: 26px;
       }
-      .hero-subtitle {
+      .mo-story-capsule {
+        padding: 3.5px 12px;
+        gap: 7px;
+      }
+      .story-tag-text {
+        font-size: 8px;
+      }
+      .mo-story-text {
         font-size: 11px;
       }
       #mo-stage-wrapper {
@@ -1715,6 +1803,18 @@ function injectStyles(colors) {
       display: flex;
       align-items: center;
       gap: 8px;
+    }
+    .drawer-header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .drawer-story-sub {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(247, 243, 233, 0.72);
+      letter-spacing: 0.2px;
+      font-style: italic;
     }
     .drawer-close-btn {
       background: rgba(255,255,255,0.08);
@@ -1978,9 +2078,17 @@ function buildHTML(config) {
           <span>● LIVE AI HOST • SYRACUSE UNIVERSITY FLAGSHIP</span>
         </div>
         <h1 class="hero-title">Meet <span class="title-accent">Mo</span></h1>
-        <p class="hero-subtitle">
-          Halalholic's living 3D AI host. Talk to him live right at this kiosk to customize platters, grab 2-min speed wraps, or order squad feasts.
-        </p>
+        
+        <!-- Catchy Premium Story Capsule (Ex-Student Backstory) -->
+        <div id="mo-story-capsule" class="mo-story-capsule" role="button" tabindex="0" title="Tap to hear Mo's backstory">
+          <div class="story-tag-pill">
+            <span class="story-grad-icon">🎓</span>
+            <span class="story-tag-text">ALUMNI STORY</span>
+          </div>
+          <p class="mo-story-text">
+            “I am <strong class="story-name-highlight">Mo</strong>. I was a student earlier — now I work here because of my love for food.”
+          </p>
+        </div>
       </div>
 
       <!-- Syracuse Live Social Proof Ticker -->
@@ -2163,7 +2271,10 @@ function buildHTML(config) {
     <!-- Slide-Out Menu Drawer with Gourmet Imagery -->
     <div id="menu-drawer">
       <div class="menu-drawer-header">
-        <h2>🔥 Halalholic Crave Board</h2>
+        <div class="drawer-header-left">
+          <h2>🔥 Halalholic Crave Board</h2>
+          <span class="drawer-story-sub">“Ex-student turned food lover — ask me for my top picks!” — Mo 👨‍🍳</span>
+        </div>
         <button class="drawer-close-btn" id="drawer-close-btn">✕</button>
       </div>
 
@@ -2774,6 +2885,17 @@ export class App {
           this.goToSlide(parseInt(block.dataset.slideTarget, 10));
         }
       });
+    });
+
+    // Interactive Alumni Story Capsule
+    const storyCapsule = document.getElementById('mo-story-capsule');
+    storyCapsule?.addEventListener('click', () => {
+      this.setMoSpeech(
+        "“Real talk: I was a Syracuse student just like you! Survived on Halalholic during finals, and now I work here because of my love for food.”",
+        200
+      );
+      this._Mo?.triggerSmug?.();
+      this._onChipClick?.("Tell me your backstory Mo, why do you work at Halalholic?");
     });
 
     // Menu Drawer Toggle & Interactive Item Selection
