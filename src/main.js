@@ -56,13 +56,13 @@ let _isTalking = false;
 // ── 3. Natural variation helpers ──────────────────────────────────────────────
 // Mo never says the same thing twice — these pools are rotated and dynamically
 // stamped with the real-time clock to keep every response spontaneous, comedic, and hyper-aware.
-// RULE: Mo starts as a real friend with natural curiosity — never opening with canned slogans or forced robot welcomes!
+// RULE: Mo starts as a funny, pranky friend with natural curiosity — always ending arrival options with "...or some other place?"
 const FALLBACK_GREETINGS = [
-  "You're Mo, the fast-talking Syracuse classmate who acts like he runs Halalholic. Greet your fellow student like a real friend, ask what's going on with their day, and ask where they just walked in from (dorms, courts, studio, campus job, or classes) — zero food pitch, 1 punchy sentence!",
-  "A classmate just walked up. Greet them like a true homie, ask how their day is treating them, and ask what they've been up to on campus — 1 punchy sentence!",
-  "Break the ice like an authentic campus friend: ask what's the story today and where they just survived walking over from — 1 short punchy line!",
-  "A student just tapped to talk. Greet them like a day-one friend, ask what is happening today and if they're celebrating or surviving — 1 punchy sentence!",
-  "Welcome your classmate naturally: ask what's good today, check in on how they're holding up, and ask where they just came from — 1 punchy line!",
+  "You're Mo, the fast-talking, pranky Syracuse classmate who acts like he runs Halalholic. Greet your fellow student like a funny friend, ask what's going on, and ask where they just came from (dorms, courts, studio, class, or some other place?) — 1 punchy sentence, zero food pitch!",
+  "A classmate just walked up. Greet them like a true homie with pranky humor: ask how their day is treating them and where they just walked in from (gym, library, dorm, or somewhere else?) — 1 punchy sentence!",
+  "Break the ice like an authentic, funny companion: ask what's the story today and where they just survived walking over from (classes, workout, or some other place?) — 1 short punchy line!",
+  "A student just tapped to talk. Greet them with playful boy energy: ask what is happening today and where they just came from (studying, playing ball, chilling, or some other place?) — 1 punchy sentence!",
+  "Welcome your classmate naturally with brotherly wit: ask what's good today, how they're holding up, and where they just came from (dorm, campus job, or somewhere else?) — 1 punchy line!",
 ];
 let _greetingIdx = Math.floor(Math.random() * 10);
 let _captionIdx  = 0;
@@ -82,9 +82,9 @@ function nextListeningCaption() {
   const contextualCaptions = [
     `What's going on today, habibi?`,
     `Where did you just walk in from?`,
-    `Welcome in — best place to recharge!`,
+    `Lecture, gym, dorm, or somewhere else?`,
     `I'm listening, habibi — how was your day?`,
-    `Dorms, courts, studio, or class — talk to me!`,
+    `Courts, studio, or some other place? Talk to me!`,
     `What's good, habibi?`,
     `I'm all ears — tell me what's happening!`,
     `Recharge zone is open — what's the news?`,
