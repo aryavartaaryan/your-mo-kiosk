@@ -1347,16 +1347,36 @@ function injectStyles(colors) {
         font-size: clamp(11.5px, 1.2vw, 13px);
       }
 
-      /* Bold "Meet Mo" Identity Jewel in Portrait View */
+      /* Bold & Catchy "Meet Mo" Hero Jewel in Kiosk / Portrait View (Lots of Vertical Space) */
       .mo-story-capsule {
         order: 3;
         width: auto;
-        margin: 6px auto 2px;
-        padding: 7px 22px;
+        margin: clamp(8px, 1.4vh, 18px) auto clamp(4px, 0.8vh, 10px);
+        padding: clamp(9px, 1.4vh, 16px) clamp(26px, 4vw, 40px);
+        gap: clamp(9px, 1.4vw, 14px);
+        border-radius: 99px;
+        background: linear-gradient(135deg, rgba(16, 44, 35, 0.96) 0%, rgba(8, 24, 20, 0.98) 100%);
+        border: 2.5px solid rgba(255, 150, 50, 0.75);
+        box-shadow: 0 8px 36px rgba(0, 0, 0, 0.75), 0 0 32px rgba(255, 120, 30, 0.40), inset 0 1px 2px rgba(255, 255, 255, 0.45);
         justify-content: center;
       }
+      .mo-story-capsule:hover {
+        transform: translateY(-2px) scale(1.04);
+        box-shadow: 0 12px 44px rgba(0, 0, 0, 0.8), 0 0 42px rgba(255, 120, 30, 0.6);
+      }
       .mo-hero-name {
-        font-size: clamp(16px, 2.2vw, 20px);
+        font-size: clamp(22px, 3.2vw, 32px);
+        letter-spacing: clamp(1px, 0.2vw, 2px);
+        text-shadow: 0 3px 14px rgba(0, 0, 0, 0.9);
+      }
+      .mo-live-dot {
+        width: clamp(10px, 1.2vw, 13px);
+        height: clamp(10px, 1.2vw, 13px);
+        box-shadow: 0 0 12px #72CC38, 0 0 24px rgba(114, 204, 56, 0.8);
+      }
+      .mo-spark-star {
+        font-size: clamp(13px, 1.6vw, 18px);
+        filter: drop-shadow(0 0 8px #FF9900);
       }
 
       /* Main Stage Area: Full Vertical Scale */
@@ -1658,11 +1678,20 @@ function injectStyles(colors) {
       }
       #mo-story-capsule {
         order: 2;
-        padding: 8px 24px;
+        padding: 5px 16px;
         margin: 0;
+        gap: 7px;
       }
       .mo-hero-name {
-        font-size: 19px;
+        font-size: 13.5px;
+        letter-spacing: 0.4px;
+      }
+      .mo-live-dot {
+        width: 7px;
+        height: 7px;
+      }
+      .mo-spark-star {
+        font-size: 10px;
       }
       #header-nav {
         order: 3;
@@ -1871,10 +1900,18 @@ function injectStyles(colors) {
         padding: 5px 12px;
       }
       #mo-story-capsule {
-        padding: 6px 18px;
+        padding: 4px 14px;
+        gap: 6px;
       }
       .mo-hero-name {
-        font-size: 16px;
+        font-size: 12.5px;
+      }
+      .mo-live-dot {
+        width: 6.5px;
+        height: 6.5px;
+      }
+      .mo-spark-star {
+        font-size: 9px;
       }
       #mo-stage-wrapper {
         width: min(72vh, 560px);
