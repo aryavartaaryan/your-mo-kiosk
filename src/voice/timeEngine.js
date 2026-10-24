@@ -51,9 +51,9 @@ export function getCampusTimeContext(date = new Date()) {
     recommendedPick = 'Lamb or Chicken Gyro Wrap ($7.99) — one-handed, zero-utensils, sprint-to-class aerodynamic.';
     budgetHack = '$7.99 Gyro Wrap is the most portable protein bomb under eight bucks.';
     greetingHooks = [
-      `It is ${formattedTime} on ${dayOfWeek}. A classmate just walked up half-asleep. Greet them like a funny friend asking what brutal morning class took their soul — NO food pitch, 1 punchy sentence!`,
-      `Morning at ${formattedTime}! Welcome the student like a campus buddy asking what major had them dragging their feet in the cold this early — 1 funny sentence, no food talk yet!`,
-      `It's ${formattedTime} morning. Hit them with a warm laugh asking if they're actually awake or sleepwalking from an 8 AM lecture — 1 punchy line, zero food pitch!`,
+      `It is ${formattedTime} on a ${dayOfWeek}. Greet the student warmly like a real friend, ask what is going on today, and ask where they just came from this early (lecture, morning gym workout, or dorm) — DO NOT pitch food yet, 1 punchy sentence!`,
+      `Morning check-in at ${formattedTime}! Welcome them like an authentic campus classmate, ask what's going on, and ask where they just walked in from right now — 1 punchy sentence!`,
+      `It's ${formattedTime} morning. Hit them with Mo's warm brotherly charm: ask what's going on with them and where they just survived walking from — 1 sentence!`,
     ];
   } else if (timeDec >= 10.5 && timeDec < 14.5) {
     slot = TIME_SLOTS.LUNCH_RUSH;
@@ -62,9 +62,9 @@ export function getCampusTimeContext(date = new Date()) {
     recommendedPick = 'Chicken or Mix Combo Platter ($9.99) or Gyro Wrap ($7.99) ready in 2 minutes.';
     budgetHack = 'The $9.99 Platter Two-Meal Hack: eat half for lunch, save half in foil for late study session = $5 per meal.';
     greetingHooks = [
-      `It is ${formattedTime} lunch time on ${dayOfWeek}. A student walked up. Greet them like a real friend asking what craziness is going on between classes today — 1 punchy sentence, no food talk yet!`,
-      `Midday rush at ${formattedTime}! Welcome your classmate with fast Mo charm asking what professor gave a surprise pop quiz or what's going on — 1 punchy sentence, zero food pitch!`,
-      `It's ${formattedTime}. Greet them like your favorite campus homie asking what major they're grinding in and how their day is going — 1 funny line, no food talk!`,
+      `It is ${formattedTime} on ${dayOfWeek}. Greet the student like a true homie, ask what's going on, and ask factually where they just walked in from (lecture hall, gym, or library) — DO NOT pitch food yet, 1 punchy sentence!`,
+      `Midday check-in at ${formattedTime}! Welcome your classmate with fast-talking Mo warmth, ask what is happening with their day, and ask where they just escaped from — 1 punchy sentence!`,
+      `It's ${formattedTime}. Greet them like a real friend asking what's good today and where they just walked over from on campus — 1 punchy sentence!`,
     ];
   } else if (timeDec >= 14.5 && timeDec < 17.5) {
     slot = TIME_SLOTS.AFTERNOON_SLUMP;
@@ -73,9 +73,9 @@ export function getCampusTimeContext(date = new Date()) {
     recommendedPick = 'Crispy Sauced Wings ($9.99) or Chicken Dose Platter ($9.99) with Extra White Sauce.';
     budgetHack = 'Upgrade any order with +$2.99 Combo for seasoned waffle fries and soda to power through the afternoon.';
     greetingHooks = [
-      `It is ${formattedTime} in the afternoon on ${dayOfWeek}. Greet the student like a true friend asking what lecture or lab just melted their brain — 1 punchy line, zero food pitch!`,
-      `Afternoon slump at ${formattedTime}! Welcome your classmate asking what is going on with them and whether they just escaped from Bird Library — 1 funny sentence, no food talk!`,
-      `It's ${formattedTime}. Hit them with Mo's witty charm asking how their day was and what campus chaos went down today — 1 punchy line, zero food talk!`,
+      `It is ${formattedTime} in the afternoon on ${dayOfWeek}. Greet the student like their favorite friend, ask what's going on, and ask where they just came from right now (classes, the gym, or the library) — zero food talk yet, 1 punchy sentence!`,
+      `Afternoon check-in at ${formattedTime}! Break the ice with genuine friend banter, ask what is going on today and where they just walked in from — 1 punchy sentence!`,
+      `It's ${formattedTime} afternoon. Welcome your fellow student like a real classmate: ask what's happening and what they've been up to today — 1 sentence!`,
     ];
   } else if (timeDec >= 17.5 && timeDec < 21.5) {
     slot = TIME_SLOTS.DINNER_RUSH;
@@ -86,9 +86,9 @@ export function getCampusTimeContext(date = new Date()) {
     recommendedPick = 'The Legendary HolicBucket ($15.99) for the crew or Mix Combo Platter ($9.99) with double meat.';
     budgetHack = 'The $15.99 HolicBucket Squad Hack: feeds 3 students with 4 pitas and a mountain of fries & rice = $5.33 per person, crushing dining hall prices.';
     greetingHooks = [
-      `It is ${formattedTime} evening on ${dayOfWeek}. Greet the student like a close friend asking what's the move tonight and what's going on with the squad — 1 punchy sentence, no food pitch!`,
-      `Dinner time at ${formattedTime}! Welcome your classmate asking how they survived classes today and what's the latest story — 1 funny sentence, zero food talk!`,
-      `It's ${formattedTime}. Greet them like a campus homie asking what is going on and if they finally escaped the lecture halls — 1 punchy line, no food pitch!`,
+      `It is ${formattedTime} evening on ${dayOfWeek}. Greet the student like a day-one friend, ask what's going on tonight, and ask where they just came from (lecture wrap-up, gym, or dorm) — DO NOT pitch food yet, 1 punchy sentence!`,
+      `Evening welcome at ${formattedTime}! Greet them warmly like their campus buddy, ask how their day went and what's happening right now — 1 punchy sentence!`,
+      `It's ${formattedTime} dinner time. Check in with real friend energy: ask what is going on with them tonight and where they just walked in from — 1 sentence!`,
     ];
   } else if (timeDec >= 21.5 || timeDec < 2) {
     slot = TIME_SLOTS.LATE_NIGHT_CRAMMING;
@@ -99,9 +99,9 @@ export function getCampusTimeContext(date = new Date()) {
     recommendedPick = 'Loaded Chicken Dose Platter ($9.99) with Extra Holic (+$3.00) or 12 Pieces Wings ($15.99).';
     budgetHack = 'Late-night calorie efficiency: The $9.99 loaded platter delivers basmati rice, protein, fries, and salad to power an all-nighter till sunrise.';
     greetingHooks = [
-      `It is ${formattedTime} late night on ${dayOfWeek}. Greet the student with brotherly hype asking what crazy homework or project crisis has them up right now — 1 punchy sentence, no food pitch!`,
-      `Late night at ${formattedTime}! Welcome your classmate asking what is going on and what insane deadline they're battling tonight — 1 funny sentence, zero food talk!`,
-      `It's ${formattedTime} night. Hit them with Mo's witty energy asking what professor had the audacity to assign work due at midnight — 1 punchy line, zero food pitch!`,
+      `It is ${formattedTime} late night on ${dayOfWeek}. Greet the student like a real homie, ask what's going on tonight, and ask where they just walked in from (Bird Library, late gym lift, or dorm) — zero food pitch yet, 1 punchy sentence!`,
+      `Late-night check-in at ${formattedTime}! Welcome them like their favorite companion, ask what is happening tonight and where they just came from — 1 punchy sentence!`,
+      `It's ${formattedTime} night. Hit them with Mo's late-night friend energy: ask what's going on and what they've been grinding on tonight — 1 sentence!`,
     ];
   } else {
     // 02:00 - 05:00
@@ -111,8 +111,8 @@ export function getCampusTimeContext(date = new Date()) {
     recommendedPick = 'Warm Gyro Wrap ($7.99) or Chicken Platter ($9.99) with extra garlic white sauce.';
     budgetHack = 'Save your wallet from $25 third-party delivery apps: get real hot halal food on Marshall St for eight bucks.';
     greetingHooks = [
-      `It is ${formattedTime} in the dead of night on ${dayOfWeek}. Salute this fellow student warrior asking what crazy all-nighter or thesis drama is going on — 1 punchy sentence, no food pitch!`,
-      `Graveyard shift at ${formattedTime}! Greet your fellow night owl asking what's going on and what crisis kept them awake till now — 1 funny line, zero food talk!`,
+      `It is ${formattedTime} in the dead of night on ${dayOfWeek}. Greet this fellow student like a true companion, ask what is going on, and ask where they've been or what they're working on — DO NOT pitch food yet, 1 punchy sentence!`,
+      `Graveyard shift check-in at ${formattedTime}! Welcome your fellow night owl asking what's going on tonight and where they just walked in from — 1 sentence!`,
     ];
   }
 

@@ -26,7 +26,7 @@ import { getCampusTimeContext } from './voice/timeEngine.js';
 // Helper for dynamic real-time caption
 function getDynamicIdleCaption() {
   const timeCtx = getCampusTimeContext();
-  return `Yo 'Cuse! It's ${timeCtx.formattedTime} — what's going on, habibi? Tap below to talk to Mo! 🔥`;
+  return `Yo 'Cuse! (${timeCtx.formattedTime}) What's going on today? Tap below to talk with Mo! 🔥`;
 }
 
 // ── 1. Bootstrap ──────────────────────────────────────────────────────────────
@@ -51,13 +51,13 @@ let _isTalking = false;
 // ── 3. Natural variation helpers ──────────────────────────────────────────────
 // Mo never says the same thing twice — these pools are rotated and dynamically
 // stamped with the real-time clock to keep every response spontaneous, comedic, and hyper-aware.
-// GOLDEN RULE: Mo starts with friendship, humor, and asking what's going on — NEVER a cold food pitch!
+// RULE: Mo starts as a real friend asking what's going on and where they came from — NEVER opening with food pitches!
 const FALLBACK_GREETINGS = [
-  "You're Mo, the fast-talking Syracuse classmate. Greet your fellow student like a real campus friend asking what is going on with them today — NO food mentions yet, keep it 1 funny punchy sentence!",
-  "A classmate just walked up looking tired from lectures. Break the ice like their favorite campus homie asking what crazy class just wrecked them today — 1 punchy sentence, no food talk yet!",
-  "Welcome your fellow student with Mo's warm, witty humor asking what's the latest campus news or what is going on with them — 1 punchy sentence, zero food pitch!",
-  "Ask them what major they're in and how their semester is treating them in Mo's stand-up comedy style — 1 short punchy line, zero food pitch!",
-  "A student just tapped to talk. Greet them like a day-one friend asking what crazy campus drama or test they just survived — 1 punchy line, no food talk yet!",
+  "You're Mo, the fast-talking Syracuse classmate who acts like he runs Halalholic. Greet your fellow student like a real friend, ask what's going on, and ask where they just came from right now (lecture, gym, or library) — zero food talk yet, 1 punchy sentence!",
+  "A classmate just walked up. Greet them like a true homie, ask what is happening with them today, and ask where they just walked in from — 1 punchy sentence!",
+  "Welcome your fellow student warmly like a campus buddy: ask how their day is going and where they just escaped from — 1 short punchy line!",
+  "A student just tapped to talk. Greet them like a day-one friend, ask what's good today and what they were just doing on campus — 1 punchy sentence!",
+  "Break the ice like an authentic companion: ask what's going on with their day and where they just came from right now — 1 punchy line!",
 ];
 let _greetingIdx = Math.floor(Math.random() * 10);
 let _captionIdx  = 0;
@@ -73,15 +73,14 @@ function nextGreeting() {
 }
 
 function nextListeningCaption() {
+  const timeCtx = getCampusTimeContext();
   const contextualCaptions = [
-    "What's going on, habibi?",
-    "Talk to me — how was your day?",
-    "What's the latest campus drama?",
-    "I'm listening, habibi — tell me everything.",
-    "What class took your soul today?",
-    "What's the move today, habibi?",
-    "Speak your truth, habibi — no judgment here!",
-    "I'm all ears, bro!",
+    `What's going on today, habibi?`,
+    `Where did you just walk in from?`,
+    `I'm listening, habibi — how was your day?`,
+    `Talk to me — lecture, gym, or library?`,
+    `What's good, habibi?`,
+    `I'm all ears — tell me what's happening!`,
   ];
   const msg = contextualCaptions[_captionIdx % contextualCaptions.length];
   _captionIdx++;
@@ -243,6 +242,10 @@ async function startVoiceSession(initialPrompt = null) {
       } else if (lower.includes('haha') || lower.includes('heh') || lower.includes('lol') || lower.includes('joke') || lower.includes('breakup') || lower.includes('ex ') || lower.includes('ex-') || lower.includes('girlfriend') || lower.includes('dumped')) {
         Mo.setExpression('laughing');
         Mo.triggerLaugh();
+      } else if (lower.includes('protein') || lower.includes('muscle') || lower.includes('gym') || lower.includes('barnes') || lower.includes('gains') || lower.includes('lift') || lower.includes('swole')) {
+        Mo.setExpression('confident');
+        Mo.setPose('thumbs_up');
+        Mo.triggerLaugh();
       } else if (lower.includes('bold move') || lower.includes('say less') || lower.includes('trust me')) {
         Mo.setExpression('wink');
         Mo.triggerLaugh();
@@ -260,6 +263,9 @@ async function startVoiceSession(initialPrompt = null) {
         const lower = text.toLowerCase();
         if (lower.includes('eat you') || lower.includes('bite') || lower.includes('hair') || lower.includes('lettuce') || lower.includes('bread') || lower.includes('robot') || lower.includes('fake') || lower.includes('ai')) {
           Mo.setExpression('angry'); // Mock-offended prep
+        } else if (lower.includes('gym') || lower.includes('workout') || lower.includes('lift') || lower.includes('muscle') || lower.includes('protein') || lower.includes('barnes') || lower.includes('biceps') || lower.includes('gains')) {
+          Mo.setExpression('confident'); // Gym lifter swagger prep
+          Mo.setPose('thumbs_up');
         } else if (lower.includes('exam') || lower.includes('study') || lower.includes('lecture') || lower.includes('class') || lower.includes('iconic') || lower.includes('student')) {
           Mo.setExpression('confident'); // Smug prep
         } else if (lower.includes('squad') || lower.includes('friends') || lower.includes('group') || lower.includes('bucket') || lower.includes('party')) {
