@@ -68,6 +68,55 @@ function injectStyles(colors) {
       background: radial-gradient(ellipse at 50% 32%, #142822 0%, #08110E 55%, #050908 100%);
     }
 
+    /* ── Full-Screen Cinematic Campus Atmosphere Canvas ── */
+    #kiosk-cinematic-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .kiosk-bg-photo {
+      position: absolute;
+      inset: -4%;
+      width: 108%;
+      height: 108%;
+      object-fit: cover;
+      object-position: center 28%;
+      filter: saturate(1.22) contrast(1.12) brightness(0.74);
+      animation: bg-cinematic-drift 32s ease-in-out infinite alternate;
+    }
+    @keyframes bg-cinematic-drift {
+      0%   { transform: scale(1) translate(0, 0); }
+      50%  { transform: scale(1.06) translate(-1%, -1.2%); }
+      100% { transform: scale(1.03) translate(1%, 0.8%); }
+    }
+    .kiosk-bg-glass-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 40%,
+        rgba(255, 120, 20, 0.16) 0%,
+        rgba(8, 26, 22, 0.62) 50%,
+        rgba(4, 12, 10, 0.90) 82%,
+        #030706 100%
+      );
+      backdrop-filter: blur(1.5px);
+    }
+    .kiosk-bg-vignette {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg,
+        rgba(3, 10, 8, 0.94) 0%,
+        rgba(3, 10, 8, 0.50) 18%,
+        rgba(4, 14, 12, 0.22) 42%,
+        rgba(3, 10, 8, 0.68) 72%,
+        rgba(2, 6, 5, 0.96) 90%,
+        #020504 100%
+      );
+    }
+
     /* ── Cyber-Varsity Campus Stage Grid Matrix ── */
     #bg-campus-grid {
       position: absolute;
@@ -356,6 +405,56 @@ function injectStyles(colors) {
       text-shadow: 0 2px 10px rgba(0,0,0,0.7);
     }
 
+    /* ── Syracuse Live Social Proof Ticker ── */
+    #kiosk-live-ticker {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin-top: 6px;
+      margin-bottom: 2px;
+      z-index: 20;
+      pointer-events: none;
+    }
+    .ticker-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 5px 18px;
+      border-radius: 99px;
+      background: rgba(10, 26, 22, 0.88);
+      border: 1.5px solid rgba(255, 140, 50, 0.45);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.55), 0 0 16px rgba(255, 106, 0, 0.22);
+    }
+    .ticker-fire {
+      font-size: 13px;
+      filter: drop-shadow(0 0 6px #FF6A00);
+      animation: flame-flicker 1.8s infinite alternate;
+    }
+    .ticker-text {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #FFF;
+      font-family: var(--font-display);
+    }
+    .ticker-text strong {
+      color: #FFA044;
+      font-weight: 900;
+    }
+    .ticker-sep {
+      color: rgba(255, 160, 68, 0.45);
+      font-size: 9px;
+    }
+    .ticker-tag {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #72CC38;
+      text-transform: uppercase;
+    }
+
     /* ── Main Stage Area: Side Wings + 3D Holographic Stage Pedestal ── */
     #kiosk-main-stage {
       position: relative; z-index: 10;
@@ -551,18 +650,18 @@ function injectStyles(colors) {
         rgba(8, 26, 22, 0.8) 75%,
         transparent 100%
       );
-      border: 2px solid rgba(255, 150, 50, 0.6);
-      box-shadow: 0 0 40px rgba(255, 106, 0, 0.5), inset 0 0 25px rgba(255, 120, 30, 0.35);
-      transform: perspective(400px) rotateX(68deg);
+      border: 2px solid rgba(255, 150, 50, 0.65);
+      box-shadow: 0 0 35px rgba(255, 106, 0, 0.55), inset 0 0 20px rgba(255, 120, 30, 0.4);
+      transform: scaleY(0.32);
     }
     .stage-disc-inner {
       position: absolute;
       top: 18%; left: 18%; right: 18%; bottom: 18%;
       border-radius: 50%;
       background: radial-gradient(ellipse at 50% 50%, rgba(255, 200, 100, 0.45) 0%, rgba(255, 110, 0, 0.15) 55%, transparent 75%);
-      border: 1.5px solid rgba(255, 210, 120, 0.75);
-      box-shadow: 0 0 25px rgba(255, 140, 40, 0.6), inset 0 0 15px rgba(255, 160, 60, 0.4);
-      transform: perspective(400px) rotateX(68deg);
+      border: 1.5px solid rgba(255, 210, 120, 0.8);
+      box-shadow: 0 0 25px rgba(255, 140, 40, 0.65), inset 0 0 15px rgba(255, 160, 60, 0.4);
+      transform: scaleY(0.32);
       animation: stage-pulse 3.5s ease-in-out infinite alternate;
     }
     @keyframes stage-pulse {
@@ -1503,10 +1602,17 @@ function buildHTML(config) {
 
   return /* html */`
     <div id="app">
+      <!-- Full-Screen Cinematic Campus Atmosphere (College Student Life & Halal Dining) -->
+      <div id="kiosk-cinematic-bg">
+        <img class="kiosk-bg-photo" src="/assets/backgrounds/college_students_hangout.jpg" alt="Syracuse Campus Dining Vibe" />
+        <div class="kiosk-bg-glass-overlay"></div>
+        <div class="kiosk-bg-vignette"></div>
+      </div>
+
       <!-- Cyber-Varsity Campus Stage Grid Matrix -->
       <div id="bg-campus-grid"></div>
 
-      <!-- Peripheral Campus Lifestyle & Food Vignettes (Landscape Countertop Only) -->
+      <!-- Peripheral Campus Lifestyle & Food Vignettes -->
       <div id="bg-student-vignettes">
         <div class="bg-vignette-card left-card" data-prompt="What's the best late-night meal for Syracuse students?">
           <div class="vignette-img-wrap">
@@ -1571,6 +1677,18 @@ function buildHTML(config) {
         <p class="hero-subtitle">
           Halalholic's living 3D AI host. Talk to him live right at this kiosk to customize platters, grab 2-min speed wraps, or order squad feasts.
         </p>
+      </div>
+
+      <!-- Syracuse Live Social Proof Ticker -->
+      <div id="kiosk-live-ticker">
+        <div class="ticker-pill">
+          <span class="ticker-fire">🔥</span>
+          <span class="ticker-text"><strong>1,840+ PLATTERS</strong> ORDERED TODAY ON 'CUSE CAMPUS</span>
+          <span class="ticker-sep">•</span>
+          <span class="ticker-tag">⚡ 2-MIN SPEED RUSH</span>
+          <span class="ticker-sep">•</span>
+          <span class="ticker-tag">🎓 100% FRESH ZABIHA</span>
+        </div>
       </div>
 
       <!-- Main Stage: "TRY ASKING MO" Crave Chips + 3D Holographic Stage Pedestal -->
