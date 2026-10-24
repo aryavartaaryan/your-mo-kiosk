@@ -58,11 +58,11 @@ let _isTalking = false;
 // stamped with the real-time clock to keep every response spontaneous, comedic, and hyper-aware.
 // RULE: Mo starts as a funny, pranky friend with natural curiosity — always ending arrival options with "...or some other place?"
 const FALLBACK_GREETINGS = [
-  "You're Mo, the fast-talking, pranky Syracuse classmate who acts like he runs Halalholic. Greet your fellow student like a funny friend, ask where they just came from (dorms, courts, studio, class, or some other place?), and ask what name they go by if they're comfortable sharing — 1 punchy sentence, zero food pitch!",
-  "A classmate just walked up. Greet them like a true homie with pranky humor: ask how their day is treating them, where they just walked in from (gym, library, dorm, or somewhere else?), and what to call them if they're cool with it — 1 punchy sentence!",
-  "Break the ice like an authentic, funny companion: ask what's the story today and where they just survived walking over from (classes, workout, or some other place?) — 1 short punchy line!",
-  "A student just tapped to talk. Greet them with playful boy energy: introduce yourself as Mo, ask what is happening today, and ask what they go by if they're cool sharing — 1 punchy sentence!",
-  "Welcome your classmate naturally with brotherly wit: ask what's good today, how they're holding up, and where they just came from (dorm, campus job, or somewhere else?) — 1 punchy line!",
+  "You're Mo. Greet the student in 3 SHORT, breathable human lines (max 4-8 words each): Line 1: 'Yo! Look who made it in.' Line 2: 'Man, that Syracuse cold is brutal today.' Line 3: 'Did you just walk in from class, the dorms, or somewhere else?' Keep it light, conscious, and warm without over-guessing!",
+  "A classmate walked up! Greet them in 3 SHORT, touchy lines (max 4-8 words each): Line 1: 'Ayy, what's good, habibi!' Line 2: 'You look like you've had a busy day.' Line 3: 'Where did you just walk over from — lecture, the gym, or some other place?'",
+  "A student tapped to talk. Greet them in 3 SHORT, crisp lines: Line 1: 'Look who survived the cold!' Line 2: 'Welcome back to the warm zone.' Line 3: 'Did you just come from classes, the library, or somewhere else?'",
+  "Greet your classmate naturally in 3 SHORT lines: Line 1: 'Yo habibi! Good to see you.' Line 2: 'Campus hustle is wild right now.' Line 3: 'Where are you coming from today — campus, the dorms, or somewhere else?'",
+  "A student arrived. Greet them with warm brotherly wit in 3 SHORT lines: Line 1: 'What's good, my friend!' Line 2: 'Hope your day is treating you well.' Line 3: 'Did you just finish class, workout, or some other place?'",
 ];
 let _greetingIdx = Math.floor(Math.random() * 10);
 let _captionIdx  = 0;
@@ -96,6 +96,8 @@ function nextListeningCaption() {
     `I'm all ears — tell me what's happening!`,
     `Promise you'll come back through, habibi!`,
     `Recharge zone is open — what's the news?`,
+    `✨ 100% Pure Certified Halal — Zero mystery meat!`,
+    `Clean protein & pure flavor — ask Mo what's hitting!`,
   ];
   const msg = contextualCaptions[_captionIdx % contextualCaptions.length];
   _captionIdx++;

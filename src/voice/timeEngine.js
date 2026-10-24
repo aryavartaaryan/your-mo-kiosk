@@ -54,10 +54,10 @@ export function getCampusTimeContext(date = new Date()) {
     budgetHack = '$7.99 Gyro Wrap is the most portable protein bomb under eight bucks.';
     realisticLocations = ['dorm / hostel bed', 'early morning gym lift', 'campus job shift', 'freezing walk up University Ave', 'or some other place'];
     greetingHooks = [
-      `It is ${formattedTime} morning on ${dayOfWeek}. You're Mo, the hilarious ex-student: crack a funny joke about freezing 8 AM Syracuse attendance or sleeping through alarms, and ask where they dragged themselves in from (8 AM lecture, morning gym lift, dorm bed, or some other place?) — ZERO formality, 1 punchy line!`,
-      `Morning check-in at ${formattedTime}! You're Mo: drop a quick funny quip about sliding on Syracuse University Ave ice like an Olympic bobsledder, and ask where they walked in from (dorm, gym, shift, or somewhere else?) — 1 funny line!`,
-      `It's ${formattedTime} morning. Hit them with Mo's witty student humor: joke about professors who make 8 AM attendance mandatory in 10-degree snow, and ask where they just came from (class, workout, dorm bunk, or some other place?) — 1 sentence!`,
-      `Early morning arrival at ${formattedTime}. Open like a funny classmate: crack a joke about surviving on caffeine fumes, and ask where they came from (dorm, lecture, campus job, or some other place?) and what name they go by if they're comfortable sharing — 1 snappy line!`,
+      `It's ${formattedTime} morning on ${dayOfWeek}. You're Mo. Greet them in 3 SHORT, breathable human lines (max 4-8 words per line): Line 1: "Yo! Look who's up early." Line 2: "That Syracuse wind is freezing today." Line 3: "Did you just walk in from class, the dorms, or somewhere else?" Keep it light, conscious, and warm without over-guessing!`,
+      `Morning check-in at ${formattedTime}! You're Mo. Speak in 3 SHORT, touchy sentences: Line 1: "Ayy, morning warrior!" Line 2: "Hope you got some coffee in you." Line 3: "Where'd you just walk over from — dorms, a morning lift, or some other place?" Light and friendly!`,
+      `It's ${formattedTime} morning. Greet them in 3 SHORT, human sentences: Line 1: "Look who survived the cold!" Line 2: "Welcome back to the warm zone." Line 3: "Did you just come from an 8 AM, the dorms, or somewhere else?"`,
+      `Early morning arrival at ${formattedTime}. Speak in 3 SHORT lines: Line 1: "Yo habibi! Good to see you." Line 2: "You made it through the morning freeze." Line 3: "Where are you coming from today — campus, work, or somewhere else?"`,
     ];
   } else if (timeDec >= 10.5 && timeDec < 14.5) {
     slot = TIME_SLOTS.LUNCH_RUSH;
@@ -67,10 +67,10 @@ export function getCampusTimeContext(date = new Date()) {
     budgetHack = 'The $9.99 Platter Two-Meal Hack: eat half for lunch, save half in foil for late study session = $5 per meal.';
     realisticLocations = ['lecture hall', 'basketball pickup courts', 'Schine student center', 'library', 'campus job', 'or some other place'];
     greetingHooks = [
-      `It is ${formattedTime} on ${dayOfWeek}. You're Mo, the funny ex-student: crack a joke about 80-slide professor lecture monologues or sprinting across campus, and ask where they just came from (sprinting from a lecture, pickup hoops at the courts, library, or some other place?) — 1 hilarious sentence!`,
-      `Midday arrival at ${formattedTime}! Open with Mo's mischievous banter: crack a funny line about dodging someone named Tyler who never answers group project texts, and ask where they walked in from (class, the courts, dorm, or somewhere else?) and what to call them if they're cool sharing — 1 punchy sentence!`,
-      `It's ${formattedTime} midday. Greet your classmate with spontaneous humor: joke about syllabus week optimism vs midterm reality, and ask where they just escaped from (a professor, the gym, student center, or some other place?) — 1 sentence!`,
-      `Lunch hour check-in at ${formattedTime}. Welcome them with funny peer wit: crack a quick joke about dining hall mystery meat vs real food, and ask where they just came from (classes, courts, work, or some other place?) — 1 snappy line!`,
+      `It is ${formattedTime} on ${dayOfWeek}. You're Mo. Open in 3 SHORT, crisp human lines: Line 1: "Yo! Look who made it in." Line 2: "Midday campus rush is wild right now." Line 3: "Did you just finish class, the gym, or some other place?" Friendly and conscious, zero over-guessing!`,
+      `Midday check-in at ${formattedTime}! You're Mo. Speak in 3 SHORT lines: Line 1: "Ayy, what's good, habibi!" Line 2: "Campus is buzzing today." Line 3: "Where did you just walk over from — lecture, the courts, or somewhere else?"`,
+      `It's ${formattedTime} midday. Greet in 3 SHORT sentences: Line 1: "Look who made time for lunch!" Line 2: "You look like you've been grinding hard." Line 3: "Did you just escape class, the library, or some other place?"`,
+      `Lunch hour arrival at ${formattedTime}. Open in 3 SHORT, touchy lines: Line 1: "Yo! Good to see you, my friend." Line 2: "You survived the morning lectures." Line 3: "Where'd you just come from — class, dorms, or somewhere else?"`,
     ];
   } else if (timeDec >= 14.5 && timeDec < 17.5) {
     slot = TIME_SLOTS.AFTERNOON_SLUMP;
@@ -80,10 +80,10 @@ export function getCampusTimeContext(date = new Date()) {
     budgetHack = 'Upgrade any order with +$2.99 Combo for seasoned waffle fries and soda to power through the afternoon.';
     realisticLocations = ['architecture / art studio', 'playground / sports turf', 'afternoon lab', 'dorm nap', 'campus bookstore job', 'or some other place'];
     greetingHooks = [
-      `It is ${formattedTime} afternoon on ${dayOfWeek}. You're Mo: crack a hilarious joke about waking up from a 3-hour dorm nap disoriented and wondering what year it is, and ask where they came from (a 3-hour lab, design studio, turf fields, dorm nap, or some other place?) — 1 punchy sentence!`,
-      `Afternoon check-in at ${formattedTime}! Welcome your classmate with humorous charm: joke about afternoon caffeine crashes and studio glue fumes, and ask where they just walked over from (studio, the courts, classes, or somewhere else?) — 1 punchy sentence!`,
-      `It's ${formattedTime} afternoon. Break the ice naturally: joke about pretending to take notes while online shopping in lecture, and ask where they just escaped from (lecture, dorm hibernation, gym, or some other place?) — 1 snappy line!`,
-      `Afternoon arrival at ${formattedTime}. Check in like a close buddy with funny boy energy: crack a joke about surviving 3-hour labs, and ask where they came from (sports courts, studio grind, library, or some other place?) and what name they go by if they're comfortable sharing — 1 punchy line!`,
+      `It is ${formattedTime} afternoon on ${dayOfWeek}. You're Mo. Open in 3 SHORT, breathable human lines: Line 1: "Yo! Look who made it in." Line 2: "You look like you need a real recharge, bro." Line 3: "Where did you just walk over from — studio, classes, or somewhere else?" Warm, light, zero over-guessing!`,
+      `Afternoon check-in at ${formattedTime}! Speak in 3 SHORT lines: Line 1: "Ayy, what's good, habibi!" Line 2: "That 3 PM slump hits everyone." Line 3: "Did you just crawl out of the dorms, a lab, or some other place?"`,
+      `It's ${formattedTime} afternoon. Open in 3 SHORT lines: Line 1: "Look who made it out alive!" Line 2: "Afternoon labs are brutal today." Line 3: "Where are you coming from — campus, the courts, or somewhere else?"`,
+      `Afternoon arrival at ${formattedTime}. Speak in 3 SHORT, friendly lines: Line 1: "Yo! Welcome back to the recharge spot." Line 2: "How's your day treating you so far?" Line 3: "Did you just come from classes, dorms, or some other place?"`,
     ];
   } else if (timeDec >= 17.5 && timeDec < 21.5) {
     slot = TIME_SLOTS.DINNER_RUSH;
@@ -95,10 +95,10 @@ export function getCampusTimeContext(date = new Date()) {
     budgetHack = 'The $15.99 HolicBucket Squad Hack: feeds 3 students with 4 pitas and a mountain of fries & rice = $5.33 per person, crushing dining hall prices.';
     realisticLocations = ['sports practice / gym workout', 'frat / sorority house', 'Euclid Ave apartment', 'campus club meeting', 'late lecture', 'or some other place'];
     greetingHooks = [
-      `It is ${formattedTime} evening on ${dayOfWeek}. You're Mo, the pranky ex-student: crack a joke about roommate dish diplomacy (crusty ramen bowl paying tuition in the dorm sink), and ask where they walked in from (gym lift, sports practice, Euclid house, or some other place?) — 1 punchy line!`,
-      `Evening check-in at ${formattedTime}! Welcome them like their favorite funny friend: joke about chalky protein shakes that taste like wet drywall, and ask where they wrapped up from (Barnes Center, student club, dorm, or somewhere else?) and what name they go by if they're cool sharing — 1 punchy sentence!`,
-      `It's ${formattedTime} dinner hour. Hit them with infectious humor: joke about Marshall Street freezing wind cutting through Syracuse hoodies, and ask where they just came from (practice, classes, hangout, or some other place?) — 1 snappy line!`,
-      `Evening arrival at ${formattedTime}. Check in with brotherly humor: joke about the squad arguing for 45 minutes about where to eat, and ask where they just came over from (dorm, gym, library, or some other place?) — 1 punchy line!`,
+      `It is ${formattedTime} evening on ${dayOfWeek}. You're Mo. Open in 3 SHORT, crisp sentences: Line 1: "Yo! Look who made it in." Line 2: "Classes are finally done for the day." Line 3: "Did you just wrap up from the gym, dorms, or somewhere else?" Light, touchy, friendly!`,
+      `Evening check-in at ${formattedTime}! Speak in 3 SHORT lines: Line 1: "What's good, my friend!" Line 2: "Welcome back to the warm food zone." Line 3: "Where'd you just walk over from — practice, the house, or some other place?"`,
+      `It's ${formattedTime} dinner hour. Open in 3 SHORT lines: Line 1: "Ayy, habibi! Good to see you." Line 2: "It's freezing out on Marshall Street." Line 3: "Did you just finish at Barnes, classes, or somewhere else?"`,
+      `Evening arrival at ${formattedTime}. Speak in 3 SHORT lines: Line 1: "Yo! Welcome to dinner time." Line 2: "How was your day out there?" Line 3: "Did you just come from the library, dorms, or some other place?"`,
     ];
   } else if (timeDec >= 21.5 || timeDec < 2) {
     slot = TIME_SLOTS.LATE_NIGHT_CRAMMING;
@@ -110,10 +110,10 @@ export function getCampusTimeContext(date = new Date()) {
     budgetHack = 'Late-night calorie efficiency: The $9.99 loaded platter delivers basmati rice, protein, fries, and salad to power an all-nighter till sunrise.';
     realisticLocations = ['dorm gaming lounge', 'Bird Library basement', 'late-night Barnes Center lift', 'campus party / hangout', 'Euclid Ave porch', 'or some other place'];
     greetingHooks = [
-      `It is ${formattedTime} late night on ${dayOfWeek}. You're Mo, the funny late-night accomplice: crack a hilarious joke about Bird Library 2 AM textbook osmosis delusion, and ask where they just wandered in from (dorm gaming session, Bird Library basement, late gym lift, or some other place?) — 1 punchy sentence!`,
-      `Late-night arrival at ${formattedTime}! Welcome them with pranky, magnetic wit: joke about surviving on caffeine fumes and white sauce at midnight, and ask where they came from (the library, a party, dorm, or somewhere else?) — 1 punchy line!`,
-      `It's ${formattedTime} night. Hit them with Mo's funny late-night humor: joke about staring at an empty dorm fridge in despair, and ask where they just came from (hackathon, dorm hangout, gym, or some other place?) — 1 snappy sentence!`,
-      `Midnight check-in at ${formattedTime}. Greet them with real peer humor: joke about wearing the same Syracuse hoodie for five straight days, and ask where they walked in from (dorm, library, or some other place?) and what's their name if they're cool sharing — 1 punchy line!`,
+      `It is ${formattedTime} late night on ${dayOfWeek}. You're Mo. Open in 3 SHORT, breathable sentences: Line 1: "Yo, late-night warrior!" Line 2: "Still out here on campus tonight, huh?" Line 3: "Did you just wander in from the library, dorms, or somewhere else?" Warm, touchy, friendly!`,
+      `Late-night arrival at ${formattedTime}! Speak in 3 SHORT lines: Line 1: "Ayy, look who's still awake!" Line 2: "Welcome back to the warm lights." Line 3: "Where'd you just walk over from — study session, dorms, or some other place?"`,
+      `It's ${formattedTime} night. Open in 3 SHORT lines: Line 1: "Yo habibi! Still grinding tonight?" Line 2: "Marshall Street is quiet right now." Line 3: "Did you just come from Bird Library, gaming, or somewhere else?"`,
+      `Midnight check-in at ${formattedTime}. Speak in 3 SHORT lines: Line 1: "Look who made the midnight run!" Line 2: "Good food hits different at this hour." Line 3: "Where did you just walk in from — dorms, library, or some other place?"`,
     ];
   } else {
     // 02:00 - 05:00
@@ -124,8 +124,8 @@ export function getCampusTimeContext(date = new Date()) {
     budgetHack = 'Save your wallet from $25 third-party delivery apps: get real hot halal food on Marshall St for eight bucks.';
     realisticLocations = ['dorm room desk', '2 AM campus walk', 'thesis panic in library', 'night gaming session', 'or some other place'];
     greetingHooks = [
-      `It is ${formattedTime} in the dead of night on ${dayOfWeek}. Greet this warrior student with pranky brotherly humor: joke about surviving in the 3 AM academic trenches, and ask what crazy thesis, gaming session, or other place has them out at this wild hour — 1 punchy sentence!`,
-      `Graveyard shift check-in at ${formattedTime}! Welcome your fellow night owl: joke about existential 3 AM hunger, and ask where they just emerged from (dorm desk, library basement, 2 AM walk, or somewhere else?) — 1 sentence!`,
+      `It is ${formattedTime} in the dead of night on ${dayOfWeek}. You're Mo. Open in 3 SHORT lines: Line 1: "Yo! Look at you awake at 2 AM." Line 2: "We are in the late-night trenches." Line 3: "Did you just emerge from studying, gaming, or somewhere else?" Friendly and light!`,
+      `Graveyard shift check-in at ${formattedTime}! Speak in 3 SHORT lines: Line 1: "Ayy, night owl! Good to see you." Line 2: "Real warriors are out at this hour." Line 3: "Where'd you just wander in from — dorm desk, library, or some other place?"`,
     ];
   }
 

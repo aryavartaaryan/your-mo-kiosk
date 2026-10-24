@@ -573,6 +573,62 @@ function injectStyles(colors) {
       display: none;
     }
 
+    /* ── 100% Pure Halal Purity & Modern University Craft Guarantee Capsule ── */
+    #halal-purity-capsule {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 4px 14px;
+      margin-top: 4px;
+      border-radius: 99px;
+      background: rgba(10, 28, 20, 0.88);
+      border: 1px solid rgba(114, 204, 56, 0.45);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), 0 0 14px rgba(114, 204, 56, 0.18);
+      pointer-events: auto;
+      max-width: 95%;
+    }
+    .purity-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2.5px 9px;
+      border-radius: 99px;
+      background: linear-gradient(135deg, rgba(114, 204, 56, 0.35) 0%, rgba(70, 160, 40, 0.22) 100%);
+      border: 1px solid rgba(114, 204, 56, 0.65);
+      flex-shrink: 0;
+    }
+    .purity-badge-pill .purity-icon {
+      font-size: 11px;
+      line-height: 1;
+    }
+    .purity-badge-pill .purity-title {
+      font-family: var(--font-display);
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #9EE44D;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+    .purity-desc {
+      font-family: var(--font-ui);
+      font-size: clamp(10.5px, 1.1vw, 12px);
+      font-weight: 600;
+      color: rgba(247, 243, 233, 0.92);
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .purity-bullet {
+      color: #FF8C32;
+      font-weight: bold;
+      opacity: 0.85;
+    }
+
     /* ── Syracuse Live Social Proof Ticker ── */
     #kiosk-live-ticker {
       display: flex;
@@ -1048,76 +1104,104 @@ function injectStyles(colors) {
       box-shadow: 0 0 10px rgba(255, 120, 30, 0.65);
     }
 
-    /* ── Charismatic Billion-Dollar Tagline Badge Just Below Mo ── */
-    #mo-recharge-tagline {
+    /* ── Ultra-Premium Architectural Floor Horizon Lightbar Signature (Option 2) ── */
+    #floor-horizon-signature {
       position: relative;
-      z-index: 12;
+      z-index: 24;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: min(92vw, 680px);
+      margin: 8px auto 6px;
+      pointer-events: none;
+      user-select: none;
+    }
+    .horizon-lightbar-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(90vw, 560px);
+      height: 28px;
+      background: radial-gradient(ellipse at center,
+        rgba(255, 120, 20, 0.35) 0%,
+        rgba(255, 80, 0, 0.15) 50%,
+        transparent 80%
+      );
+      filter: blur(14px);
+      border-radius: 99px;
+      z-index: -1;
+      animation: horizon-glow-pulse 4s ease-in-out infinite alternate;
+    }
+    @keyframes horizon-glow-pulse {
+      0%   { opacity: 0.7; transform: translate(-50%, -50%) scale(0.96); }
+      100% { opacity: 1.0; transform: translate(-50%, -50%) scale(1.04); }
+    }
+    .horizon-lightbar-glass {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 9px;
-      margin-top: 6px;
-      padding: 6.5px 20px;
+      gap: 10px;
+      padding: 7px 22px;
       border-radius: 99px;
-      background: linear-gradient(135deg, rgba(14, 40, 32, 0.92) 0%, rgba(8, 22, 17, 0.96) 100%);
-      border: 1px solid rgba(255, 120, 30, 0.48);
-      box-shadow: 0 4px 22px rgba(0, 0, 0, 0.5), 0 0 24px rgba(255, 106, 0, 0.22);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-      cursor: default;
-      pointer-events: auto;
-      max-width: 92%;
-      text-align: center;
-      animation: tagline-entrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+      background: linear-gradient(180deg, rgba(32, 22, 14, 0.82) 0%, rgba(12, 10, 8, 0.94) 100%);
+      border: 1px solid rgba(255, 140, 50, 0.4);
+      border-top: 1.5px solid rgba(255, 210, 130, 0.65);
+      border-bottom: 1px solid rgba(255, 106, 0, 0.25);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.7),
+        0 0 24px rgba(255, 106, 0, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.25);
+      white-space: nowrap;
+      transition: all 0.3s ease;
     }
-    @keyframes tagline-entrance {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    #mo-recharge-tagline:hover {
-      border-color: rgba(255, 160, 68, 0.85);
-      box-shadow: 0 6px 28px rgba(0, 0, 0, 0.6), 0 0 35px rgba(255, 120, 30, 0.45);
-      transform: translateY(-1px);
-    }
-    .tagline-pulse-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #72CC38;
-      box-shadow: 0 0 10px #72CC38, 0 0 18px rgba(114, 204, 56, 0.8);
-      flex-shrink: 0;
-      animation: dot-pulse 1.1s ease-in-out infinite alternate;
-    }
-    .tagline-brand {
-      font-family: var(--font-display);
-      font-size: clamp(12px, 1.25vw, 15px);
-      font-weight: 900;
-      letter-spacing: 0.4px;
+    .horizon-spark {
+      font-size: 11px;
       color: #FFA044;
-      background: linear-gradient(135deg, #FFB066 0%, #FF7B1A 100%);
+      text-shadow: 0 0 10px #FF6A00;
+      animation: spark-twinkle 2.5s ease-in-out infinite alternate;
+    }
+    @keyframes spark-twinkle {
+      0%   { opacity: 0.65; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 6px #FFA044); }
+    }
+    .horizon-lead {
+      font-family: var(--font-display);
+      font-size: clamp(12.5px, 1.8vw, 17px);
+      font-weight: 900;
+      letter-spacing: clamp(1.8px, 0.3vw, 3.2px);
+      text-transform: uppercase;
+      line-height: 1;
+      background: linear-gradient(180deg, #FFFFFF 0%, #FFE6CC 45%, #FFA844 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 14px rgba(255, 120, 30, 0.4);
-      white-space: nowrap;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.8));
     }
-    .tagline-sep {
-      color: rgba(255, 255, 255, 0.35);
-      font-size: 9px;
-      flex-shrink: 0;
-    }
-    .tagline-core {
-      font-size: clamp(11.5px, 1.2vw, 14.5px);
-      font-weight: 700;
-      letter-spacing: 0.2px;
-      color: #F7F3E9;
-      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
-      white-space: nowrap;
-    }
-    .tagline-flame {
+    .horizon-divider {
       font-size: 13px;
-      filter: drop-shadow(0 0 6px rgba(255, 106, 0, 0.65));
-      flex-shrink: 0;
+      color: #72CC38;
+      text-shadow: 0 0 10px #72CC38;
+      opacity: 0.9;
+    }
+    .horizon-sub {
+      font-family: var(--font-display);
+      font-size: clamp(10.5px, 1.5vw, 14px);
+      font-weight: 800;
+      letter-spacing: clamp(1.2px, 0.2vw, 2.2px);
+      text-transform: uppercase;
+      line-height: 1;
+      color: #FFC085;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9), 0 0 12px rgba(255, 120, 30, 0.5);
+    }
+    .horizon-floor-reflection {
+      width: min(70vw, 420px);
+      height: 2px;
+      margin-top: 3px;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 120, 30, 0.6) 50%, transparent 100%);
+      filter: blur(1.5px);
     }
 
     /* ── Bottom Section: Centered Sonic Reactor ("Tap to Talk") ── */
@@ -1510,16 +1594,21 @@ function injectStyles(colors) {
         padding: 3px 9px;
       }
 
-      #mo-recharge-tagline {
-        margin-top: clamp(8px, 1.2vh, 16px);
-        padding: clamp(7px, 1vh, 11px) clamp(18px, 2.8vw, 30px);
-        max-width: 95%;
+      #floor-horizon-signature {
+        width: min(94vw, 540px);
+        margin: 6px auto 4px;
       }
-      .tagline-brand {
-        font-size: clamp(13px, 1.8vw, 17px);
+      .horizon-lightbar-glass {
+        padding: 6px 18px;
+        gap: 8px;
       }
-      .tagline-core {
-        font-size: clamp(12px, 1.6vw, 16px);
+      .horizon-lead {
+        font-size: clamp(11.5px, 2vw, 15px);
+        letter-spacing: clamp(1.4px, 0.25vw, 2.4px);
+      }
+      .horizon-sub {
+        font-size: clamp(9.5px, 1.6vw, 12.5px);
+        letter-spacing: clamp(1px, 0.15vw, 1.8px);
       }
 
       /* "TRY ASKING MO" Crave Action Grid (2x2 Full Touch Cards) */
@@ -1829,15 +1918,18 @@ function injectStyles(colors) {
         padding: 5px 14px;
         font-size: 10.5px;
       }
-      #mo-recharge-tagline {
-        margin-top: 3px;
-        padding: 4.5px 16px;
+      #floor-horizon-signature {
+        width: min(80vw, 620px);
+        margin: 4px auto 3px;
       }
-      .tagline-brand {
-        font-size: clamp(11.5px, 1.1vw, 13.5px);
+      .horizon-lightbar-glass {
+        padding: 5px 16px;
       }
-      .tagline-core {
-        font-size: clamp(11px, 1.05vw, 13px);
+      .horizon-lead {
+        font-size: clamp(11.5px, 1.4vw, 15px);
+      }
+      .horizon-sub {
+        font-size: clamp(10px, 1.2vw, 13px);
       }
 
       /* Speech Bubble: Cleanly elevated above Mo's head with zero overlap */
@@ -1926,190 +2018,371 @@ function injectStyles(colors) {
       }
     }
 
-    /* ── Slide-Out Crave Menu Board Drawer ── */
+    /* ── Full-Screen Interactive Kiosk Food Menu Mode (Billion Dollar Kiosk UI) ── */
     #menu-drawer {
       position: fixed;
-      top: 0; right: -540px;
-      width: min(94vw, 480px); height: 100vh;
-      background: rgba(6, 21, 19, 0.98);
-      backdrop-filter: blur(24px);
-      border-left: 2px solid rgba(255, 120, 40, 0.45);
-      z-index: 2000;
-      padding: 24px 20px;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at 50% 12%, rgba(14, 38, 30, 0.98) 0%, rgba(5, 16, 14, 0.99) 100%);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      z-index: 3000;
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      box-shadow: -20px 0 60px rgba(0,0,0,0.9);
-      transition: right 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.985);
+      transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+      padding: 0;
     }
-    #menu-drawer.open { right: 0; }
+    #menu-drawer.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1);
+    }
 
     .menu-drawer-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid rgba(255,255,255,0.12);
-      padding-bottom: 14px;
+      gap: 16px;
+      padding: 14px clamp(16px, 3.5vw, 36px);
+      background: rgba(8, 24, 20, 0.94);
+      border-bottom: 1.5px solid rgba(255, 140, 50, 0.35);
+      backdrop-filter: blur(20px);
       flex-shrink: 0;
-    }
-    .menu-drawer-header h2 {
-      font-size: 20px;
-      font-family: var(--font-display);
-      font-weight: 900;
-      letter-spacing: 0.5px;
-      color: #FFF;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      z-index: 20;
     }
     .drawer-header-left {
       display: flex;
       flex-direction: column;
       gap: 3px;
     }
-    .drawer-story-sub {
-      font-size: 11px;
-      font-weight: 600;
-      color: rgba(247, 243, 233, 0.72);
+    .drawer-header-left h2 {
+      font-size: clamp(20px, 2.2vw, 26px);
+      font-family: var(--font-display);
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      color: #FFF;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+    .drawer-header-center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .drawer-mo-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 99px;
+      background: rgba(255, 140, 50, 0.12);
+      border: 1px solid rgba(255, 140, 50, 0.4);
+    }
+    .mo-avatar-mini {
+      font-size: 14px;
+      line-height: 1;
+    }
+    .mo-hint-text {
+      font-family: var(--font-ui);
+      font-size: 12px;
+      font-weight: 700;
+      color: #FFC085;
       letter-spacing: 0.2px;
-      font-style: italic;
     }
     .drawer-close-btn {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 50%;
-      width: 32px; height: 32px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 20px;
+      border-radius: 99px;
+      background: linear-gradient(135deg, rgba(255, 60, 40, 0.22) 0%, rgba(200, 30, 20, 0.35) 100%);
+      border: 1.5px solid rgba(255, 90, 70, 0.6);
       color: #FFF;
-      font-size: 16px;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
       cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s;
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 14px rgba(255, 60, 40, 0.25);
+      flex-shrink: 0;
     }
     .drawer-close-btn:hover {
-      background: rgba(255, 106, 0, 0.35);
-      border-color: #FF6A00;
+      background: linear-gradient(135deg, rgba(255, 70, 50, 0.4) 0%, rgba(230, 40, 30, 0.6) 100%);
+      border-color: #FF6A50;
+      transform: scale(1.04);
+      box-shadow: 0 6px 22px rgba(255, 60, 40, 0.45);
+    }
+    .drawer-close-btn:active {
+      transform: scale(0.97);
+    }
+    .close-x {
+      font-size: 14px;
+      font-weight: 900;
+      color: #FFA088;
+    }
+    .drawer-halal-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 4px 10px;
+      margin-top: 5px;
+      border-radius: 6px;
+      background: rgba(14, 38, 28, 0.85);
+      border: 1px solid rgba(114, 204, 56, 0.4);
+      max-width: 100%;
+    }
+    .drawer-halal-banner .banner-badge {
+      font-family: var(--font-display);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: #9EE44D;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .drawer-halal-banner .banner-text {
+      font-family: var(--font-ui);
+      font-size: 10.5px;
+      font-weight: 600;
+      color: rgba(240, 245, 242, 0.88);
     }
 
+    /* ── Sticky Quick-Jump Category Navigation Tabs ── */
+    .menu-category-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px clamp(16px, 3.5vw, 36px);
+      background: rgba(6, 18, 15, 0.92);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      flex-shrink: 0;
+      z-index: 15;
+    }
+    .menu-category-nav::-webkit-scrollbar { display: none; }
+    .cat-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 16px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(247, 243, 233, 0.85);
+      font-family: var(--font-display);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .cat-nav-btn:hover, .cat-nav-btn.active {
+      background: linear-gradient(135deg, rgba(255, 140, 50, 0.28) 0%, rgba(255, 106, 0, 0.38) 100%);
+      border-color: #FFA044;
+      color: #FFF;
+      box-shadow: 0 0 14px rgba(255, 106, 0, 0.3);
+      transform: translateY(-1px);
+    }
+
+    /* ── Scrollable Multi-Column Menu Grid Body ── */
+    .menu-drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 22px clamp(16px, 3.5vw, 42px) 80px;
+    }
+    .menu-grid-layout {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 520px), 1fr));
+      gap: 24px;
+      max-width: 1440px;
+      margin: 0 auto;
+      align-items: start;
+    }
+
+    /* ── Category Blocks (Never Squished / flex-shrink: 0) ── */
     .menu-category-block {
-      background: rgba(10, 36, 32, 0.85);
-      border: 1.5px solid rgba(255, 120, 40, 0.25);
-      border-radius: 18px;
-      padding: 0;
+      flex-shrink: 0;
+      background: rgba(10, 32, 26, 0.92);
+      border: 1.5px solid rgba(255, 140, 50, 0.32);
+      border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-      transition: border-color 0.2s;
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.55), 0 0 16px rgba(255, 106, 0, 0.06);
+      transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
     }
     .menu-category-block:hover {
-      border-color: rgba(255, 120, 40, 0.55);
+      border-color: rgba(255, 150, 60, 0.65);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7), 0 0 24px rgba(255, 120, 30, 0.2);
     }
 
     .menu-cat-hero-img {
       position: relative;
       width: 100%;
-      height: 125px;
+      height: 140px;
       overflow: hidden;
+      cursor: pointer;
     }
     .menu-cat-hero-img img {
-      width: 100%; height: 100%;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
       filter: saturate(1.15) contrast(1.05);
-      transition: transform 0.35s ease;
+      transition: transform 0.4s ease;
     }
     .menu-category-block:hover .menu-cat-hero-img img {
-      transform: scale(1.05);
+      transform: scale(1.04);
     }
     .menu-cat-hero-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(10, 36, 32, 0.95) 100%);
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(8, 24, 20, 0.92) 100%);
       display: flex;
       align-items: flex-end;
-      padding: 10px 14px;
+      justify-content: space-between;
+      padding: 12px 18px;
     }
     .menu-cat-hero-title {
       font-family: var(--font-display);
-      font-size: 13.5px;
-      font-weight: 800;
+      font-size: 15px;
+      font-weight: 900;
       color: #FFF;
       text-transform: uppercase;
       letter-spacing: 0.6px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 8px;
     }
     .menu-cat-badge {
-      font-size: 8px;
-      font-weight: 800;
+      font-size: 8.5px;
+      font-weight: 900;
       letter-spacing: 0.8px;
-      padding: 2px 7px;
+      padding: 3px 9px;
       border-radius: 99px;
       background: linear-gradient(90deg, #FF6A00, #FFA044);
       color: #000;
+      box-shadow: 0 0 10px rgba(255, 106, 0, 0.4);
+    }
+    .menu-cat-flavor-bar {
+      padding: 9px 16px;
+      background: rgba(255, 106, 0, 0.12);
+      border-bottom: 1px solid rgba(255, 140, 50, 0.22);
+      font-size: 11px;
+      font-weight: 700;
+      color: #FFA844;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.3px;
+      line-height: 1.35;
+    }
+    .menu-section-header {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 900;
+      color: #FFB35C;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 10px 6px 4px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.12);
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
+    /* ── Item Rows with High Contrast Typography & Pure Visibility ── */
     .menu-items-list {
-      padding: 10px 14px 14px;
+      padding: 14px 16px 18px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 9px;
     }
-
     .menu-item-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px 10px;
-      border-radius: 10px;
-      font-size: 12.5px;
-      font-weight: 600;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      transition: all 0.2s ease;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
       cursor: pointer;
+      flex-shrink: 0;
     }
     .menu-item-row:hover {
-      background: rgba(255, 106, 0, 0.16);
-      border-color: rgba(255, 120, 40, 0.4);
-      transform: translateX(3px);
+      background: rgba(255, 120, 30, 0.16);
+      border-color: rgba(255, 140, 50, 0.5);
+      transform: translateX(4px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+    .menu-item-row:active {
+      transform: scale(0.99);
     }
     .item-name-group {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 2.5px;
+      flex: 1;
     }
     .item-name {
-      color: #FFF;
-      font-weight: 700;
+      color: #FFFFFF;
+      font-size: 14px;
+      font-weight: 800;
+      font-family: var(--font-ui);
+      letter-spacing: 0.15px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
     }
     .item-sub {
-      font-size: 10px;
-      color: var(--c-muted);
+      font-size: 11px;
+      color: rgba(247, 243, 233, 0.72);
+      line-height: 1.35;
     }
     .item-price-tag {
-      color: #FFA044;
+      color: #FFA844;
       font-family: var(--font-display);
       font-weight: 900;
-      font-size: 13.5px;
+      font-size: 14px;
+      padding: 3.5px 10px;
+      border-radius: 99px;
+      background: rgba(255, 140, 50, 0.14);
+      border: 1px solid rgba(255, 140, 50, 0.35);
+      flex-shrink: 0;
+      white-space: nowrap;
+      letter-spacing: 0.5px;
     }
 
-    /* ── Mo's Student Feedback & Revisit Card ── */
+    /* ── Mo's Student Feedback & Revisit Card in Menu ── */
     .menu-feedback-card {
+      grid-column: 1 / -1;
       position: relative;
-      margin-top: 10px;
-      margin-bottom: 6px;
-      border-radius: 16px;
+      margin-top: 14px;
+      margin-bottom: 10px;
+      border-radius: 18px;
       background: linear-gradient(135deg, rgba(14, 38, 32, 0.95) 0%, rgba(20, 48, 40, 0.90) 100%);
       border: 1.5px solid rgba(255, 140, 50, 0.45);
-      padding: 14px 16px;
+      padding: 16px 20px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 20px rgba(255, 120, 30, 0.12);
       overflow: hidden;
     }
     .feedback-card-header {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
+      gap: 12px;
+      margin-bottom: 12px;
     }
     .feedback-icon {
       font-size: 20px;
@@ -2241,8 +2514,8 @@ function buildHTML(config) {
         <div class="kiosk-bg-slide" data-index="3" data-label="🌯 SPEED GYRO WRAPS • $7.99">
           <img class="kiosk-bg-photo" src="/assets/food/gyro_wrap.jpg" alt="Speed Gyro Wraps" />
         </div>
-        <div class="kiosk-bg-slide" data-index="4" data-label="⭐ SQUAD HOLICBUCKET 5-IN-1 • $15.99">
-          <img class="kiosk-bg-photo" src="/assets/food/holic_bucket.jpg" alt="Squad HolicBucket" />
+        <div class="kiosk-bg-slide" data-index="4" data-label="🥪 CHOPPED CHEESE & HEROES • $9.99">
+          <img class="kiosk-bg-photo" src="/assets/food/burger_hero.jpg" alt="Chopped Cheese & Gourmet Heroes" />
         </div>
         <div class="kiosk-bg-slide" data-index="5" data-label="🍔 CHOPPED CHEESE & HEROES • $6.99–$9.99">
           <img class="kiosk-bg-photo" src="/assets/food/burger_hero.jpg" alt="Chopped Cheese & Gourmet Burgers" />
@@ -2275,17 +2548,12 @@ function buildHTML(config) {
         </div>
 
         <div id="header-center-emblem">
-          <span class="emblem-bolt">⚡</span>
-          <span class="emblem-text">KIOSK AI HOST</span>
-          <span class="emblem-tag">• 100% ZABIHA</span>
+          <span class="emblem-bolt">✨</span>
+          <span class="emblem-text">100% PURE HALAL MEAT</span>
+          <span class="emblem-tag">• MODERN CAMPUS STREET FOOD</span>
         </div>
 
         <div id="header-nav">
-          <button id="feedback-kiosk-btn" class="crave-feedback-launcher" title="Share feedback or complaints directly with Mo">
-            <span class="feedback-btn-icon">💬</span>
-            <span class="feedback-btn-text">FEEDBACK / COMPLAIN</span>
-            <span class="feedback-btn-badge">TELL MO</span>
-          </button>
           <button id="menu-board-btn" class="crave-menu-launcher">
             <span class="menu-btn-icon">🔥</span>
             <span class="menu-btn-text">EXPLORE MENU</span>
@@ -2316,6 +2584,15 @@ function buildHTML(config) {
             “I am <strong class="story-name-highlight">Mo</strong>. I was a student earlier — now I work here because of my love for food.”
           </p>
         </div>
+
+        <!-- 100% Pure Halal Purity & Modern University Craft Guarantee -->
+        <div id="halal-purity-capsule">
+          <div class="purity-badge-pill">
+            <span class="purity-icon">✨</span>
+            <span class="purity-title">100% PURE HALAL</span>
+          </div>
+          <span class="purity-desc">Zero Mystery Meat <span class="purity-bullet">•</span> Clean Fuel <span class="purity-bullet">•</span> Modern Campus Comfort Loved by Students</span>
+        </div>
       </div>
 
       <!-- Syracuse Live Social Proof Ticker -->
@@ -2326,7 +2603,9 @@ function buildHTML(config) {
           <span class="ticker-sep">•</span>
           <span class="ticker-tag">⚡ 2-MIN SPEED RUSH</span>
           <span class="ticker-sep">•</span>
-          <span class="ticker-tag">🎓 100% FRESH ZABIHA</span>
+          <span class="ticker-tag">✨ 100% PURE ZABIHA HALAL</span>
+          <span class="ticker-sep">•</span>
+          <span class="ticker-tag">🍗 ZERO MYSTERY MEAT • CLEAN GAINS</span>
           <span class="ticker-sep">•</span>
           <span class="ticker-perk">⭐ FREE SAUCE W/ STUDENT ID</span>
         </div>
@@ -2339,7 +2618,7 @@ function buildHTML(config) {
           <span class="indicator-dot" data-slide="1" title="Loaded Platters"></span>
           <span class="indicator-dot" data-slide="2" title="Crispy Wings"></span>
           <span class="indicator-dot" data-slide="3" title="Speed Gyros"></span>
-          <span class="indicator-dot" data-slide="4" title="Squad Bucket"></span>
+          <span class="indicator-dot" data-slide="4" title="Chopped Cheese & Heroes"></span>
           <span class="indicator-dot" data-slide="5" title="Burgers & Heroes"></span>
           <span class="indicator-dot" data-slide="6" title="Tenders & Nuggets"></span>
           <span class="indicator-dot" data-slide="7" title="Loaded Sides"></span>
@@ -2378,7 +2657,7 @@ function buildHTML(config) {
             <div class="chip-info-wrap">
               <div class="chip-badge-row">
                 <span class="chip-badge">⭐ MO'S SPECIALTY</span>
-                <span class="chip-price-tag">$8.99</span>
+                <span class="chip-price-tag">$9.99</span>
               </div>
               <span class="chip-title">Crispy Sauced Wings</span>
               <span class="chip-sub">Hot Holic Glaze & Garlic Dip</span>
@@ -2412,6 +2691,19 @@ function buildHTML(config) {
             </div>
           </div>
 
+          <!-- Ultra-Premium Architectural Floor Horizon Lightbar Signature (Option 2) -->
+          <div id="floor-horizon-signature" aria-label="Welcome to Halalholic - The Best Place to Recharge">
+            <div class="horizon-lightbar-glow"></div>
+            <div class="horizon-lightbar-glass">
+              <span class="horizon-spark left">✦</span>
+              <span class="horizon-lead">WELCOME TO HALALHOLIC</span>
+              <span class="horizon-divider">•</span>
+              <span class="horizon-sub">THE BEST PLACE TO RECHARGE</span>
+              <span class="horizon-spark right">✦</span>
+            </div>
+            <div class="horizon-floor-reflection"></div>
+          </div>
+
           <!-- Interactive Action & Feedback Options Row Directly Below Mo -->
           <div id="mo-stage-actions-row">
             <button id="stage-feedback-btn" class="stage-action-pill stage-feedback-pill" title="Tell Mo any feedback or complaint">
@@ -2425,15 +2717,6 @@ function buildHTML(config) {
               <span class="pill-badge">WISHLIST</span>
             </button>
           </div>
-
-          <!-- Charismatic Billion-Dollar Student Tagline Badge Just Below Mo -->
-          <div id="mo-recharge-tagline">
-            <span class="tagline-pulse-dot"></span>
-            <span class="tagline-brand">Welcome to Halalholic</span>
-            <span class="tagline-sep">•</span>
-            <span class="tagline-core">You're in the best place to recharge</span>
-            <span class="tagline-flame">🔥</span>
-          </div>
         </main>
 
         <!-- Right Wing (Crave Chips 3 & 4) -->
@@ -2443,17 +2726,17 @@ function buildHTML(config) {
             <span>TRY ASKING MO</span>
           </div>
 
-          <button class="action-wing-card" data-prompt="I brought the whole squad. What feeds everyone?" data-slide-target="4">
+          <button class="action-wing-card" data-prompt="Can I get the Chopped Cheese on Hero with fries?" data-slide-target="4">
             <div class="chip-thumb-wrap">
-              <img src="/assets/food/holic_bucket.jpg" alt="Squad HolicBucket" />
+              <img src="/assets/food/burger_hero.jpg" alt="Chopped Cheese On Hero" />
             </div>
             <div class="chip-info-wrap">
               <div class="chip-badge-row">
-                <span class="chip-badge">🍗 SQUAD FEAST (3-4)</span>
-                <span class="chip-price-tag">$15.99</span>
+                <span class="chip-badge">🥪 NYC BODEGA HIT</span>
+                <span class="chip-price-tag">$9.99</span>
               </div>
-              <span class="chip-title">Holic Squad Bucket</span>
-              <span class="chip-sub">5-in-1 Feast & Waffle Fries • Share</span>
+              <span class="chip-title">Chopped Cheese Hero</span>
+              <span class="chip-sub">Seasoned Beef, Melted Provolone & Hero</span>
             </div>
           </button>
 
@@ -2509,456 +2792,549 @@ function buildHTML(config) {
       </div>
     </div>
 
-    <!-- Slide-Out Menu Drawer with Gourmet Imagery -->
+    <!-- Full-Screen Interactive Kiosk Crave Menu Board (Billion Dollar Kiosk UI) -->
     <div id="menu-drawer">
       <div class="menu-drawer-header">
         <div class="drawer-header-left">
           <h2>🔥 Halalholic Crave Board</h2>
-          <span class="drawer-story-sub">“Ex-student turned food lover — ask me for my top picks!” — Mo 👨‍🍳</span>
+          <div class="drawer-halal-banner">
+            <span class="banner-badge">✨ 100% PURE CERTIFIED HALAL</span>
+            <span class="banner-text">Modern Campus Comfort Food • Hand-Cut Fresh Daily • Zero Mystery Meat</span>
+          </div>
         </div>
-        <button class="drawer-close-btn" id="drawer-close-btn">✕</button>
-      </div>
 
-      <!-- Category 1: Loaded Rice Platters -->
-      <div class="menu-category-block" data-slide-target="1">
-        <div class="menu-cat-hero-img">
-          <img src="/assets/food/halal_platter.jpg" alt="Signature Halal Platters" />
-          <div class="menu-cat-hero-overlay">
-            <span class="menu-cat-hero-title">🍛 Loaded Platters Over Rice</span>
-            <span class="menu-cat-badge">#1 CAMPUS PICK</span>
+        <div class="drawer-header-center">
+          <div class="drawer-mo-pill">
+            <span class="mo-avatar-mini">👨‍🍳</span>
+            <span class="mo-hint-text">“Tap any item to ask me, or say your order aloud!” — Mo</span>
           </div>
         </div>
-        <div class="menu-items-list">
-          <div class="menu-item-row" data-prompt="Can I get the Chicken Dose Platter?" data-slide-target="1">
-            <div class="item-name-group">
-              <span class="item-name">Chicken Dose Platter</span>
-              <span class="item-sub">Seasoned basmati rice, spiced chicken, mix salad & fries or hummus</span>
-            </div>
-            <span class="item-price-tag">$9.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Lamb Dose Platter?" data-slide-target="1">
-            <div class="item-name-group">
-              <span class="item-name">Lamb Dose Platter</span>
-              <span class="item-sub">Tender marinated gyro lamb over golden rice + two sides</span>
-            </div>
-            <span class="item-price-tag">$9.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Mix Combo Dose Platter?" data-slide-target="1">
-            <div class="item-name-group">
-              <span class="item-name">Mix Combo Dose</span>
-              <span class="item-sub">Double protein: Spiced Chicken + Gyro Lamb combo</span>
-            </div>
-            <span class="item-price-tag">$9.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Fish Dose Platter?" data-slide-target="1">
-            <div class="item-name-group">
-              <span class="item-name">Fish Dose Platter</span>
-              <span class="item-sub">Golden crispy fish fillet over basmati rice + two sides</span>
-            </div>
-            <span class="item-price-tag">$9.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Falafel Dose Platter?" data-slide-target="1">
-            <div class="item-name-group">
-              <span class="item-name">Falafel Dose (Vegetarian)</span>
-              <span class="item-sub">Crispy golden handmade falafels & pickled cabbage</span>
-            </div>
-            <span class="item-price-tag">$9.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Kofta Dose Platter?" data-slide-target="1">
-            <div class="item-name-group">
-              <span class="item-name">Kofta Dose Platter</span>
-              <span class="item-sub">Seasoned beef & lamb kofta skewers over spiced rice</span>
-            </div>
-            <span class="item-price-tag">$9.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can you make my platter Extra Holic?" data-slide-target="1">
-            <div class="item-name-group">
-              <span class="item-name">Make It Extra Holic</span>
-              <span class="item-sub">Double meat load, extra white sauce & spicy red drizzle</span>
-            </div>
-            <span class="item-price-tag">+$3.00</span>
-          </div>
-        </div>
-      </div>
 
-      <!-- Category 2: Speed Gyro Wraps -->
-      <div class="menu-category-block" data-slide-target="3">
-        <div class="menu-cat-hero-img">
-          <img src="/assets/food/gyro_wrap.jpg" alt="Speed Gyro Wraps" />
-          <div class="menu-cat-hero-overlay">
-            <span class="menu-cat-hero-title">🌯 Speed Gyro Wraps</span>
-            <span class="menu-cat-badge">2-MIN RUSH</span>
-          </div>
-        </div>
-        <div class="menu-items-list">
-          <div class="menu-item-row" data-prompt="I need a quick Chicken Gyro." data-slide-target="3">
-            <div class="item-name-group">
-              <span class="item-name">Chicken Gyro Wrap</span>
-              <span class="item-sub">Warm toasted flatbread with lettuce, tomato & garlic white sauce</span>
-            </div>
-            <span class="item-price-tag">$7.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="I need a quick Lamb Gyro." data-slide-target="3">
-            <div class="item-name-group">
-              <span class="item-name">Lamb Gyro Wrap</span>
-              <span class="item-sub">Classic shaved gyro with pickled red cabbage & white sauce</span>
-            </div>
-            <span class="item-price-tag">$7.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Mix Gyro?" data-slide-target="3">
-            <div class="item-name-group">
-              <span class="item-name">Mix Gyro Wrap</span>
-              <span class="item-sub">Chicken + lamb double protein wrap</span>
-            </div>
-            <span class="item-price-tag">$7.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Fish Gyro?" data-slide-target="3">
-            <div class="item-name-group">
-              <span class="item-name">Fish Gyro Wrap</span>
-              <span class="item-sub">Golden fish fillet, crisp greens & tartar white sauce</span>
-            </div>
-            <span class="item-price-tag">$7.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Falafel Gyro?" data-slide-target="3">
-            <div class="item-name-group">
-              <span class="item-name">Falafel Gyro (Vegetarian)</span>
-              <span class="item-sub">Handmade falafel, hummus, lettuce, tomato & tahini</span>
-            </div>
-            <span class="item-price-tag">$7.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Chicken Kofta Gyro?" data-slide-target="3">
-            <div class="item-name-group">
-              <span class="item-name">Chicken Kofta Gyro</span>
-              <span class="item-sub">Spiced chicken kofta, grilled onions & white sauce</span>
-            </div>
-            <span class="item-price-tag">$7.99</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Category 3: Squad HolicBucket -->
-      <div class="menu-category-block" data-slide-target="4">
-        <div class="menu-cat-hero-img">
-          <img src="/assets/food/holic_bucket.jpg" alt="Squad HolicBucket 5-in-1" />
-          <div class="menu-cat-hero-overlay">
-            <span class="menu-cat-hero-title">⭐ Squad HolicBucket 5-in-1</span>
-            <span class="menu-cat-badge">FEEDS 3-4</span>
-          </div>
-        </div>
-        <div class="menu-items-list">
-          <div class="menu-item-row" data-prompt="We want the HolicBucket for the squad!" data-slide-target="4">
-            <div class="item-name-group">
-              <span class="item-name">HolicBucket 5-in-1 Feast</span>
-              <span class="item-sub">Tenders, Buffalo Wings, Waffle Fries, Mozz Sticks & Mac Bites</span>
-            </div>
-            <span class="item-price-tag">$15.99</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Category 4: Crispy Sauced Wings -->
-      <div class="menu-category-block" data-slide-target="2">
-        <div class="menu-cat-hero-img">
-          <img src="/assets/food/crispy_wings.jpg" alt="Crispy Sauced Wings" />
-          <div class="menu-cat-hero-overlay">
-            <span class="menu-cat-hero-title">🍗 Crispy Sauced Wings</span>
-            <span class="menu-cat-badge">5 FLAVORS</span>
-          </div>
-        </div>
-        <div class="menu-items-list">
-          <div class="menu-item-row" data-prompt="Can I order 6 piece Wings?" data-slide-target="2">
-            <div class="item-name-group">
-              <span class="item-name">6 Pieces Crispy Wings</span>
-              <span class="item-sub">Hot, BBQ, Buffalo, Lemon Pepper, or Mango Habanero</span>
-            </div>
-            <span class="item-price-tag">$9.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I order 9 piece Wings?" data-slide-target="2">
-            <div class="item-name-group">
-              <span class="item-name">9 Pieces Crispy Wings</span>
-              <span class="item-sub">Sauced with your choice of White, Blue Cheese or Ranch dip</span>
-            </div>
-            <span class="item-price-tag">$12.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the 12 piece Wings?" data-slide-target="2">
-            <div class="item-name-group">
-              <span class="item-name">12 Pieces Crispy Wings</span>
-              <span class="item-sub">Perfect for sharing with friends</span>
-            </div>
-            <span class="item-price-tag">$15.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Give me the 20 piece party Wings!" data-slide-target="2">
-            <div class="item-name-group">
-              <span class="item-name">20 Pieces Party Wings</span>
-              <span class="item-sub">Maximum crave feast for study groups</span>
-            </div>
-            <span class="item-price-tag">$23.99</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Category 5: Gourmet Burgers & Heroes -->
-      <div class="menu-category-block" data-slide-target="5">
-        <div class="menu-cat-hero-img">
-          <img src="/assets/food/burger_hero.jpg" alt="Gourmet Burgers & Heroes" />
-          <div class="menu-cat-hero-overlay">
-            <span class="menu-cat-hero-title">🍔 Burgers & Hero Sandwiches</span>
-            <span class="menu-cat-badge">+$2.99 COMBO</span>
-          </div>
-        </div>
-        <div class="menu-items-list">
-          <div class="menu-item-row" data-prompt="Can I get the Chopped Cheese on Hero?" data-slide-target="5">
-            <div class="item-name-group">
-              <span class="item-name">Chopped Cheese On Hero</span>
-              <span class="item-sub">NYC bodega style seasoned beef, melted cheese, lettuce, tomato</span>
-            </div>
-            <span class="item-price-tag">$9.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Philly Cheesesteak On Hero?" data-slide-target="5">
-            <div class="item-name-group">
-              <span class="item-name">Philly Cheesesteak On Hero</span>
-              <span class="item-sub">Shaved ribeye, grilled peppers, onions, melted provolone</span>
-            </div>
-            <span class="item-price-tag">$9.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Chicken Cheesesteak On Hero?" data-slide-target="5">
-            <div class="item-name-group">
-              <span class="item-name">Chicken Cheesesteak On Hero</span>
-              <span class="item-sub">Grilled chicken, sweet peppers, melted cheese</span>
-            </div>
-            <span class="item-price-tag">$9.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Chicken Cutlet On Hero?" data-slide-target="5">
-            <div class="item-name-group">
-              <span class="item-name">Chicken Cutlet On Hero</span>
-              <span class="item-sub">Crispy breaded golden chicken cutlet, mayo, lettuce</span>
-            </div>
-            <span class="item-price-tag">$9.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Pastrami On Hero?" data-slide-target="5">
-            <div class="item-name-group">
-              <span class="item-name">Pastrami On Hero</span>
-              <span class="item-sub">Warm sliced pastrami with mustard & melted swiss</span>
-            </div>
-            <span class="item-price-tag">$9.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Turkey On Hero?" data-slide-target="5">
-            <div class="item-name-group">
-              <span class="item-name">Turkey On Hero</span>
-              <span class="item-sub">Smoked halal turkey breast, cheese, crisp lettuce</span>
-            </div>
-            <span class="item-price-tag">$9.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get a Classic Cheeseburger?" data-slide-target="5">
-            <div class="item-name-group">
-              <span class="item-name">Classic Cheeseburger</span>
-              <span class="item-sub">Grilled beef patty, American cheese, pickle, special sauce</span>
-            </div>
-            <span class="item-price-tag">$6.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Double Cheeseburger?" data-slide-target="5">
-            <div class="item-name-group">
-              <span class="item-name">Double Cheeseburger</span>
-              <span class="item-sub">Two smash patties, double cheese, toasted brioche bun</span>
-            </div>
-            <span class="item-price-tag">$8.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Crispy Chicken Sandwich?" data-slide-target="5">
-            <div class="item-name-group">
-              <span class="item-name">Crispy Chicken Sandwich</span>
-              <span class="item-sub">Golden fried breast fillet, pickles, house spread</span>
-            </div>
-            <span class="item-price-tag">$6.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Spicy Crispy Chicken Sandwich?" data-slide-target="5">
-            <div class="item-name-group">
-              <span class="item-name">Spicy Crispy Chicken Sandwich</span>
-              <span class="item-sub">Spicy glazed chicken fillet, jalapeño crunch</span>
-            </div>
-            <span class="item-price-tag">$6.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Heart Attack Burger?" data-slide-target="5">
-            <div class="item-name-group">
-              <span class="item-name">Heart Attack Burger</span>
-              <span class="item-sub">Loaded burger stack with extra beef & melted cheese</span>
-            </div>
-            <span class="item-price-tag">$7.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Add fries and drink to my sandwich." data-slide-target="5">
-            <div class="item-name-group">
-              <span class="item-name">Combo Deal: Add Fries & Drink</span>
-              <span class="item-sub">Includes seasoned fries & fountain soda</span>
-            </div>
-            <span class="item-price-tag">+$2.99</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Category 6: Tenders & Nuggets -->
-      <div class="menu-category-block" data-slide-target="6">
-        <div class="menu-cat-hero-img">
-          <img src="/assets/food/chicken_tenders.jpg" alt="Crispy Chicken Tenders & Nuggets" />
-          <div class="menu-cat-hero-overlay">
-            <span class="menu-cat-hero-title">🍗 Tenders & Golden Nuggets</span>
-            <span class="menu-cat-badge">CRISPY GOLD</span>
-          </div>
-        </div>
-        <div class="menu-items-list">
-          <div class="menu-item-row" data-prompt="Can I get 3 piece Chicken Tenders?" data-slide-target="6">
-            <div class="item-name-group">
-              <span class="item-name">3 Pieces Tenders</span>
-              <span class="item-sub">Hand-breaded tenders with honey mustard or white sauce</span>
-            </div>
-            <span class="item-price-tag">$6.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get 5 piece Chicken Tenders?" data-slide-target="6">
-            <div class="item-name-group">
-              <span class="item-name">5 Pieces Tenders</span>
-              <span class="item-sub">Golden crunch tenders with choice of 2 dipping sauces</span>
-            </div>
-            <span class="item-price-tag">$9.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get 10 piece Chicken Tenders?" data-slide-target="6">
-            <div class="item-name-group">
-              <span class="item-name">10 Pieces Tenders</span>
-              <span class="item-sub">Giant tender box for sharing</span>
-            </div>
-            <span class="item-price-tag">$15.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get 6 piece Nuggets?" data-slide-target="6">
-            <div class="item-name-group">
-              <span class="item-name">6 Pieces Nuggets</span>
-              <span class="item-sub">Bite-sized crispy golden chicken nuggets</span>
-            </div>
-            <span class="item-price-tag">$5.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get 12 piece Nuggets?" data-slide-target="6">
-            <div class="item-name-group">
-              <span class="item-name">12 Pieces Nuggets</span>
-              <span class="item-sub">12 golden nuggets with dipping sauce</span>
-            </div>
-            <span class="item-price-tag">$8.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get 20 piece Nuggets?" data-slide-target="6">
-            <div class="item-name-group">
-              <span class="item-name">20 Pieces Nuggets</span>
-              <span class="item-sub">20-piece party nugget pack</span>
-            </div>
-            <span class="item-price-tag">$10.99</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Category 7: Side Orders & Loaded Starters -->
-      <div class="menu-category-block" data-slide-target="7">
-        <div class="menu-cat-hero-img">
-          <img src="/assets/food/loaded_sides.jpg" alt="Loaded Sides Feast" />
-          <div class="menu-cat-hero-overlay">
-            <span class="menu-cat-hero-title">🍟 Loaded Sides & Starters</span>
-            <span class="menu-cat-badge">HOT SIDES</span>
-          </div>
-        </div>
-        <div class="menu-items-list">
-          <div class="menu-item-row" data-prompt="Can I get Seasoned Fries?" data-slide-target="7">
-            <div class="item-name-group">
-              <span class="item-name">Seasoned Fries</span>
-              <span class="item-sub">Golden crispy fries tossed in signature Halalholic spice</span>
-            </div>
-            <span class="item-price-tag">$4.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get Cheese Fries?" data-slide-target="7">
-            <div class="item-name-group">
-              <span class="item-name">Cheese Fries</span>
-              <span class="item-sub">Hot seasoned fries smothered in melted cheddar cheese sauce</span>
-            </div>
-            <span class="item-price-tag">$5.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get Mozzarella Sticks?" data-slide-target="7">
-            <div class="item-name-group">
-              <span class="item-name">Mozzarella Sticks</span>
-              <span class="item-sub">Crispy golden sticks with warm marinara dipping sauce</span>
-            </div>
-            <span class="item-price-tag">$6.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get Mac N Cheese Bites?" data-slide-target="7">
-            <div class="item-name-group">
-              <span class="item-name">Mac N Cheese Bites</span>
-              <span class="item-sub">Crispy fried bite-sized mac and cheddar goodness</span>
-            </div>
-            <span class="item-price-tag">$4.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get Onion Rings?" data-slide-target="7">
-            <div class="item-name-group">
-              <span class="item-name">Crispy Onion Rings</span>
-              <span class="item-sub">Golden battered onion rings with house dipping sauce</span>
-            </div>
-            <span class="item-price-tag">$3.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I add Falafel Balls?" data-slide-target="7">
-            <div class="item-name-group">
-              <span class="item-name">Falafel Ball (Single Piece)</span>
-              <span class="item-sub">Handmade fresh crispy falafel ball</span>
-            </div>
-            <span class="item-price-tag">$0.75</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Category 8: Mediterranean Fresh Salads -->
-      <div class="menu-category-block" data-slide-target="8">
-        <div class="menu-cat-hero-img">
-          <img src="/assets/food/falafel_salad.jpg" alt="Mediterranean Fresh Salads" />
-          <div class="menu-cat-hero-overlay">
-            <span class="menu-cat-hero-title">🥗 Mediterranean Fresh Salads</span>
-            <span class="menu-cat-badge">100% FRESH</span>
-          </div>
-        </div>
-        <div class="menu-items-list">
-          <div class="menu-item-row" data-prompt="Can I get the Garden Salad?" data-slide-target="8">
-            <div class="item-name-group">
-              <span class="item-name">Garden Salad (Vegetarian)</span>
-              <span class="item-sub">Crisp romaine, tomatoes, cucumbers, olives & white sauce</span>
-            </div>
-            <span class="item-price-tag">$8.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Grilled Chicken Salad?" data-slide-target="8">
-            <div class="item-name-group">
-              <span class="item-name">Grilled Chicken Salad</span>
-              <span class="item-sub">Seasoned grilled chicken breast over fresh garden greens</span>
-            </div>
-            <span class="item-price-tag">$9.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Lamb Salad?" data-slide-target="8">
-            <div class="item-name-group">
-              <span class="item-name">Lamb Gyro Salad</span>
-              <span class="item-sub">Tender shaved gyro lamb over crisp Mediterranean salad</span>
-            </div>
-            <span class="item-price-tag">$9.99</span>
-          </div>
-          <div class="menu-item-row" data-prompt="Can I get the Fish Salad?" data-slide-target="8">
-            <div class="item-name-group">
-              <span class="item-name">Fish Salad</span>
-              <span class="item-sub">Crispy fish fillet over mixed greens with lemon herb dressing</span>
-            </div>
-            <span class="item-price-tag">$9.99</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Mo's Student Feedback & Revisit Card -->
-      <div class="menu-feedback-card">
-        <div class="feedback-card-header">
-          <span class="feedback-icon">💬</span>
-          <div class="feedback-title-group">
-            <span class="feedback-title">Tell Mo How Your Food Was</span>
-            <span class="feedback-sub">Good vibes, real complaints, or honest suggestions — Mo cares!</span>
-          </div>
-        </div>
-        <button class="feedback-action-btn menu-item-row" data-prompt="Mo, here is my honest feedback and experience with the food and restaurant today:">
-          <span>🎤 Tell Mo Your Feedback & Complaints</span>
+        <button class="drawer-close-btn" id="drawer-close-btn" title="Close Menu">
+          <span class="close-x">✕</span>
+          <span class="close-label">CLOSE MENU</span>
         </button>
       </div>
-    </div>
+
+      <!-- Quick-Jump Category Navigation Tabs -->
+      <nav class="menu-category-nav" id="menu-cat-nav">
+        <button class="cat-nav-btn active" data-cat="cat-platters">🍛 Platters ($9.99)</button>
+        <button class="cat-nav-btn" data-cat="cat-gyros">🌯 Gyros ($7.99)</button>
+        <button class="cat-nav-btn" data-cat="cat-wings">🍗 Wings ($9.99+)</button>
+        <button class="cat-nav-btn" data-cat="cat-tenders">🍗 Tenders ($6.99+)</button>
+        <button class="cat-nav-btn" data-cat="cat-nuggets">🍗 Nuggets ($5.99+)</button>
+        <button class="cat-nav-btn" data-cat="cat-burgers">🍔 Burgers & Heroes ($6.99+)</button>
+        <button class="cat-nav-btn" data-cat="cat-sides">🍟 Side Orders ($0.75+)</button>
+        <button class="cat-nav-btn" data-cat="cat-salads">🥗 Salad ($8.99+)</button>
+      </nav>
+
+      <!-- Scrollable Multi-Column Menu Grid -->
+      <div class="menu-drawer-body" id="menu-drawer-body">
+        <div class="menu-grid-layout">
+          <!-- Category 1: Platters ($9.99) -->
+          <div id="cat-platters" class="menu-category-block" data-slide-target="1">
+            <div class="menu-cat-hero-img">
+              <img src="/assets/food/halal_platter.jpg" alt="Signature Halal Platters" />
+              <div class="menu-cat-hero-overlay">
+                <span class="menu-cat-hero-title">🍛 Platters</span>
+                <span class="menu-cat-badge">ALL $9.99</span>
+              </div>
+            </div>
+            <div class="menu-cat-flavor-bar">
+              <span>🥗 Comes with Mix Salad &amp; Fries or Hummus • 🌶️ White, Hot, Green, BBQ, Chipotle</span>
+            </div>
+            <div class="menu-items-list">
+              <div class="menu-item-row" data-prompt="Can I get the Lamb Dose Platter?" data-slide-target="1">
+                <div class="item-name-group">
+                  <span class="item-name">Lamb Dose</span>
+                  <span class="item-sub">Tender gyro lamb over rice + mix salad &amp; fries or hummus</span>
+                </div>
+                <span class="item-price-tag">$9.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Chicken Dose Platter?" data-slide-target="1">
+                <div class="item-name-group">
+                  <span class="item-name">Chicken Dose</span>
+                  <span class="item-sub">Marinated spiced halal chicken over seasoned rice + mix salad &amp; sides</span>
+                </div>
+                <span class="item-price-tag">$9.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Fish Dose Platter?" data-slide-target="1">
+                <div class="item-name-group">
+                  <span class="item-name">Fish Dose</span>
+                  <span class="item-sub">Crispy golden fish fillet over basmati rice + mix salad &amp; sides</span>
+                </div>
+                <span class="item-price-tag">$9.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Falafel Dose Platter?" data-slide-target="1">
+                <div class="item-name-group">
+                  <span class="item-name">Falafel Dose</span>
+                  <span class="item-sub">Handmade fresh crispy falafel balls over rice + mix salad &amp; sides</span>
+                </div>
+                <span class="item-price-tag">$9.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Kofta Dose Platter?" data-slide-target="1">
+                <div class="item-name-group">
+                  <span class="item-name">Kofta Dose</span>
+                  <span class="item-sub">Seasoned savory kofta skewers over rice + mix salad &amp; sides</span>
+                </div>
+                <span class="item-price-tag">$9.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Mix Combo Dose Platter?" data-slide-target="1">
+                <div class="item-name-group">
+                  <span class="item-name">Mix Combo Dose</span>
+                  <span class="item-sub">Double protein: Spiced Chicken + Gyro Lamb over rice + salad &amp; sides</span>
+                </div>
+                <span class="item-price-tag">$9.99</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category 2: Gyros ($7.99) -->
+          <div id="cat-gyros" class="menu-category-block" data-slide-target="3">
+            <div class="menu-cat-hero-img">
+              <img src="/assets/food/gyro_wrap.jpg" alt="Speed Gyros" />
+              <div class="menu-cat-hero-overlay">
+                <span class="menu-cat-hero-title">🌯 Gyros</span>
+                <span class="menu-cat-badge">ALL $7.99</span>
+              </div>
+            </div>
+            <div class="menu-cat-flavor-bar">
+              <span>🌶️ Choice of Sauce: White, Hot, Green, BBQ, Chipotle</span>
+            </div>
+            <div class="menu-items-list">
+              <div class="menu-item-row" data-prompt="Can I get a Chicken Gyro?" data-slide-target="3">
+                <div class="item-name-group">
+                  <span class="item-name">Chicken Gyro</span>
+                  <span class="item-sub">Warm toasted flatbread with marinated chicken, lettuce &amp; sauce</span>
+                </div>
+                <span class="item-price-tag">$7.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get a Lamb Gyro?" data-slide-target="3">
+                <div class="item-name-group">
+                  <span class="item-name">Lamb Gyro</span>
+                  <span class="item-sub">Classic shaved gyro lamb with crisp greens &amp; signature sauce</span>
+                </div>
+                <span class="item-price-tag">$7.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get a Mix Gyro?" data-slide-target="3">
+                <div class="item-name-group">
+                  <span class="item-name">Mix Gyro</span>
+                  <span class="item-sub">Chicken + lamb double protein wrapped in warm pita</span>
+                </div>
+                <span class="item-price-tag">$7.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get a Fish Gyro?" data-slide-target="3">
+                <div class="item-name-group">
+                  <span class="item-name">Fish Gyro</span>
+                  <span class="item-sub">Golden fish fillet, crisp lettuce, tomato &amp; sauce</span>
+                </div>
+                <span class="item-price-tag">$7.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get a Falafel Gyro?" data-slide-target="3">
+                <div class="item-name-group">
+                  <span class="item-name">Falafel Gyro</span>
+                  <span class="item-sub">Fresh crispy falafel, tomatoes, lettuce &amp; tahini sauce</span>
+                </div>
+                <span class="item-price-tag">$7.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get a Chicken Kofta Gyro?" data-slide-target="3">
+                <div class="item-name-group">
+                  <span class="item-name">Chicken Kofta Gyro</span>
+                  <span class="item-sub">Savory chicken kofta kebab wrapped with salad &amp; white sauce</span>
+                </div>
+                <span class="item-price-tag">$7.99</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category 3: Wings -->
+          <div id="cat-wings" class="menu-category-block" data-slide-target="2">
+            <div class="menu-cat-hero-img">
+              <img src="/assets/food/crispy_wings.jpg" alt="Crispy Wings" />
+              <div class="menu-cat-hero-overlay">
+                <span class="menu-cat-hero-title">🍗 Wings</span>
+                <span class="menu-cat-badge">5 FLAVORS</span>
+              </div>
+            </div>
+            <div class="menu-cat-flavor-bar">
+              <span>🔥 Hot, BBQ, Buffalo, Lemon Pepper, Mango Habanero • 🥣 White, Blue Cheese, Ranch</span>
+            </div>
+            <div class="menu-items-list">
+              <div class="menu-item-row" data-prompt="Can I get 6 pieces of Wings?" data-slide-target="2">
+                <div class="item-name-group">
+                  <span class="item-name">6 Pcs. Wings</span>
+                  <span class="item-sub">Crispy bone-in wings tossed in your choice of sauce</span>
+                </div>
+                <span class="item-price-tag">$9.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get 9 pieces of Wings?" data-slide-target="2">
+                <div class="item-name-group">
+                  <span class="item-name">9 Pcs. Wings</span>
+                  <span class="item-sub">Crispy wings with sauce + dipping sauce of choice</span>
+                </div>
+                <span class="item-price-tag">$12.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get 12 pieces of Wings?" data-slide-target="2">
+                <div class="item-name-group">
+                  <span class="item-name">12 Pcs. Wings</span>
+                  <span class="item-sub">Great for sharing with friends</span>
+                </div>
+                <span class="item-price-tag">$15.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get 20 pieces of Wings?" data-slide-target="2">
+                <div class="item-name-group">
+                  <span class="item-name">20 Pcs. Wings</span>
+                  <span class="item-sub">Party box for study groups &amp; cravings</span>
+                </div>
+                <span class="item-price-tag">$23.99</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category 4: Tenders -->
+          <div id="cat-tenders" class="menu-category-block" data-slide-target="6">
+            <div class="menu-cat-hero-img">
+              <img src="/assets/food/chicken_tenders.jpg" alt="Chicken Tenders" />
+              <div class="menu-cat-hero-overlay">
+                <span class="menu-cat-hero-title">🍗 Tenders</span>
+                <span class="menu-cat-badge">CRISPY STRIPS</span>
+              </div>
+            </div>
+            <div class="menu-cat-flavor-bar">
+              <span>🍯 Sauces: White, Honey Mustard, BBQ, Chipotle • 🍟 Add Fries &amp; Drink $2.99</span>
+            </div>
+            <div class="menu-items-list">
+              <div class="menu-item-row" data-prompt="Can I get 3 pieces of Chicken Tenders?" data-slide-target="6">
+                <div class="item-name-group">
+                  <span class="item-name">3 Pcs. Tenders</span>
+                  <span class="item-sub">Hand-breaded golden tenders with dipping sauce</span>
+                </div>
+                <span class="item-price-tag">$6.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get 5 pieces of Chicken Tenders?" data-slide-target="6">
+                <div class="item-name-group">
+                  <span class="item-name">5 Pcs. Tenders</span>
+                  <span class="item-sub">Five crispy tender strips with dipping sauces</span>
+                </div>
+                <span class="item-price-tag">$9.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get 10 pieces of Chicken Tenders?" data-slide-target="6">
+                <div class="item-name-group">
+                  <span class="item-name">10 Pcs. Tenders</span>
+                  <span class="item-sub">Box of ten crispy tenders for the crew</span>
+                </div>
+                <span class="item-price-tag">$15.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can you make that a combo with fries and a drink?" data-slide-target="6">
+                <div class="item-name-group">
+                  <span class="item-name">Add Fries &amp; Drink</span>
+                  <span class="item-sub">Combo upgrade for any Tenders order</span>
+                </div>
+                <span class="item-price-tag">+$2.99</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category 5: Nuggets -->
+          <div id="cat-nuggets" class="menu-category-block" data-slide-target="6">
+            <div class="menu-cat-hero-img">
+              <img src="/assets/food/chicken_tenders.jpg" alt="Chicken Nuggets" />
+              <div class="menu-cat-hero-overlay">
+                <span class="menu-cat-hero-title">🍗 Nuggets</span>
+                <span class="menu-cat-badge">BITE-SIZED</span>
+              </div>
+            </div>
+            <div class="menu-cat-flavor-bar">
+              <span>🍟 Add Fries &amp; Drink $2.99</span>
+            </div>
+            <div class="menu-items-list">
+              <div class="menu-item-row" data-prompt="Can I get 6 pieces of Nuggets?" data-slide-target="6">
+                <div class="item-name-group">
+                  <span class="item-name">6 Pcs. Nuggets</span>
+                  <span class="item-sub">Golden crispy bite-sized halal chicken nuggets</span>
+                </div>
+                <span class="item-price-tag">$5.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get 12 pieces of Nuggets?" data-slide-target="6">
+                <div class="item-name-group">
+                  <span class="item-name">12 Pcs. Nuggets</span>
+                  <span class="item-sub">Twelve crispy nuggets with dipping sauce</span>
+                </div>
+                <span class="item-price-tag">$8.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get 20 pieces of Nuggets?" data-slide-target="6">
+                <div class="item-name-group">
+                  <span class="item-name">20 Pcs. Nuggets</span>
+                  <span class="item-sub">Twenty crispy nuggets party pack</span>
+                </div>
+                <span class="item-price-tag">$10.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Add fries and drink to my nuggets." data-slide-target="6">
+                <div class="item-name-group">
+                  <span class="item-name">Add Fries &amp; Drink</span>
+                  <span class="item-sub">Combo upgrade for any Nuggets order</span>
+                </div>
+                <span class="item-price-tag">+$2.99</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category 6: Burgers & Sandwiches -->
+          <div id="cat-burgers" class="menu-category-block" data-slide-target="4">
+            <div class="menu-cat-hero-img">
+              <img src="/assets/food/burger_hero.jpg" alt="Burgers & Sandwiches" />
+              <div class="menu-cat-hero-overlay">
+                <span class="menu-cat-hero-title">🍔 Burgers &amp; Sandwiches</span>
+                <span class="menu-cat-badge">NYC HEROES</span>
+              </div>
+            </div>
+            <div class="menu-cat-flavor-bar">
+              <span>🍟 Add Fries &amp; Drink $2.99</span>
+            </div>
+            <div class="menu-items-list">
+              <div class="menu-section-header">
+                <span>Sandwiches &amp; Burgers</span>
+                <span>$6.99 – $8.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Crispy Chicken Sandwich?" data-slide-target="4">
+                <div class="item-name-group">
+                  <span class="item-name">Crispy Chicken Sandwich</span>
+                  <span class="item-sub">Golden fried halal chicken breast, pickles, bun</span>
+                </div>
+                <span class="item-price-tag">$6.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Spicy Crispy Chicken Sandwich?" data-slide-target="4">
+                <div class="item-name-group">
+                  <span class="item-name">Spicy Crispy Chicken Sandwich</span>
+                  <span class="item-sub">Spicy breaded chicken breast fillet with kick</span>
+                </div>
+                <span class="item-price-tag">$6.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Grilled Chicken Sandwich?" data-slide-target="4">
+                <div class="item-name-group">
+                  <span class="item-name">Grilled Chicken Sandwich</span>
+                  <span class="item-sub">Tender marinated grilled chicken breast, lettuce, tomato</span>
+                </div>
+                <span class="item-price-tag">$6.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Spicy Grilled Chicken Sandwich?" data-slide-target="4">
+                <div class="item-name-group">
+                  <span class="item-name">Spicy Grilled Chicken Sandwich</span>
+                  <span class="item-sub">Grilled chicken with house hot spice blend</span>
+                </div>
+                <span class="item-price-tag">$6.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Fish Sandwich?" data-slide-target="4">
+                <div class="item-name-group">
+                  <span class="item-name">Fish Sandwich</span>
+                  <span class="item-sub">Crispy golden fish fillet, lettuce, tartar sauce</span>
+                </div>
+                <span class="item-price-tag">$6.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Cheeseburger?" data-slide-target="4">
+                <div class="item-name-group">
+                  <span class="item-name">Cheeseburger</span>
+                  <span class="item-sub">Halal beef patty with melted cheese, lettuce, tomato, pickles</span>
+                </div>
+                <span class="item-price-tag">$6.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Double Cheeseburger?" data-slide-target="4">
+                <div class="item-name-group">
+                  <span class="item-name">Double Cheeseburger</span>
+                  <span class="item-sub">Two beef patties, double melted cheese on toasted bun</span>
+                </div>
+                <span class="item-price-tag">$8.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Baconator Only burger?" data-slide-target="4">
+                <div class="item-name-group">
+                  <span class="item-name">Baconator Only</span>
+                  <span class="item-sub">Loaded burger stack with halal bacon &amp; cheese</span>
+                </div>
+                <span class="item-price-tag">$7.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Heart Attack Burger?" data-slide-target="4">
+                <div class="item-name-group">
+                  <span class="item-name">Heart Attack Burger</span>
+                  <span class="item-sub">Towering loaded burger with extra cheese &amp; special sauce</span>
+                </div>
+                <span class="item-price-tag">$7.99</span>
+              </div>
+
+              <div class="menu-section-header">
+                <span>On Hero</span>
+                <span>$9.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Chopped Cheese On Hero?" data-slide-target="4">
+                <div class="item-name-group">
+                  <span class="item-name">Chopped Cheese On Hero</span>
+                  <span class="item-sub">NYC bodega style chopped ground beef, melted cheese on hero bread</span>
+                </div>
+                <span class="item-price-tag">$9.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Philly Cheesesteak On Hero?" data-slide-target="4">
+                <div class="item-name-group">
+                  <span class="item-name">Philly Cheesesteak On Hero</span>
+                  <span class="item-sub">Thin-sliced steak, grilled onions, peppers &amp; melted cheese</span>
+                </div>
+                <span class="item-price-tag">$9.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Chicken Cheesesteak On Hero?" data-slide-target="4">
+                <div class="item-name-group">
+                  <span class="item-name">Chicken Cheesesteak On Hero</span>
+                  <span class="item-sub">Chopped chicken, sauteed peppers &amp; melted cheese</span>
+                </div>
+                <span class="item-price-tag">$9.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Chicken Cutlet On Hero?" data-slide-target="4">
+                <div class="item-name-group">
+                  <span class="item-name">Chicken Cutlet On Hero</span>
+                  <span class="item-sub">Crispy breaded golden chicken cutlet, mayo, greens on hero</span>
+                </div>
+                <span class="item-price-tag">$9.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Grilled Chicken On Hero?" data-slide-target="4">
+                <div class="item-name-group">
+                  <span class="item-name">Grilled Chicken On Hero</span>
+                  <span class="item-sub">Marinated grilled chicken breast on fresh hero bread</span>
+                </div>
+                <span class="item-price-tag">$9.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Pastrami On Hero?" data-slide-target="4">
+                <div class="item-name-group">
+                  <span class="item-name">Pastrami On Hero</span>
+                  <span class="item-sub">Warm sliced pastrami with mustard on toasted hero</span>
+                </div>
+                <span class="item-price-tag">$9.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Turkey On Hero?" data-slide-target="4">
+                <div class="item-name-group">
+                  <span class="item-name">Turkey On Hero</span>
+                  <span class="item-sub">Smoked halal turkey breast, cheese, crisp lettuce on hero</span>
+                </div>
+                <span class="item-price-tag">$9.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Add fries and drink to my sandwich." data-slide-target="4">
+                <div class="item-name-group">
+                  <span class="item-name">Add Fries &amp; Drink</span>
+                  <span class="item-sub">Combo upgrade for any Burger or Hero</span>
+                </div>
+                <span class="item-price-tag">+$2.99</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category 7: Side Orders -->
+          <div id="cat-sides" class="menu-category-block" data-slide-target="7">
+            <div class="menu-cat-hero-img">
+              <img src="/assets/food/loaded_sides.jpg" alt="Side Orders" />
+              <div class="menu-cat-hero-overlay">
+                <span class="menu-cat-hero-title">🍟 Side Orders</span>
+                <span class="menu-cat-badge">CRISPY SIDES</span>
+              </div>
+            </div>
+            <div class="menu-items-list">
+              <div class="menu-item-row" data-prompt="Can I get Season Fries?" data-slide-target="7">
+                <div class="item-name-group">
+                  <span class="item-name">Season Fries</span>
+                  <span class="item-sub">Golden crispy fries tossed in signature spice</span>
+                </div>
+                <span class="item-price-tag">$4.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get Cheese Fries?" data-slide-target="7">
+                <div class="item-name-group">
+                  <span class="item-name">Cheese Fries</span>
+                  <span class="item-sub">Hot seasoned fries smothered in melted cheddar cheese</span>
+                </div>
+                <span class="item-price-tag">$5.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get Onion Rings?" data-slide-target="7">
+                <div class="item-name-group">
+                  <span class="item-name">Onion Rings</span>
+                  <span class="item-sub">Golden crispy battered onion rings</span>
+                </div>
+                <span class="item-price-tag">$3.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get Mac N Cheese Bites?" data-slide-target="7">
+                <div class="item-name-group">
+                  <span class="item-name">Mac N Cheese Bites</span>
+                  <span class="item-sub">Crispy fried bite-sized macaroni and cheddar</span>
+                </div>
+                <span class="item-price-tag">$4.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get Mozzarella Sticks?" data-slide-target="7">
+                <div class="item-name-group">
+                  <span class="item-name">Mozzarella Sticks</span>
+                  <span class="item-sub">Crispy melted mozzarella sticks with marinara</span>
+                </div>
+                <span class="item-price-tag">$6.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get a Falafel Ball?" data-slide-target="7">
+                <div class="item-name-group">
+                  <span class="item-name">Falafel Ball (Per Pc.)</span>
+                  <span class="item-sub">Fresh handmade crispy falafel ball</span>
+                </div>
+                <span class="item-price-tag">$0.75</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category 8: Salad -->
+          <div id="cat-salads" class="menu-category-block" data-slide-target="8">
+            <div class="menu-cat-hero-img">
+              <img src="/assets/food/falafel_salad.jpg" alt="Salad" />
+              <div class="menu-cat-hero-overlay">
+                <span class="menu-cat-hero-title">🥗 Salad</span>
+                <span class="menu-cat-badge">FRESH &amp; CRISP</span>
+              </div>
+            </div>
+            <div class="menu-items-list">
+              <div class="menu-item-row" data-prompt="Can I get the Garden Salad?" data-slide-target="8">
+                <div class="item-name-group">
+                  <span class="item-name">Garden Salad</span>
+                  <span class="item-sub">Crisp mixed greens, tomatoes, cucumbers, dressing</span>
+                </div>
+                <span class="item-price-tag">$8.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Lamb Salad?" data-slide-target="8">
+                <div class="item-name-group">
+                  <span class="item-name">Lamb Salad</span>
+                  <span class="item-sub">Tender gyro lamb over fresh crisp garden greens</span>
+                </div>
+                <span class="item-price-tag">$9.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Grilled Chicken Salad?" data-slide-target="8">
+                <div class="item-name-group">
+                  <span class="item-name">Grilled Chicken Salad</span>
+                  <span class="item-sub">Seasoned grilled chicken breast over mixed greens</span>
+                </div>
+                <span class="item-price-tag">$9.99</span>
+              </div>
+              <div class="menu-item-row" data-prompt="Can I get the Fish Salad?" data-slide-target="8">
+                <div class="item-name-group">
+                  <span class="item-name">Fish Salad</span>
+                  <span class="item-sub">Golden fish fillet over fresh garden salad</span>
+                </div>
+                <span class="item-price-tag">$9.99</span>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /.menu-grid-layout -->
+
+        <!-- Mo's Student Feedback & Revisit Card -->
+        <div class="menu-feedback-card">
+          <div class="feedback-card-header">
+            <span class="feedback-icon">💬</span>
+            <div class="feedback-title-group">
+              <span class="feedback-title">Tell Mo How Your Food Was</span>
+              <span class="feedback-sub">Good vibes, real complaints, or honest suggestions — Mo cares!</span>
+            </div>
+          </div>
+          <button class="feedback-action-btn menu-item-row" data-prompt="Mo, here is my honest feedback and experience with the food and restaurant today:">
+            <span>🎤 Tell Mo Your Feedback & Complaints</span>
+          </button>
+        </div>
+      </div> <!-- /.menu-drawer-body -->
+    </div> <!-- /#menu-drawer -->
 
     <!-- Studio Debug Panel (Press 'D') -->
     <div id="debug-panel">
@@ -3161,10 +3537,9 @@ export class App {
       this._onChipClick?.("Tell me your backstory Mo, why do you work at Halalholic?");
     });
 
-    // Feedback & Suggestion Launchers (Directly below Mo & Header)
+    // Feedback & Suggestion Launchers Directly below Mo
     const stageFeedbackBtn = document.getElementById('stage-feedback-btn');
     const stageSuggestBtn  = document.getElementById('stage-suggest-btn');
-    const feedbackKioskBtn = document.getElementById('feedback-kiosk-btn');
 
     const feedbackInquiries = [
       "“Talk to me, habibi! How was your food and your visit today? Tell me what went wrong or what complaint you have — I'm right here to fix it for you!”",
@@ -3184,7 +3559,6 @@ export class App {
     };
 
     stageFeedbackBtn?.addEventListener('click', triggerFeedback);
-    feedbackKioskBtn?.addEventListener('click', triggerFeedback);
 
     const suggestInquiries = [
       "“Ayy, I love this! What new dish, crave item, or sauce do you want us to add to the menu? Tell your boy Mo — I pitch ideas straight to the kitchen!”",
@@ -3207,6 +3581,20 @@ export class App {
     const closeBtn = document.getElementById('drawer-close-btn');
     peekBtn?.addEventListener('click', () => this._menuDrawer.classList.toggle('open'));
     closeBtn?.addEventListener('click', () => this._menuDrawer.classList.remove('open'));
+
+    // Quick-Jump Category Navigation Tabs
+    const catNavBtns = document.querySelectorAll('.cat-nav-btn');
+    catNavBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        catNavBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const targetId = btn.dataset.cat;
+        const targetEl = document.getElementById(targetId);
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
 
     document.querySelectorAll('.menu-item-row[data-prompt]').forEach(row => {
       row.style.cursor = 'pointer';
