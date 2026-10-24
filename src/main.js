@@ -53,14 +53,14 @@ const GREETING_PROMPTS = [
   "Welcome your fellow Syracuse student in fast-talking, hilarious Mo style — ask what major they're grinding in and what food can rescue them today — 1 sentence!",
 ];
 const LISTENING_CAPTIONS = [
-  "What's hitting today, habibi?",
-  "Talk to me — what are you craving?",
-  "I'm listening, habibi. Make it legendary.",
-  "What's the play? Solo feast or squad?",
-  "Go ahead, habibi. No judgment here!",
-  "Lay it on me — craving platters or wings?",
-  "Speak your truth, habibi!",
-  "I'm all ears — let's fuel up!",
+  "What's the major, what's the crave, habibi?",
+  "What class took your soul today?",
+  "Talk to Mo — spill the campus tea!",
+  "What's the play? Solo feast or squad bucket?",
+  "Need brain fuel or comfort carbs, habibi?",
+  "Lay it on me — craving platters, gyros, or wings?",
+  "Sprint-to-class rush or full comfort feast?",
+  "I'm all ears, habibi — let's fuel up!",
 ];
 let _greetingIdx = Math.floor(Math.random() * GREETING_PROMPTS.length);
 let _captionIdx  = 0;
@@ -214,23 +214,23 @@ async function startVoiceSession(initialPrompt = null) {
         Mo.setExpression('angry'); // Mock-offended
         Mo.setPose('arms_crossed');
         Mo.triggerLaugh();
-      } else if (lower.includes('flavor than your dining hall') || lower.includes('personality trait') || lower.includes('respect') || lower.includes('iconic') || lower.includes('certified classic') || lower.includes('dr. mo') || lower.includes('came as a student')) {
+      } else if (lower.includes('flavor than your dining hall') || lower.includes('personality trait') || lower.includes('respect') || lower.includes('iconic') || lower.includes('certified classic') || lower.includes('dr. mo') || lower.includes('came as a student') || lower.includes('whitman') || lower.includes('cs major') || lower.includes('roi') || lower.includes('semicolon')) {
         Mo.setExpression('confident'); // Smug, proud & iconic
         Mo.setPose('arms_crossed');
-      } else if (lower.includes('holicbucket') || lower.includes('squad') || lower.includes('group project') || lower.includes('sharing is caring') || lower.includes('extra holic') || lower.includes('feast')) {
-        Mo.setExpression('excited'); // Excited
+      } else if (lower.includes('holicbucket') || lower.includes('squad') || lower.includes('group project') || lower.includes('sharing is caring') || lower.includes('extra holic') || lower.includes('feast') || lower.includes('game day') || lower.includes('carrier dome') || lower.includes('dome')) {
+        Mo.setExpression('excited'); // Excited & game-day hype
         Mo.setPose('dancing');
         Mo.triggerLaugh();
-      } else if (lower.includes('gyro') || lower.includes('running late') || lower.includes('class') || lower.includes('rush') || lower.includes('speed')) {
+      } else if (lower.includes('gyro') || lower.includes('running late') || lower.includes('class') || lower.includes('rush') || lower.includes('speed') || lower.includes('architecture') || lower.includes('pre-med')) {
         Mo.setExpression('confident');
         Mo.setPose('pointing');
       } else if (lower.includes('platter') || lower.includes('earned it') || lower.includes('straight a') || lower.includes('a-plus')) {
         Mo.setExpression('happy');
         Mo.setPose('thumbs_up');
-      } else if (lower.includes('haha') || lower.includes('heh') || lower.includes('lol') || lower.includes('joke') || lower.includes('breakup') || lower.includes('ex ') || lower.includes('ex-') || lower.includes('girlfriend') || lower.includes('dumped')) {
+      } else if (lower.includes('haha') || lower.includes('heh') || lower.includes('lol') || lower.includes('joke') || lower.includes('breakup') || lower.includes('ex ') || lower.includes('ex-') || lower.includes('girlfriend') || lower.includes('dumped') || lower.includes('lettuce')) {
         Mo.setExpression('laughing');
         Mo.triggerLaugh();
-      } else if (lower.includes('bold move') || lower.includes('say less') || lower.includes('trust me')) {
+      } else if (lower.includes('bold move') || lower.includes('say less') || lower.includes('trust me') || lower.includes('doctor ordered') || lower.includes('aesthetic')) {
         Mo.setExpression('wink');
         Mo.triggerLaugh();
       }
@@ -247,11 +247,11 @@ async function startVoiceSession(initialPrompt = null) {
         const lower = text.toLowerCase();
         if (lower.includes('eat you') || lower.includes('bite') || lower.includes('hair') || lower.includes('lettuce') || lower.includes('bread') || lower.includes('robot') || lower.includes('fake') || lower.includes('ai')) {
           Mo.setExpression('angry'); // Mock-offended prep
-        } else if (lower.includes('exam') || lower.includes('study') || lower.includes('lecture') || lower.includes('class') || lower.includes('iconic') || lower.includes('student')) {
+        } else if (lower.includes('exam') || lower.includes('study') || lower.includes('lecture') || lower.includes('class') || lower.includes('iconic') || lower.includes('student') || lower.includes('major') || lower.includes('cs') || lower.includes('business') || lower.includes('finance') || lower.includes('engineer')) {
           Mo.setExpression('confident'); // Smug prep
-        } else if (lower.includes('squad') || lower.includes('friends') || lower.includes('group') || lower.includes('bucket') || lower.includes('party')) {
+        } else if (lower.includes('squad') || lower.includes('friends') || lower.includes('group') || lower.includes('bucket') || lower.includes('party') || lower.includes('game') || lower.includes('dome')) {
           Mo.setExpression('excited'); // Excited prep
-        } else if (lower.includes('breakup') || lower.includes('ex') || lower.includes('dumped') || lower.includes('girlfriend') || lower.includes('boyfriend') || lower.includes('sad') || lower.includes('stress')) {
+        } else if (lower.includes('breakup') || lower.includes('ex') || lower.includes('dumped') || lower.includes('girlfriend') || lower.includes('boyfriend') || lower.includes('sad') || lower.includes('stress') || lower.includes('tired') || lower.includes('fail')) {
           Mo.setExpression('thinking'); // Attentive confidant listening
         } else {
           Mo.setExpression('thinking'); // Thinking
