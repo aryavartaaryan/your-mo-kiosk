@@ -1358,152 +1358,229 @@ function injectStyles(colors) {
     }
 
     /* ─────────────────────────────────────────────────────────────────────────────
-       DEDICATED LUXURY DESKTOP & WIDESCREEN ARCHITECTURE
-       Engineered to make Desktop / Laptop views look clean, spacious, and ultra-premium
-       without removing a single element. Expands Mo's size and separates action wings.
+       DEDICATED PREMIUM DESKTOP & WIDESCREEN ARCHITECTURE
+       Applies ONLY on landscape/desktop displays (min-width: 901px & aspect-ratio > 1.05/1).
+       Guarantees:
+         • Zero clutter: Mo is 100% free with no components covering his head or body
+         • Mo size slightly increased (~15-20%) for commanding presence
+         • Nothing removed: all badges, titles, tickers, indicators, cards & controls intact
+         • Kiosk / portrait view is 100% untouched
        ───────────────────────────────────────────────────────────────────────────── */
-    @media (min-aspect-ratio: 1.05/1) and (min-width: 900px) {
+    @media (min-width: 901px) and (min-aspect-ratio: 1.05/1) {
       #app {
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
         justify-content: space-between;
-        padding-bottom: 6px;
+        padding: 0 0 8px;
       }
 
-      /* Reduce visual background clash in center column */
-      .kiosk-bg-glass-overlay {
-        background: radial-gradient(ellipse at 50% 50%,
-          rgba(255, 120, 20, 0.08) 0%,
-          rgba(6, 20, 16, 0.72) 42%,
-          rgba(3, 10, 8, 0.94) 75%,
-          #020605 100%
-        );
-      }
-      #bg-spotlight {
-        width: min(78vh, 700px);
-        height: min(78vh, 700px);
-        background: radial-gradient(circle,
-          rgba(255, 120, 20, 0.25) 0%,
-          rgba(255, 80, 0, 0.08) 38%,
-          rgba(8, 26, 22, 0.03) 65%,
-          transparent 75%
-        );
-      }
-
-      /* Desktop Header: Generous horizontal luxury breathing room */
+      /* Compact, ultra-clean header */
       #header {
-        padding: 12px clamp(32px, 4vw, 64px) 0;
+        padding: 14px 32px 0;
+        margin-bottom: 2px;
       }
 
-      /* Desktop Hero Greeting: Crisp, proportional, non-crowded */
+      /* Streamline "Meet Mo" banner: reduced vertical footprint, sleek typography */
       #kiosk-hero-banner {
-        padding: 2px 24px 0;
-        margin-bottom: 0;
+        padding: 4px 24px 0;
+        margin-top: 0;
       }
       .hero-live-badge {
         padding: 3px 12px;
-        margin-bottom: 3px;
+        margin-bottom: 4px;
+      }
+      .hero-live-badge span {
+        font-size: 8.5px;
+        letter-spacing: 1.6px;
       }
       .hero-title {
-        font-size: clamp(28px, 3.2vw, 42px);
+        font-size: clamp(26px, 2.5vw, 36px);
         margin-bottom: 2px;
+        line-height: 1;
       }
       .hero-subtitle {
-        font-size: 13px;
-        max-width: 660px;
-        line-height: 1.42;
-        color: rgba(247, 243, 233, 0.88);
+        font-size: clamp(11.5px, 1.1vw, 13px);
+        max-width: 580px;
+        line-height: 1.35;
+        opacity: 0.88;
       }
 
-      /* Desktop Ticker: Sleek capsule */
+      /* Sleek live ticker: elegant horizontal pill */
       #kiosk-live-ticker {
         margin-top: 4px;
-        margin-bottom: 2px;
+        margin-bottom: 0;
       }
       .ticker-pill {
-        padding: 4px 18px;
-        background: rgba(8, 22, 18, 0.92);
-        border: 1.5px solid rgba(255, 140, 50, 0.42);
+        padding: 3.5px 16px;
+        gap: 8px;
+      }
+      .ticker-fire {
+        font-size: 11.5px;
+      }
+      .ticker-text {
+        font-size: 9.5px;
+        letter-spacing: 1.1px;
+      }
+      .ticker-tag, .ticker-perk {
+        font-size: 9px;
       }
 
-      /* Desktop Slide Indicator: Clear separation from speech bubble */
+      /* Ambient Luxury Slide Indicator: Float gracefully at bottom-left corner */
+      /* Frees up the entire center stage above Mo while keeping all 9 dots & titles interactive */
       #kiosk-slide-indicator {
-        margin: 5px 0 2px;
+        position: fixed;
+        bottom: 22px;
+        left: 28px;
+        margin: 0;
+        z-index: 50;
+        background: rgba(8, 24, 20, 0.88);
+        border: 1px solid rgba(255, 140, 50, 0.38);
+        border-radius: 99px;
+        padding: 4px 14px;
+        backdrop-filter: blur(16px);
+        box-shadow: 0 8px 28px rgba(0,0,0,0.65), 0 0 16px rgba(255, 106, 0, 0.2);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
       }
       .slide-indicator-track {
-        padding: 3.5px 12px;
-        background: rgba(6, 20, 16, 0.90);
-        border: 1px solid rgba(255, 140, 50, 0.4);
+        padding: 0;
+        background: transparent;
+        border: none;
+        backdrop-filter: none;
+      }
+      #slide-feature-tag {
+        font-size: 9.5px;
+        letter-spacing: 1.2px;
+        white-space: nowrap;
       }
 
-      /* Desktop Main Stage: Push Crave Cards to outer flanks for massive center breathing room */
+      /* Expanded Widescreen Stage: Spacious Side Wings + Enlarged Mo Avatar */
       #kiosk-main-stage {
-        max-width: 1460px;
-        padding: 0 clamp(24px, 4.5vw, 72px);
-        gap: clamp(24px, 4vw, 64px);
-        justify-content: space-between;
-        align-items: center;
+        max-width: 1440px;
+        padding: 0 clamp(24px, 3.5vw, 48px);
         flex: 1;
         min-height: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
       }
 
+      /* Side Wings: Wider, crisp, elegant spacing */
       .action-wing {
-        width: clamp(250px, 18.5vw, 290px);
+        width: clamp(260px, 20vw, 310px);
         gap: 12px;
+        z-index: 15;
       }
       .action-wing-card {
-        padding: 12px 15px;
-        background: rgba(8, 24, 20, 0.88);
-        border: 1.5px solid rgba(255, 120, 40, 0.32);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.58);
+        padding: 11px 14px;
+        gap: 12px;
+        border-radius: 18px;
       }
-      .action-wing-card:hover {
-        background: rgba(14, 38, 32, 0.96);
-        border-color: #FFA044;
+      .chip-thumb-wrap {
+        width: 50px;
+        height: 50px;
+      }
+      .chip-title {
+        font-size: 13.5px;
+      }
+      .chip-sub {
+        font-size: 10.5px;
       }
 
-      /* SIZABLY INCREASE MO SIZE ON DESKTOP (~18-20% larger presence) */
+      /* Central Stage: Mo enlarged by ~15-20% and 100% free of obstructions */
+      #stage-area {
+        flex: 1;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        position: relative;
+      }
       #mo-stage-wrapper {
-        width: min(65vh, 540px);
-        height: min(65vh, 540px);
+        width: min(65vh, 520px);
+        height: min(65vh, 520px);
+        position: relative;
       }
 
-      /* Desktop Speech Bubble: Anchored cleanly above Mo without colliding into top elements */
+      /* Speech Bubble: Cleanly elevated above Mo's head with zero overlap */
       #mo-speech-bubble {
-        top: 2px;
-        padding: 8px 18px;
-        max-width: 480px;
-        background: rgba(8, 22, 18, 0.96);
-        border: 1.5px solid rgba(255, 120, 40, 0.5);
-        box-shadow: 0 12px 36px rgba(0,0,0,0.7), 0 0 24px rgba(255, 106, 0, 0.25);
+        top: -32px;
+        padding: 8px 20px;
+        max-width: 460px;
+        border-radius: 20px;
+        z-index: 30;
       }
       #speech-text {
-        font-size: 14px;
-        max-width: 420px;
+        font-size: 13.5px;
+        max-width: 390px;
       }
 
-      /* Desktop Bottom Voice Console: Compact luxury footprint */
+      /* Bottom Bar: Sleek, compact console leaving generous headroom for Mo */
       #bottom-kiosk-bar {
-        padding: 0 24px 10px;
+        padding: 0 24px 12px;
         gap: 4px;
+        max-width: 520px;
+      }
+      #talk-orb-container {
+        gap: 8px;
       }
       .orb-plate {
-        width: clamp(86px, 9.5vh, 102px);
-        height: clamp(86px, 9.5vh, 102px);
+        width: 80px;
+        height: 80px;
+      }
+      #talk-cta-btn svg {
+        width: 32px;
+        height: 32px;
       }
       #talk-cta-label-group {
-        margin-top: 3px;
         gap: 2px;
       }
       #talk-cta-label {
-        font-size: 13px;
-        letter-spacing: 1.8px;
+        font-size: 12.5px;
+        letter-spacing: 2px;
       }
       #talk-cta-sub {
         font-size: 9.5px;
-        letter-spacing: 0.9px;
       }
       #user-sub-caption {
-        font-size: 11.5px;
+        font-size: 11px;
         min-height: 14px;
+      }
+    }
+
+    @media (min-width: 901px) and (min-aspect-ratio: 1.05/1) and (max-height: 850px) {
+      #header {
+        padding-top: 10px;
+      }
+      #kiosk-hero-banner {
+        padding-top: 2px;
+      }
+      .hero-title {
+        font-size: 26px;
+      }
+      .hero-subtitle {
+        font-size: 11px;
+      }
+      #mo-stage-wrapper {
+        width: min(58vh, 460px);
+        height: min(58vh, 460px);
+      }
+      #mo-speech-bubble {
+        top: -24px;
+        padding: 6px 16px;
+      }
+      #speech-text {
+        font-size: 12.5px;
+      }
+      .orb-plate {
+        width: 74px;
+        height: 74px;
+      }
+      #bottom-kiosk-bar {
+        padding-bottom: 8px;
       }
     }
 
