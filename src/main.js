@@ -26,7 +26,7 @@ import { getCampusTimeContext } from './voice/timeEngine.js';
 // Helper for dynamic real-time caption
 function getDynamicIdleCaption() {
   const timeCtx = getCampusTimeContext();
-  return `Yo 'Cuse! (${timeCtx.formattedTime}) What's going on today? Tap below to talk with Mo! 🔥`;
+  return `Yo 'Cuse! (${timeCtx.formattedTime}) Welcome to Halalholic — best place to recharge! Tap below to talk with Mo! 🔥`;
 }
 
 // ── 1. Bootstrap ──────────────────────────────────────────────────────────────
@@ -51,13 +51,13 @@ let _isTalking = false;
 // ── 3. Natural variation helpers ──────────────────────────────────────────────
 // Mo never says the same thing twice — these pools are rotated and dynamically
 // stamped with the real-time clock to keep every response spontaneous, comedic, and hyper-aware.
-// RULE: Mo starts as a real friend asking what's going on and where they came from — NEVER opening with food pitches!
+// RULE: Mo starts as a real friend welcoming them to recharge and asking where they came from — NEVER opening with food pitches!
 const FALLBACK_GREETINGS = [
-  "You're Mo, the fast-talking Syracuse classmate who acts like he runs Halalholic. Greet your fellow student like a real friend, ask what's going on, and ask where they just came from right now (lecture, gym, or library) — zero food talk yet, 1 punchy sentence!",
-  "A classmate just walked up. Greet them like a true homie, ask what is happening with them today, and ask where they just walked in from — 1 punchy sentence!",
-  "Welcome your fellow student warmly like a campus buddy: ask how their day is going and where they just escaped from — 1 short punchy line!",
-  "A student just tapped to talk. Greet them like a day-one friend, ask what's good today and what they were just doing on campus — 1 punchy sentence!",
-  "Break the ice like an authentic companion: ask what's going on with their day and where they just came from right now — 1 punchy line!",
+  "You're Mo, the fast-talking Syracuse classmate who acts like he runs Halalholic. Welcome your fellow student to Halalholic as the ultimate place to recharge, ask what's going on, and ask where they just walked in from (dorms, basketball courts, studio, campus job, or gym) — zero food pitch yet, 1 punchy sentence!",
+  "A classmate just walked up. Welcome them warmly to the Halalholic recharge sanctuary, ask how their day is going, and ask where they just came from on campus — 1 punchy sentence!",
+  "Welcome your fellow student warmly to Halalholic to recharge: ask what is happening with them today and what they were just doing — 1 short punchy line!",
+  "A student just tapped to talk. Greet them like a day-one friend, welcome them to Halalholic to recharge their battery, and ask where they just walked in from — 1 punchy sentence!",
+  "Break the ice like an authentic companion: welcome them to Halalholic as the best spot in Syracuse to recharge, and ask what's going on with their day — 1 punchy line!",
 ];
 let _greetingIdx = Math.floor(Math.random() * 10);
 let _captionIdx  = 0;
@@ -77,10 +77,12 @@ function nextListeningCaption() {
   const contextualCaptions = [
     `What's going on today, habibi?`,
     `Where did you just walk in from?`,
+    `Welcome in — best place to recharge!`,
     `I'm listening, habibi — how was your day?`,
-    `Talk to me — lecture, gym, or library?`,
+    `Dorms, courts, studio, or class — talk to me!`,
     `What's good, habibi?`,
     `I'm all ears — tell me what's happening!`,
+    `Recharge zone is open — what's the news?`,
   ];
   const msg = contextualCaptions[_captionIdx % contextualCaptions.length];
   _captionIdx++;
@@ -246,6 +248,12 @@ async function startVoiceSession(initialPrompt = null) {
         Mo.setExpression('confident');
         Mo.setPose('thumbs_up');
         Mo.triggerLaugh();
+      } else if (lower.includes('recharge') || lower.includes('sanctuary') || lower.includes('welcome')) {
+        Mo.setExpression('confident');
+        Mo.setPose('front');
+      } else if (lower.includes('court') || lower.includes('playground') || lower.includes('basketball') || lower.includes('soccer') || lower.includes('turf')) {
+        Mo.setExpression('excited');
+        Mo.setPose('thumbs_up');
       } else if (lower.includes('bold move') || lower.includes('say less') || lower.includes('trust me')) {
         Mo.setExpression('wink');
         Mo.triggerLaugh();
@@ -266,6 +274,15 @@ async function startVoiceSession(initialPrompt = null) {
         } else if (lower.includes('gym') || lower.includes('workout') || lower.includes('lift') || lower.includes('muscle') || lower.includes('protein') || lower.includes('barnes') || lower.includes('biceps') || lower.includes('gains')) {
           Mo.setExpression('confident'); // Gym lifter swagger prep
           Mo.setPose('thumbs_up');
+        } else if (lower.includes('court') || lower.includes('playground') || lower.includes('basketball') || lower.includes('soccer') || lower.includes('turf') || lower.includes('hoops') || lower.includes('field')) {
+          Mo.setExpression('excited'); // Sports & playground energy prep
+          Mo.setPose('thumbs_up');
+        } else if (lower.includes('dorm') || lower.includes('hostel') || lower.includes('bed') || lower.includes('nap') || lower.includes('flint') || lower.includes('lawrinson') || lower.includes('euclid')) {
+          Mo.setExpression('happy'); // Dorm crawl-out empathy prep
+          Mo.setPose('front');
+        } else if (lower.includes('studio') || lower.includes('architecture') || lower.includes('art') || lower.includes('design') || lower.includes('job') || lower.includes('work') || lower.includes('shift')) {
+          Mo.setExpression('thinking'); // Studio/work shift focus prep
+          Mo.setPose('pointing');
         } else if (lower.includes('exam') || lower.includes('study') || lower.includes('lecture') || lower.includes('class') || lower.includes('iconic') || lower.includes('student')) {
           Mo.setExpression('confident'); // Smug prep
         } else if (lower.includes('squad') || lower.includes('friends') || lower.includes('group') || lower.includes('bucket') || lower.includes('party')) {
