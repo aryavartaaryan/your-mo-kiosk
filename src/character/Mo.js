@@ -15,9 +15,21 @@
 const ASSETS = {
   base:      '/assets/mo/hires/mo_natural_standing.png',
   eyelids:   '/assets/mo/hires/mo_eyelids.png',
-  mouthHalf: '/assets/mo/hires/mo_mouth_half.png',
-  mouthOpen: '/assets/mo/hires/mo_mouth_open.png',
+  visemes: {
+    aa:     '/assets/mo/hires/visemes/viseme_aa.png',
+    ee:     '/assets/mo/hires/visemes/viseme_ee.png',
+    oh:     '/assets/mo/hires/visemes/viseme_oh.png',
+    ou:     '/assets/mo/hires/visemes/viseme_ou.png',
+    dental: '/assets/mo/hires/visemes/viseme_dental.png',
+    fv:     '/assets/mo/hires/visemes/viseme_fv.png',
+    mbp:    '/assets/mo/hires/visemes/viseme_mbp.png',
+  },
+  // Backward compatibility fallbacks
+  mouthHalf: '/assets/mo/hires/visemes/viseme_dental.png',
+  mouthOpen: '/assets/mo/hires/visemes/viseme_aa.png',
 };
+
+const VISEME_KEYS = ['aa', 'ee', 'oh', 'ou', 'dental', 'fv', 'mbp'];
 
 export const Mo = (() => {
   let _container = null;
@@ -28,11 +40,13 @@ export const Mo = (() => {
   // Active states
   let _curState  = 'idle';
 
-  // Cadence & Audio Lip-Sync (smoothed)
-  let _rawMouthOpen    = 0;
-  let _smoothMouthOpen = 0;
+  // Cadence & Modern AI Avatar Viseme Lip-Sync
+  let _currentViseme   = 'rest';
+  let _rawAperture     = 0;
+  let _smoothAperture  = 0;
+  let _rawSpread       = 0;
+  let _smoothSpread    = 0;
   let _cadence         = 0;
-  let _visemeState     = 'closed';
 
   // Laugh spring physics
   let _lPos    = 0;
@@ -44,7 +58,8 @@ export const Mo = (() => {
   let _isBlinking    = false;
 
   // DOM Elements
-  let $baseImg, $eyelidsImg, $mouthHalf, $mouthOpen, $shadow;
+  let $baseImg, $eyelidsImg, $mouthGroup, $shadow;
+  const $visemeEls = {};
 
   function init(containerEl) {
     _container = containerEl;
@@ -83,39 +98,27 @@ export const Mo = (() => {
           filter: drop-shadow(0 16px 32px rgba(0,0,0,0.58));
         " />
 
-        <!-- Layer 2: 3D Talking Mouth Half Open Viseme (Consonants / Speech Transitions) -->
-        <img id="mo-mouth-half" src="${ASSETS.mouthHalf}" alt="Mo Speaking Half" style="
+        <!-- Layer 2: Anatomical Skeletal Jaw & 8-Viseme Mouth Articulation Group -->
+        <div id="mo-mouth-group" style="
           position: absolute;
           top: 0; left: 0;
           width: 100%; height: 100%;
-          object-fit: contain;
           pointer-events: none;
           user-select: none;
           z-index: 3;
-          opacity: 0;
-          transform-origin: 51.5% 31.8%;
-          transform: scaleY(0.9);
-          transition: none;
-          will-change: opacity, transform;
-        " />
+          transform-origin: 51.06% 32.08%;
+          will-change: transform;
+        ">
+          <img id="mo-viseme-aa" src="${ASSETS.visemes.aa}" alt="AA" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.06% 32.08%; pointer-events: none;" />
+          <img id="mo-viseme-ee" src="${ASSETS.visemes.ee}" alt="EE" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.06% 32.08%; pointer-events: none;" />
+          <img id="mo-viseme-oh" src="${ASSETS.visemes.oh}" alt="OH" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.06% 32.08%; pointer-events: none;" />
+          <img id="mo-viseme-ou" src="${ASSETS.visemes.ou}" alt="OU" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.06% 32.08%; pointer-events: none;" />
+          <img id="mo-viseme-dental" src="${ASSETS.visemes.dental}" alt="DENTAL" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.06% 32.08%; pointer-events: none;" />
+          <img id="mo-viseme-fv" src="${ASSETS.visemes.fv}" alt="FV" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.06% 32.08%; pointer-events: none;" />
+          <img id="mo-viseme-mbp" src="${ASSETS.visemes.mbp}" alt="MBP" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.06% 32.08%; pointer-events: none;" />
+        </div>
 
-        <!-- Layer 3: 3D Talking Mouth Full Open Viseme (Vowels / Loud Speech) -->
-        <img id="mo-mouth-open" src="${ASSETS.mouthOpen}" alt="Mo Speaking Open" style="
-          position: absolute;
-          top: 0; left: 0;
-          width: 100%; height: 100%;
-          object-fit: contain;
-          pointer-events: none;
-          user-select: none;
-          z-index: 4;
-          opacity: 0;
-          transform-origin: 51.5% 31.8%;
-          transform: scaleY(1.0);
-          transition: none;
-          will-change: opacity, transform;
-        " />
-
-        <!-- Layer 4: 3D Natural Eyelid Overlay for Organic Blinking -->
+        <!-- Layer 3: 3D Natural Eyelid Overlay for Organic Blinking -->
         <img id="mo-eyelids-overlay" src="${ASSETS.eyelids}" alt="Mo Eyelids" style="
           position: absolute;
           top: 0; left: 0;
@@ -134,13 +137,17 @@ export const Mo = (() => {
 
     _rootEl     = _container.querySelector('#mo-mascot-rig');
     $baseImg    = _container.querySelector('#mo-base-img');
-    $mouthHalf  = _container.querySelector('#mo-mouth-half');
-    $mouthOpen  = _container.querySelector('#mo-mouth-open');
+    $mouthGroup = _container.querySelector('#mo-mouth-group');
     $eyelidsImg = _container.querySelector('#mo-eyelids-overlay');
     $shadow     = _container.querySelector('#mo-floor-shadow');
 
-    // Preload all 4 layers
-    Object.values(ASSETS).forEach(src => {
+    VISEME_KEYS.forEach(key => {
+      $visemeEls[key] = _container.querySelector(`#mo-viseme-${key}`);
+    });
+
+    // Preload all viseme textures
+    const preloadUrls = [ASSETS.base, ASSETS.eyelids, ...Object.values(ASSETS.visemes)];
+    preloadUrls.forEach(src => {
       const img = new Image();
       img.src = src;
     });
@@ -231,56 +238,58 @@ export const Mo = (() => {
       $shadow.style.transform = `translateX(${shadowX.toFixed(2)}px) scale(${shadowScale.toFixed(3)})`;
     }
 
-    // 6. Zero-Latency Crisp Syllabic Lip-Sync Articulation (Hysteresis & Elastic Flex)
-    _smoothMouthOpen += (_rawMouthOpen - _smoothMouthOpen) * 0.85;
+    // 6. Modern AI Avatar Phonetic Lip-Sync & Skeletal Jaw Hinge Engine
+    _smoothAperture += (_rawAperture - _smoothAperture) * 0.90;
+    _smoothSpread   += (_rawSpread - _smoothSpread) * 0.35;
 
-    if ($mouthHalf && $mouthOpen) {
-      if (_curState === 'talking' && _smoothMouthOpen > 0.038) {
-        // Hysteresis debouncing to eliminate flutter at transition boundaries
-        if (_visemeState === 'open') {
-          // Open vowel stays open until acoustic energy drops below release threshold
-          if (_smoothMouthOpen < 0.22) {
-            _visemeState = _smoothMouthOpen >= 0.04 ? 'half' : 'closed';
-          }
-        } else if (_visemeState === 'half') {
-          // Half open transitions to full open when vocal energy spikes
-          if (_smoothMouthOpen >= 0.32) {
-            _visemeState = 'open';
-          } else if (_smoothMouthOpen < 0.036) {
-            _visemeState = 'closed';
-          }
-        } else {
-          // From resting closed smile, instantly articulate on speech onset
-          if (_smoothMouthOpen >= 0.30) {
-            _visemeState = 'open';
-          } else if (_smoothMouthOpen >= 0.048) {
-            _visemeState = 'half';
-          } else {
-            _visemeState = 'closed';
-          }
-        }
-      } else {
-        _visemeState = 'closed';
+    if ($mouthGroup) {
+      // Anatomical Jaw-Drop Transform (Spring-hinged jaw drop on loud open vowels)
+      let jawDropY = 0;
+      if (_curState === 'talking' && _currentViseme !== 'rest') {
+        if (_currentViseme === 'aa') jawDropY = _smoothAperture * 3.2;
+        else if (_currentViseme === 'oh') jawDropY = _smoothAperture * 2.2;
+        else if (_currentViseme === 'ee' || _currentViseme === 'dental') jawDropY = _smoothAperture * 1.0;
+        else jawDropY = _smoothAperture * 0.6;
+      }
+      $mouthGroup.style.transform = `translateY(${jawDropY.toFixed(2)}px)`;
+
+      // Parametric Elastic Scaling on Active Viseme
+      let sx = 1.0, sy = 1.0;
+      if (_currentViseme === 'aa') {
+        sy = 0.95 + _smoothAperture * 0.38;
+        sx = 1.00 + _smoothAperture * 0.08;
+      } else if (_currentViseme === 'ee') {
+        sy = 0.92 + _smoothAperture * 0.16;
+        sx = 1.04 + _smoothAperture * 0.16;
+      } else if (_currentViseme === 'oh') {
+        sy = 0.94 + _smoothAperture * 0.28;
+        sx = 0.96 - _smoothAperture * 0.08;
+      } else if (_currentViseme === 'ou') {
+        sy = 0.92 + _smoothAperture * 0.22;
+        sx = 0.88 - _smoothAperture * 0.12;
+      } else if (_currentViseme === 'dental') {
+        sy = 0.90 + _smoothAperture * 0.18;
+        sx = 1.00 + _smoothAperture * 0.08;
+      } else if (_currentViseme === 'fv') {
+        sy = 0.88 + _smoothAperture * 0.15;
+        sx = 0.98;
+      } else if (_currentViseme === 'mbp') {
+        sy = 0.85 + _smoothAperture * 0.10;
+        sx = 0.98;
       }
 
-      // Viseme Rendering: Solid opacity (ZERO ghosting / double-mouth artifact)
-      // + Organic dynamic scaling with audio volume
-      if (_visemeState === 'open') {
-        const excess = Math.max(0, _smoothMouthOpen - 0.24);
-        const scaleY = 0.94 + Math.min(0.38, excess * 0.52);
-        const scaleX = 0.98 + Math.min(0.12, excess * 0.18);
-        $mouthOpen.style.opacity = '1';
-        $mouthOpen.style.transform = `scale(${scaleX.toFixed(3)}, ${scaleY.toFixed(3)})`;
-        $mouthHalf.style.opacity = '0';
-      } else if (_visemeState === 'half') {
-        const scaleY = 0.86 + Math.min(0.34, _smoothMouthOpen * 0.60);
-        const scaleX = 0.98 + Math.min(0.08, _smoothMouthOpen * 0.16);
-        $mouthHalf.style.opacity = '1';
-        $mouthHalf.style.transform = `scale(${scaleX.toFixed(3)}, ${scaleY.toFixed(3)})`;
-        $mouthOpen.style.opacity = '0';
-      } else {
-        $mouthHalf.style.opacity = '0';
-        $mouthOpen.style.opacity = '0';
+      // Viseme Rendering: Solid Opacity (ZERO ghosting / double-mouth artifact)
+      for (let i = 0; i < VISEME_KEYS.length; i++) {
+        const key = VISEME_KEYS[i];
+        const el = $visemeEls[key];
+        if (!el) continue;
+
+        if (_curState === 'talking' && _currentViseme === key && _smoothAperture > 0.035) {
+          el.style.opacity = '1';
+          el.style.transform = `scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`;
+        } else {
+          el.style.opacity = '0';
+        }
       }
     }
 
@@ -347,18 +356,33 @@ export const Mo = (() => {
   function setState(state) {
     _curState = state;
     if (state !== 'talking') {
-      _rawMouthOpen    = 0;
-      _smoothMouthOpen = 0;
-      _visemeState     = 'closed';
+      _rawAperture    = 0;
+      _smoothAperture = 0;
+      _rawSpread      = 0;
+      _smoothSpread   = 0;
+      _currentViseme  = 'rest';
       _cadence         = 0;
       _smoothCadence   = 0;
-      if ($mouthHalf) $mouthHalf.style.opacity = '0';
-      if ($mouthOpen) $mouthOpen.style.opacity = '0';
+      if ($mouthGroup) $mouthGroup.style.transform = 'translateY(0px)';
+      for (let i = 0; i < VISEME_KEYS.length; i++) {
+        const el = $visemeEls[VISEME_KEYS[i]];
+        if (el) el.style.opacity = '0';
+      }
     }
   }
 
+  function setViseme({ viseme = 'rest', aperture = 0, spread = 0, cadence = 0 } = {}) {
+    _currentViseme = viseme;
+    _rawAperture   = Math.max(0, Math.min(1, aperture));
+    _rawSpread     = Math.max(-1, Math.min(1, spread));
+    _cadence       = Math.max(0, Math.min(1, cadence));
+  }
+
   function setMouthOpen(v) {
-    _rawMouthOpen = Math.max(0, Math.min(1, v));
+    _rawAperture = Math.max(0, Math.min(1, v));
+    if (_curState === 'talking' && _currentViseme === 'rest' && _rawAperture > 0.05) {
+      _currentViseme = _rawAperture > 0.35 ? 'aa' : 'dental';
+    }
   }
 
   function setSpeechCadence(v) {
@@ -394,6 +418,7 @@ export const Mo = (() => {
     setState,
     setPose,
     setExpression,
+    setViseme,
     setMouthOpen,
     setSpeechCadence,
     triggerLaugh,

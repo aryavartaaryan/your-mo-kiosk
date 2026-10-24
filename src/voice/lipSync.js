@@ -1,28 +1,31 @@
 // src/voice/lipSync.js
 // ─────────────────────────────────────────────────────────────────────────────
-// Billion-Dollar Quality Real-Time Mascot Lip-Sync Engine
-// Ultra-low latency RMS and high-frequency phoneme envelope follower.
-// Instantly drives Mo's mouth visemes with zero delay, clean syllabic
-// separation, and zero ghosting.
+// Billion-Dollar Quality Real-Time Modern AI Avatar Lip-Sync Engine
+// Dual-formant (F1 jaw aperture, F2 tongue/lip-rounding) and spectral flux
+// phoneme classifier. Maps 24kHz streaming audio to Preston Blair / Oculus
+// phonetic visemes (AA, EE, OH, OU, DENTAL, FV, MBP, REST) with zero lag.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { Mo } from '../character/Mo.js';
 
 // ── Tuning parameters ─────────────────────────────────────────────────────────
-const NOISE_GATE      = 0.0035; // RMS below this → silence (resting smile)
-const ATTACK_RATE     = 0.88;   // Instantaneous jaw onset (<16ms, zero perceptual lag)
+const NOISE_GATE      = 0.0035; // RMS threshold for silence (resting smile)
+const ATTACK_RATE     = 0.90;   // Instantaneous jaw onset (<16ms, zero perceptual delay)
 const RELEASE_RATE    = 0.24;   // Natural phonetic syllable closure (~65ms decay)
 const NORMALIZE_PEAK  = 0.082;  // Calibrated to Gemini Live 24kHz vocal stream
+const DWELL_FRAMES    = 2;      // Minimum frames (~33ms) to dwell on a viseme (prevents flutter)
 
 // ── State ─────────────────────────────────────────────────────────────────────
-let _rafId    = null;
-let _envelope = 0;   // smoothed speech envelope
-let _cadence  = 0;   // smoothed conversational pacing
+let _rafId          = null;
+let _envelope       = 0;        // smoothed speech power envelope
+let _cadence        = 0;        // smoothed conversational pacing
+let _activeViseme   = 'rest';   // current active phonetic viseme
+let _dwellCount     = 0;        // frames remaining for current viseme dwell
 
 // ── Public API ────────────────────────────────────────────────────────────────
 
 /**
- * Start the low-latency speech lip-sync loop.
+ * Start the real-time formant-tracking phoneme lip-sync loop.
  * @param {AnalyserNode} analyserNode – from audioOutput.getAnalyserNode()
  */
 export function startLipSync(analyserNode) {
@@ -35,7 +38,7 @@ export function startLipSync(analyserNode) {
   function frame() {
     analyserNode.getByteTimeDomainData(timeBuf);
 
-    // 1. Time-Domain Instantaneous RMS (Zero-latency physical loudness)
+    // 1. Instantaneous Time-Domain RMS (Zero-latency physical loudness)
     let sumSq = 0;
     for (let i = 0; i < timeBuf.length; i++) {
       const s = (timeBuf[i] - 128) / 128;
@@ -43,38 +46,103 @@ export function startLipSync(analyserNode) {
     }
     const rms = Math.sqrt(sumSq / timeBuf.length);
 
-    // 2. High-Frequency Consonant / Fricative Detector (e.g. s, t, sh, f, ch)
+    // 2. Frequency-Domain Formant & Spectral Feature Extraction
     analyserNode.getByteFrequencyData(freqBuf);
-    let consonantPeak = 0;
-    // Bins ~40 to 120 correspond to ~1.8 kHz – 5.6 kHz in 24kHz audio
-    const startBin = Math.min(40, binCount - 1);
-    const endBin   = Math.min(120, binCount - 1);
-    for (let b = startBin; b <= endBin; b += 2) {
-      if (freqBuf[b] > consonantPeak) consonantPeak = freqBuf[b];
-    }
-    const consonantEnergy = consonantPeak / 255;
 
-    // 3. Combined Acoustic Speech Signal
+    // Formant F1 Band (bins 5..18, ~235 Hz to ~845 Hz) -> Jaw Aperture
+    let f1Sum = 0;
+    for (let b = 5; b <= 18; b++) f1Sum += freqBuf[b];
+    const eF1 = f1Sum / 14;
+
+    // Formant F2 Band (bins 19..52, ~890 Hz to ~2440 Hz) -> Tongue Frontness vs Rounding
+    let f2Sum = 0;
+    for (let b = 19; b <= 52; b++) f2Sum += freqBuf[b];
+    const eF2 = f2Sum / 34;
+
+    // High-Frequency Sibilant / Fricative Band (bins 55..125, ~2575 Hz to ~5860 Hz)
+    let sibPeak = 0;
+    for (let b = 55; b <= 125; b += 2) {
+      if (freqBuf[b] > sibPeak) sibPeak = freqBuf[b];
+    }
+
+    // 3. Phonetic Target Classification
+    let candidateViseme = 'rest';
     let rawSignal = 0;
-    if (rms >= NOISE_GATE) {
-      // Vowels & vocal cord resonance: broadband RMS augmented by phonetic intensity
-      rawSignal = Math.max(rms, consonantEnergy * 0.045);
-    } else if (consonantEnergy > 0.16) {
-      // Unvoiced consonants where RMS is low but mouth must still articulate
-      rawSignal = consonantEnergy * 0.038;
+
+    if (rms < NOISE_GATE) {
+      candidateViseme = 'rest';
+      rawSignal = 0;
+    } else {
+      rawSignal = Math.max(rms, (sibPeak / 255) * 0.045);
+
+      if (sibPeak > 95 && sibPeak > eF1 * 1.15) {
+        // Sibilants: /s, z, t, d, th, ch/ (teeth clenched dental)
+        candidateViseme = 'dental';
+      } else if (sibPeak > 75 && eF1 < 60) {
+        // Labiodentals: /f, v/ (lower lip tuck)
+        candidateViseme = 'fv';
+      } else if (eF1 > 75) {
+        // High F1 -> Wide open vowel sounds
+        if (eF2 > 82) {
+          candidateViseme = 'ee'; // Front vowels (/i, e, æ/ - wide spread)
+        } else if (eF2 < 55) {
+          candidateViseme = 'oh'; // Rounded back vowels (/o, ɔ/ - open oval)
+        } else {
+          candidateViseme = 'aa'; // Central open vowels (/a, ɑ/ - deep jaw drop)
+        }
+      } else if (eF1 > 42) {
+        // Moderate F1 -> Mid/Close vowels
+        if (eF2 < 52) {
+          candidateViseme = 'ou'; // Tightly rounded /u, w, oo/ (pucker)
+        } else if (eF2 > 70) {
+          candidateViseme = 'ee'; // Spread smile
+        } else {
+          candidateViseme = 'oh'; // Round oval
+        }
+      } else if (rms > 0.0075) {
+        // Low F1 + vocal energy -> Bilabials (/m, b, p/ closed lips)
+        candidateViseme = 'mbp';
+      } else {
+        candidateViseme = 'dental';
+      }
     }
 
-    // 4. Asymmetric Zero-Lag Attack / Natural Syllabic Release Filter
+    // 4. Syllabic Dwell & Coarticulation Debouncing
+    if (candidateViseme === 'rest') {
+      _activeViseme = 'rest';
+      _dwellCount   = 0;
+    } else if (candidateViseme !== _activeViseme) {
+      if (_dwellCount <= 0 || candidateViseme === 'aa') {
+        _activeViseme = candidateViseme;
+        _dwellCount   = DWELL_FRAMES;
+      } else {
+        _dwellCount--;
+      }
+    } else {
+      _dwellCount = Math.max(0, _dwellCount - 1);
+    }
+
+    // 5. Envelope Follower (Zero-Lag Attack, Organic Phonetic Release)
     const target = Math.min(1.0, rawSignal / NORMALIZE_PEAK);
     const rate   = target > _envelope ? ATTACK_RATE : RELEASE_RATE;
     _envelope   += rate * (target - _envelope);
 
-    // 5. Conversational Cadence (smooth pacing signal for expressive head nod)
+    // 6. Conversational Cadence (smooth pacing signal for head nod & emphasis)
     _cadence += 0.22 * (_envelope - _cadence);
 
-    // 6. Drive Mo's 3D Rig with zero lag
-    const finalMouth = Math.max(0, Math.min(1, _envelope));
-    Mo.setMouthOpen(finalMouth);
+    // 7. Parametric Lateral Spread Calculation (-1 = pucker, +1 = wide spread)
+    const mouthSpread = candidateViseme === 'ee' ? 0.8 : (candidateViseme === 'ou' ? -0.7 : 0.0);
+
+    // 8. Drive Mo's 3D Living Mascot Rig
+    Mo.setViseme?.({
+      viseme:   _activeViseme,
+      aperture: Math.max(0, Math.min(1, _envelope)),
+      spread:   mouthSpread,
+      cadence:  _cadence,
+    });
+
+    // Backward-compatible calls
+    Mo.setMouthOpen(Math.max(0, Math.min(1, _envelope)));
     Mo.setSpeechCadence?.(_cadence);
 
     _rafId = requestAnimationFrame(frame);
@@ -91,8 +159,17 @@ export function stopLipSync() {
     cancelAnimationFrame(_rafId);
     _rafId = null;
   }
-  _envelope = 0;
-  _cadence  = 0;
+  _envelope     = 0;
+  _cadence      = 0;
+  _activeViseme = 'rest';
+  _dwellCount   = 0;
+
+  Mo.setViseme?.({
+    viseme:   'rest',
+    aperture: 0,
+    spread:   0,
+    cadence:  0,
+  });
   Mo.setMouthOpen(0);
   Mo.setSpeechCadence?.(0);
 }
