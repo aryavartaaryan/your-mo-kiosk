@@ -214,8 +214,8 @@ async function startVoiceSession(initialPrompt = null) {
         Mo.setExpression('angry'); // Mock-offended
         Mo.setPose('arms_crossed');
         Mo.triggerLaugh();
-      } else if (lower.includes('flavor than your dining hall') || lower.includes('personality trait') || lower.includes('respect') || lower.includes('iconic') || lower.includes('certified classic') || lower.includes('dr. mo')) {
-        Mo.setExpression('confident'); // Smug & proud
+      } else if (lower.includes('flavor than your dining hall') || lower.includes('personality trait') || lower.includes('respect') || lower.includes('iconic') || lower.includes('certified classic') || lower.includes('dr. mo') || lower.includes('came as a student')) {
+        Mo.setExpression('confident'); // Smug, proud & iconic
         Mo.setPose('arms_crossed');
       } else if (lower.includes('holicbucket') || lower.includes('squad') || lower.includes('group project') || lower.includes('sharing is caring') || lower.includes('extra holic') || lower.includes('feast')) {
         Mo.setExpression('excited'); // Excited
@@ -227,7 +227,7 @@ async function startVoiceSession(initialPrompt = null) {
       } else if (lower.includes('platter') || lower.includes('earned it') || lower.includes('straight a') || lower.includes('a-plus')) {
         Mo.setExpression('happy');
         Mo.setPose('thumbs_up');
-      } else if (lower.includes('haha') || lower.includes('heh') || lower.includes('lol') || lower.includes('joke')) {
+      } else if (lower.includes('haha') || lower.includes('heh') || lower.includes('lol') || lower.includes('joke') || lower.includes('breakup') || lower.includes('ex ') || lower.includes('ex-') || lower.includes('girlfriend') || lower.includes('dumped')) {
         Mo.setExpression('laughing');
         Mo.triggerLaugh();
       } else if (lower.includes('bold move') || lower.includes('say less') || lower.includes('trust me')) {
@@ -247,10 +247,12 @@ async function startVoiceSession(initialPrompt = null) {
         const lower = text.toLowerCase();
         if (lower.includes('eat you') || lower.includes('bite') || lower.includes('hair') || lower.includes('lettuce') || lower.includes('bread') || lower.includes('robot') || lower.includes('fake') || lower.includes('ai')) {
           Mo.setExpression('angry'); // Mock-offended prep
-        } else if (lower.includes('exam') || lower.includes('study') || lower.includes('lecture') || lower.includes('class')) {
+        } else if (lower.includes('exam') || lower.includes('study') || lower.includes('lecture') || lower.includes('class') || lower.includes('iconic') || lower.includes('student')) {
           Mo.setExpression('confident'); // Smug prep
         } else if (lower.includes('squad') || lower.includes('friends') || lower.includes('group') || lower.includes('bucket') || lower.includes('party')) {
           Mo.setExpression('excited'); // Excited prep
+        } else if (lower.includes('breakup') || lower.includes('ex') || lower.includes('dumped') || lower.includes('girlfriend') || lower.includes('boyfriend') || lower.includes('sad') || lower.includes('stress')) {
+          Mo.setExpression('thinking'); // Attentive confidant listening
         } else {
           Mo.setExpression('thinking'); // Thinking
         }
