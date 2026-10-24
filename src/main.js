@@ -43,23 +43,24 @@ let _isTalking = false;
 
 // ── 3. Natural variation helpers ──────────────────────────────────────────────
 // Mo never says the same thing twice — these pools are rotated to keep
-// every response feeling spontaneous and human, not scripted.
+// every response feeling spontaneous, comedic, and human, not scripted.
 const GREETING_PROMPTS = [
-  "A Syracuse student just stepped up! Give them your funniest, warmest 1-sentence Mo welcome — pure campus buddy energy!",
-  "Hit them with a quick, witty one-liner welcoming them like your favorite college friend — 1 punchy sentence!",
-  "Welcome your campus friend with a jokey, high-energy 1-sentence opener!",
-  "A hungry student is here! Drop a funny, warm 1-sentence greeting asking what they're craving!",
-  "Drop your funniest, punchiest Mo opener — 1 sentence, peak Syracuse legend energy!",
+  "Give a witty, funny 1-sentence welcome as Mo to a Syracuse student stepping up to the counter!",
+  "Someone just stepped up looking hungry. Drop a punchy, jokey Mo one-liner to break the ice!",
+  "New student at the kiosk! Hit them with a quick laugh and your signature Mo charm in 1 sentence!",
+  "A student just tapped to talk. Greet them like your favorite campus buddy with a short witty one-liner!",
+  "Welcome them in your legendary jokey Mo style — 1 short punchy line!",
+  "They're here and ready to feast. Give them a warm, hilarious Mo greeting in one sentence!",
 ];
 const LISTENING_CAPTIONS = [
-  "I'm all ears, habibi…",
-  "Talk to me — what's the move?",
-  "What are we eating today?",
-  "Say less, I'm listening.",
-  "Hit me with your crave!",
-  "Solo or squad? Tell me.",
-  "What's hitting today?",
-  "Go ahead, habibi!",
+  "What's hitting today, habibi?",
+  "Talk to me — what are you craving?",
+  "I'm listening, habibi. Make it legendary.",
+  "What's the play? Solo feast or squad?",
+  "Go ahead, habibi. No judgment here!",
+  "Lay it on me — craving platters or wings?",
+  "Speak your truth, habibi!",
+  "I'm all ears — let's fuel up!",
 ];
 let _greetingIdx = Math.floor(Math.random() * GREETING_PROMPTS.length);
 let _captionIdx  = 0;
@@ -208,26 +209,29 @@ async function startVoiceSession(initialPrompt = null) {
       app.setCaption(text);
       const lower = text.toLowerCase();
 
-      // Dynamic Mascot Reactions & 3D Poses
-      if (lower.includes('personality trait') || lower.includes('respect') || lower.includes('iconic')) {
+      // Dynamic Mascot Reactions & 3D Poses (Stand-Up Comic & Mascot Energy)
+      if (lower.includes('haha') || lower.includes('heh') || lower.includes('lol') || lower.includes('joke') || lower.includes('personal space') || lower.includes('forehead')) {
+        Mo.setExpression('laughing');
+        Mo.triggerLaugh();
+      } else if (lower.includes('personality trait') || lower.includes('respect') || lower.includes('iconic') || lower.includes('certified classic')) {
         Mo.setExpression('confident');
         Mo.setPose('arms_crossed');
       } else if (lower.includes('holicbucket') || lower.includes('squad') || lower.includes('group project') || lower.includes('sharing is caring')) {
         Mo.setExpression('excited');
         Mo.setPose('dancing');
         Mo.triggerLaugh();
-      } else if (lower.includes('gyro') || lower.includes('running late') || lower.includes('class') || lower.includes('rush') || lower.includes('sprint')) {
+      } else if (lower.includes('gyro') || lower.includes('running late') || lower.includes('class') || lower.includes('rush') || lower.includes('speed')) {
         Mo.setExpression('confident');
         Mo.setPose('pointing');
-      } else if (lower.includes('platter') || lower.includes('extra holic') || lower.includes('earned it') || lower.includes('study fuel')) {
+      } else if (lower.includes('platter') || lower.includes('extra holic') || lower.includes('earned it') || lower.includes('straight a') || lower.includes('a-plus')) {
         Mo.setExpression('happy');
         Mo.setPose('thumbs_up');
-      } else if (lower.includes('flavor than your dining hall') || lower.includes('lettuce') || lower.includes('pita bread') || lower.includes('dining hall')) {
+      } else if (lower.includes('flavor than your dining hall') || lower.includes('lettuce') || lower.includes('pita bread') || lower.includes('sauce on my hoodie')) {
         Mo.setExpression('laughing');
         Mo.setPose('dancing');
         Mo.triggerLaugh();
-      } else if (lower.includes('haha') || lower.includes('joke') || lower.includes('gpa') || lower.includes('bold move') || lower.includes('say less') || lower.includes('decision') || lower.includes('syllabus')) {
-        Mo.setExpression('laughing');
+      } else if (lower.includes('bold move') || lower.includes('say less') || lower.includes('dr. mo') || lower.includes('trust me')) {
+        Mo.setExpression('wink');
         Mo.triggerLaugh();
       }
     },
@@ -241,10 +245,7 @@ async function startVoiceSession(initialPrompt = null) {
         goState('thinking');
         Mo.setPose('sitting');
         const lower = text.toLowerCase();
-        if (lower.includes('joke') || lower.includes('funny') || lower.includes('laugh') || lower.includes('lol') || lower.includes('haha')) {
-          Mo.setExpression('excited');
-          Mo.triggerLaugh();
-        } else if (lower.includes('exam') || lower.includes('study') || lower.includes('lecture')) {
+        if (lower.includes('exam') || lower.includes('study') || lower.includes('lecture')) {
           Mo.setExpression('confident');
         } else if (lower.includes('squad') || lower.includes('friends') || lower.includes('group')) {
           Mo.setExpression('excited');
