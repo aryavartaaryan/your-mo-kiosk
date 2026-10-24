@@ -433,24 +433,23 @@ function injectStyles(colors) {
       50%       { transform: scale(0.4); opacity: 0.25; }
     }
 
-    /* ── Combined Mo Hero & Alumni Companion Capsule (Center Jewel in Header) ── */
+    /* ── Compact "Meet Mo" Identity Pill (Center Jewel in Header) ── */
     .mo-story-capsule {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 9px;
-      padding: 5px 16px;
+      gap: 7px;
+      padding: 6px 16px;
       border-radius: 99px;
       background: rgba(12, 28, 24, 0.92);
       border: 1.5px solid rgba(255, 140, 50, 0.45);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 16px rgba(255, 120, 30, 0.16);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), 0 0 16px rgba(255, 120, 30, 0.16);
       transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
       cursor: pointer;
       pointer-events: auto;
-      max-width: 580px;
-      flex-shrink: 1;
+      flex-shrink: 0;
     }
     .mo-story-capsule:hover {
       transform: translateY(-1.5px);
@@ -460,12 +459,6 @@ function injectStyles(colors) {
     }
     .mo-story-capsule:active {
       transform: translateY(0) scale(0.99);
-    }
-    .mo-hero-id {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      flex-shrink: 0;
     }
     .mo-live-dot {
       width: 7px;
@@ -477,7 +470,7 @@ function injectStyles(colors) {
     }
     .mo-hero-name {
       font-family: var(--font-display);
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 900;
       letter-spacing: -0.01em;
       color: #FFF;
@@ -489,45 +482,6 @@ function injectStyles(colors) {
       background: linear-gradient(135deg, #FFA044 0%, #FF6A00 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-    }
-    .capsule-sep {
-      color: rgba(255, 160, 68, 0.4);
-      font-size: 10px;
-      line-height: 1;
-    }
-    .story-tag-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 2px 7px;
-      border-radius: 99px;
-      background: linear-gradient(135deg, rgba(255, 140, 50, 0.28) 0%, rgba(255, 100, 20, 0.16) 100%);
-      border: 1px solid rgba(255, 150, 60, 0.48);
-      flex-shrink: 0;
-    }
-    .story-grad-icon {
-      font-size: 10.5px;
-      line-height: 1;
-    }
-    .story-tag-text {
-      font-family: var(--font-display);
-      font-size: 8.5px;
-      font-weight: 800;
-      letter-spacing: 0.8px;
-      color: #FFB366;
-      text-transform: uppercase;
-    }
-    .mo-story-text {
-      font-family: var(--font-ui);
-      font-size: 11.5px;
-      font-weight: 600;
-      color: #F7F3E9;
-      line-height: 1.25;
-      letter-spacing: 0.1px;
-      margin: 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     /* ── Main Stage Area: Side Wings + 3D Holographic Stage Pedestal ── */
@@ -783,10 +737,10 @@ function injectStyles(colors) {
     /* ── Dynamic Floating Speech Bubble Anchored to Mo ── */
     #mo-speech-bubble {
       position: absolute;
-      top: -76px;
+      top: -46px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 25;
+      z-index: 100;
       background: rgba(12, 28, 24, 0.94);
       border: 1.5px solid rgba(255, 120, 40, 0.45);
       border-radius: 20px;
@@ -1380,22 +1334,10 @@ function injectStyles(colors) {
       /* Combined Mo Hero & Alumni Capsule in Portrait View */
       .mo-story-capsule {
         order: 3;
-        width: 100%;
-        max-width: min(94vw, 600px);
+        width: auto;
         margin: 4px auto 0;
-        padding: clamp(6px, 1vh, 10px) 18px;
+        padding: 5px 16px;
         justify-content: center;
-      }
-      .story-tag-pill {
-        padding: 3px 9px;
-      }
-      .story-tag-text {
-        font-size: clamp(9px, 1vw, 11px);
-        letter-spacing: 1.2px;
-      }
-      .mo-story-text {
-        font-size: clamp(12px, 1.35vw, 14.5px);
-        line-height: 1.35;
       }
 
       /* Main Stage Area: Full Vertical Scale */
@@ -1672,21 +1614,11 @@ function injectStyles(colors) {
       }
       #mo-story-capsule {
         order: 2;
-        padding: 5px 18px;
-        max-width: 600px;
+        padding: 5px 16px;
         margin: 0;
       }
       .mo-hero-name {
         font-size: 13.5px;
-      }
-      .story-tag-pill {
-        padding: 2.5px 8px;
-      }
-      .story-tag-text {
-        font-size: 9px;
-      }
-      .mo-story-text {
-        font-size: 12px;
       }
       #header-nav {
         order: 3;
@@ -1814,7 +1746,7 @@ function injectStyles(colors) {
 
       /* Speech Bubble: Cleanly elevated above Mo's head with ZERO overlap and 100% visibility */
       #mo-speech-bubble {
-        top: -82px;
+        top: -46px;
         left: 50%;
         transform: translateX(-50%);
         padding: 9px 24px;
@@ -1823,7 +1755,7 @@ function injectStyles(colors) {
         background: rgba(8, 26, 20, 0.95);
         border: 1.5px solid rgba(255, 140, 50, 0.65);
         box-shadow: 0 14px 40px rgba(0, 0, 0, 0.8), 0 0 24px rgba(255, 120, 30, 0.3);
-        z-index: 40;
+        z-index: 100;
         pointer-events: auto;
       }
       #speech-text {
@@ -1878,28 +1810,24 @@ function injectStyles(colors) {
         padding: 5px 12px;
       }
       #mo-story-capsule {
-        padding: 3px 12px;
-        max-width: 500px;
+        padding: 4px 14px;
       }
       .mo-hero-name {
-        font-size: 12px;
-      }
-      .mo-story-text {
-        font-size: 10.5px;
+        font-size: 12.5px;
       }
       #mo-stage-wrapper {
         width: min(72vh, 560px);
         height: min(72vh, 560px);
-        margin-top: 18px;
+        margin-top: 14px;
       }
       #mo-container {
         transform: scale(1.15);
         transform-origin: 50% 90%;
       }
       #mo-speech-bubble {
-        top: -70px;
+        top: -42px;
         padding: 6px 18px;
-        z-index: 40;
+        z-index: 100;
       }
       #speech-text {
         font-size: 12.5px;
@@ -2443,20 +2371,10 @@ function buildHTML(config) {
           <span class="purity-mini-badge">✨ 100% PURE ZABIHA HALAL</span>
         </div>
 
-        <!-- Unified Mo Hero & Alumni Companion Capsule (Combines Meet Mo + Alumni Story) -->
-        <div id="mo-story-capsule" class="mo-story-capsule" role="button" tabindex="0" title="Tap to hear Mo's backstory">
-          <div class="mo-hero-id">
-            <span class="mo-live-dot"></span>
-            <span class="mo-hero-name">Meet <span class="mo-name-accent">Mo</span></span>
-          </div>
-          <span class="capsule-sep">•</span>
-          <div class="story-tag-pill">
-            <span class="story-grad-icon">🎓</span>
-            <span class="story-tag-text">ALUMNI</span>
-          </div>
-          <p class="mo-story-text">
-            “Former Syracuse student — now here for the love of food!”
-          </p>
+        <!-- Compact "Meet Mo" Identity Pill -->
+        <div id="mo-story-capsule" class="mo-story-capsule" role="button" tabindex="0" title="Tap to hear Mo speak">
+          <span class="mo-live-dot"></span>
+          <span class="mo-hero-name">Meet <span class="mo-name-accent">Mo</span></span>
         </div>
 
         <div id="header-nav">

@@ -15,21 +15,9 @@
 const ASSETS = {
   base:      '/assets/mo/hires/mo_natural_standing.png',
   eyelids:   '/assets/mo/hires/mo_eyelids.png',
-  visemes: {
-    aa:     '/assets/mo/hires/visemes/viseme_aa.png',
-    ee:     '/assets/mo/hires/visemes/viseme_ee.png',
-    oh:     '/assets/mo/hires/visemes/viseme_oh.png',
-    ou:     '/assets/mo/hires/visemes/viseme_ou.png',
-    dental: '/assets/mo/hires/visemes/viseme_dental.png',
-    fv:     '/assets/mo/hires/visemes/viseme_fv.png',
-    mbp:    '/assets/mo/hires/visemes/viseme_mbp.png',
-  },
-  // Backward compatibility fallbacks
-  mouthHalf: '/assets/mo/hires/visemes/viseme_dental.png',
-  mouthOpen: '/assets/mo/hires/visemes/viseme_aa.png',
+  mouthHalf: '/assets/mo/hires/mo_mouth_half.png',
+  mouthOpen: '/assets/mo/hires/mo_mouth_open.png',
 };
-
-const VISEME_KEYS = ['aa', 'ee', 'oh', 'ou', 'dental', 'fv', 'mbp'];
 
 export const Mo = (() => {
   let _container = null;
@@ -40,14 +28,9 @@ export const Mo = (() => {
   // Active states
   let _curState  = 'idle';
 
-  // Cadence & Modern AI Avatar Viseme Lip-Sync (Dual-Buffer Morphing)
-  let _primaryViseme   = 'rest';
-  let _secondaryViseme = 'rest';
-  let _morphAlpha      = 1.0;
-  let _rawAperture     = 0;
-  let _smoothAperture  = 0;
-  let _rawSpread       = 0;
-  let _smoothSpread    = 0;
+  // Cadence & Audio Lip-Sync (smoothed)
+  let _rawMouthOpen    = 0;
+  let _smoothMouthOpen = 0;
   let _cadence         = 0;
 
   // Laugh spring physics
@@ -60,8 +43,7 @@ export const Mo = (() => {
   let _isBlinking    = false;
 
   // DOM Elements
-  let $baseImg, $eyelidsImg, $mouthGroup, $shadow;
-  const $visemeEls = {};
+  let $baseImg, $eyelidsImg, $mouthHalf, $mouthOpen, $shadow;
 
   function init(containerEl) {
     _container = containerEl;
@@ -100,27 +82,37 @@ export const Mo = (() => {
           filter: drop-shadow(0 16px 32px rgba(0,0,0,0.58));
         " />
 
-        <!-- Layer 2: Anatomical Skeletal Jaw & 8-Viseme Mouth Articulation Group -->
-        <div id="mo-mouth-group" style="
+        <!-- Layer 2: 3D Talking Mouth Half Open Viseme (Consonants / Speech Transitions) -->
+        <img id="mo-mouth-half" src="${ASSETS.mouthHalf}" alt="Mo Speaking Half" style="
           position: absolute;
           top: 0; left: 0;
           width: 100%; height: 100%;
+          object-fit: contain;
           pointer-events: none;
           user-select: none;
           z-index: 3;
-          transform-origin: 51.0% 31.83%;
-          will-change: transform;
-        ">
-          <img id="mo-viseme-aa" src="${ASSETS.visemes.aa}" alt="AA" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.0% 31.83%; pointer-events: none;" />
-          <img id="mo-viseme-ee" src="${ASSETS.visemes.ee}" alt="EE" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.0% 31.83%; pointer-events: none;" />
-          <img id="mo-viseme-oh" src="${ASSETS.visemes.oh}" alt="OH" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.0% 31.83%; pointer-events: none;" />
-          <img id="mo-viseme-ou" src="${ASSETS.visemes.ou}" alt="OU" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.0% 31.83%; pointer-events: none;" />
-          <img id="mo-viseme-dental" src="${ASSETS.visemes.dental}" alt="DENTAL" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.0% 31.83%; pointer-events: none;" />
-          <img id="mo-viseme-fv" src="${ASSETS.visemes.fv}" alt="FV" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.0% 31.83%; pointer-events: none;" />
-          <img id="mo-viseme-mbp" src="${ASSETS.visemes.mbp}" alt="MBP" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none; will-change: opacity, transform; transform-origin: 51.0% 31.83%; pointer-events: none;" />
-        </div>
+          opacity: 0;
+          transform-origin: 51.5% 31.8%;
+          transform: scaleY(0.9);
+          transition: none;
+        " />
 
-        <!-- Layer 3: 3D Natural Eyelid Overlay for Organic Blinking -->
+        <!-- Layer 3: 3D Talking Mouth Full Open Viseme (Vowels / Loud Speech) -->
+        <img id="mo-mouth-open" src="${ASSETS.mouthOpen}" alt="Mo Speaking Open" style="
+          position: absolute;
+          top: 0; left: 0;
+          width: 100%; height: 100%;
+          object-fit: contain;
+          pointer-events: none;
+          user-select: none;
+          z-index: 4;
+          opacity: 0;
+          transform-origin: 51.5% 31.8%;
+          transform: scaleY(1.0);
+          transition: none;
+        " />
+
+        <!-- Layer 4: 3D Natural Eyelid Overlay for Organic Blinking -->
         <img id="mo-eyelids-overlay" src="${ASSETS.eyelids}" alt="Mo Eyelids" style="
           position: absolute;
           top: 0; left: 0;
@@ -139,17 +131,13 @@ export const Mo = (() => {
 
     _rootEl     = _container.querySelector('#mo-mascot-rig');
     $baseImg    = _container.querySelector('#mo-base-img');
-    $mouthGroup = _container.querySelector('#mo-mouth-group');
+    $mouthHalf  = _container.querySelector('#mo-mouth-half');
+    $mouthOpen  = _container.querySelector('#mo-mouth-open');
     $eyelidsImg = _container.querySelector('#mo-eyelids-overlay');
     $shadow     = _container.querySelector('#mo-floor-shadow');
 
-    VISEME_KEYS.forEach(key => {
-      $visemeEls[key] = _container.querySelector(`#mo-viseme-${key}`);
-    });
-
-    // Preload all viseme textures
-    const preloadUrls = [ASSETS.base, ASSETS.eyelids, ...Object.values(ASSETS.visemes)];
-    preloadUrls.forEach(src => {
+    // Preload all 4 layers
+    Object.values(ASSETS).forEach(src => {
       const img = new Image();
       img.src = src;
     });
@@ -169,47 +157,26 @@ export const Mo = (() => {
     }
   }
 
-  // Coarticulation syllable & motion smoothing
-  let _smoothCadence = 0;
+  // Coarticulation syllable smoothing
+  let _activeViseme = 'closed'; // 'closed' | 'half' | 'open'
+  let _lastSpeechTs = 0;
 
   // ── Procedural Animation Tick (60 FPS) ──────────────────────────────────────
   function _tick(ts) {
     _phase = ts * 0.001;
     if (!_rootEl) { _rafId = requestAnimationFrame(_tick); return; }
 
-    // 1. Organic Diaphragm Breathing (0.28 Hz - relaxed human resting breath)
-    const breatheY = 1 + Math.sin(_phase * 1.75) * 0.007;
-    const breatheX = 1 + Math.cos(_phase * 1.75) * 0.0035;
+    // 1. Organic Idle Breathing (0.32 Hz)
+    const breathe = 1 + Math.sin(_phase * 2.0) * 0.008;
 
-    // 2. Human Postural Weight Shift (5.4s cycle between left & right hip)
-    // Simulates an authentic Syracuse student casually shifting balance
-    const weightPhase = _phase * 1.16;
-    const hipShiftX   = Math.sin(weightPhase) * 3.2;   // 3.2px left/right shift
-    const torsoTilt   = -Math.sin(weightPhase) * 0.55; // natural counter-balance tilt (deg)
+    // 2. Subtle Natural Body Sway & Weight Shift
+    const swayX   = Math.sin(_phase * 1.1) * 2.0;
+    const swayRot = Math.sin(_phase * 1.1) * 0.45;
 
-    // Smooth cadence for expressive emphasis
-    _smoothCadence += (_cadence - _smoothCadence) * 0.25;
-
-    // 3. Conversational Speech Dynamics (Organic emphasis, ZERO vibration)
-    let talkLeanY = 0;
-    let talkPitch = 0;
-    let talkYaw   = 0;
-
-    if (_curState === 'talking') {
-      // Smooth conversational forward engagement (Mo leans slightly into the conversation)
-      talkLeanY = Math.sin(_phase * 2.8) * 1.2 - (_smoothCadence * 1.8);
-
-      // Natural human head emphasis nodding (0.75 Hz slow nod on stressed syllables)
-      talkPitch = Math.sin(_phase * 4.6) * (_smoothCadence * 1.4);
-
-      // Expressive conversational head tilt (subtle curious/friendly head cant)
-      talkYaw = Math.cos(_phase * 2.3) * (_smoothCadence * 1.1);
-    } else if (_curState === 'listening') {
-      // Attentive listening posture: slight forward perk with focused head cant
-      talkLeanY = -2.0;
-      talkPitch = -0.6;
-      talkYaw   = 0.8;
-    }
+    // 3. Natural conversational engagement tilt (zero vertical vibration)
+    const talkTilt = _curState === 'talking'
+      ? Math.sin(_phase * 2.2) * 0.35
+      : 0;
 
     // 4. Spring physics laugh bounce
     if (_lActive) {
@@ -222,105 +189,46 @@ export const Mo = (() => {
       }
     }
 
-    // 5. Apply Natural Composite Transform (Zero Up-Down Vibration)
-    const totalX   = hipShiftX;
-    const totalY   = talkLeanY + talkPitch + _lPos;
-    const totalRot = torsoTilt + talkYaw;
-
     _rootEl.style.transform = `
-      translate(${totalX.toFixed(2)}px, ${totalY.toFixed(2)}px)
-      rotate(${totalRot.toFixed(2)}deg)
-      scale(${breatheX.toFixed(4)}, ${breatheY.toFixed(4)})
+      translate(${swayX}px, ${_lPos}px)
+      rotate(${swayRot + talkTilt}deg)
+      scale(${breathe})
     `;
 
-    // Stage floor shadow follows body weight shift smoothly
-    if ($shadow) {
-      const shadowX = hipShiftX * 0.65;
-      const shadowScale = 1 - (talkLeanY * 0.015);
-      $shadow.style.transform = `translateX(${shadowX.toFixed(2)}px) scale(${shadowScale.toFixed(3)})`;
-    }
+    // 5. Dynamic Syllabic Lip-Sync Articulation (Smooth, natural tracking)
+    _smoothMouthOpen += (_rawMouthOpen - _smoothMouthOpen) * 0.38;
 
-    // 6. True Living Anatomical Mouth Opening & Closing Engine
-    _smoothAperture += (_rawAperture - _smoothAperture) * 0.88;
-    _smoothSpread   += (_rawSpread - _smoothSpread) * 0.35;
+    if ($mouthHalf && $mouthOpen) {
+      if (_curState === 'talking') {
+        const energy = _smoothMouthOpen;
 
-    // Advance morph alpha: 0.0 -> 1.0 in ~45ms
-    _morphAlpha = Math.min(1.0, _morphAlpha + 0.32);
-
-    if ($mouthGroup) {
-      const openAmount = Math.max(0, Math.min(1.0, _smoothAperture));
-      const isSpeaking = _curState === 'talking' && openAmount > 0.038;
-
-      // Vertical mouth opening: scales from 0.05 (closed slit) to 1.15 (wide open)
-      // This physically pulls the lips apart vertically with acoustic volume!
-      const verticalAperture = Math.max(0.04, openAmount * 1.15);
-
-      // Chin / Jaw drop: drops the skeletal jaw down by up to 3.5px with opening
-      const jawDropY = openAmount * 3.4;
-      $mouthGroup.style.transform = `translateY(${jawDropY.toFixed(2)}px)`;
-
-      // Dynamic opacity: rapid fade-in as lips part, complete fade to 0 when closed
-      const mouthOpacity = Math.min(1.0, (openAmount - 0.038) / 0.06);
-
-      const getScale = (visemeKey) => {
-        let sx = 1.0;
-        let sy = verticalAperture;
-
-        if (visemeKey === 'aa') {
-          sy = verticalAperture * 1.25;
-          sx = 1.0 - openAmount * 0.04;
-        } else if (visemeKey === 'oh') {
-          sy = verticalAperture * 1.12;
-          sx = 0.94 - openAmount * 0.08;
-        } else if (visemeKey === 'ou') {
-          sy = verticalAperture * 0.96;
-          sx = 0.86 - openAmount * 0.12;
-        } else if (visemeKey === 'ee') {
-          sy = verticalAperture * 0.85;
-          sx = 1.04 + openAmount * 0.16;
-        } else if (visemeKey === 'dental') {
-          sy = verticalAperture * 0.80;
-          sx = 1.01 + openAmount * 0.05;
-        } else if (visemeKey === 'fv') {
-          sy = verticalAperture * 0.75;
-          sx = 0.98;
-        } else if (visemeKey === 'mbp') {
-          sy = verticalAperture * 0.45;
-          sx = 0.98;
-        }
-        return { sx, sy };
-      };
-
-      for (let i = 0; i < VISEME_KEYS.length; i++) {
-        const key = VISEME_KEYS[i];
-        const el = $visemeEls[key];
-        if (!el) continue;
-
-        if (isSpeaking) {
-          if (key === _primaryViseme) {
-            const { sx, sy } = getScale(key);
-            const op = _morphAlpha * mouthOpacity;
-            el.style.zIndex = '3';
-            el.style.opacity = op.toFixed(3);
-            el.style.transform = `scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`;
-          } else if (key === _secondaryViseme && _morphAlpha < 1.0) {
-            const { sx, sy } = getScale(key);
-            const op = (1.0 - _morphAlpha) * mouthOpacity;
-            el.style.zIndex = '2';
-            el.style.opacity = op.toFixed(3);
-            el.style.transform = `scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`;
+        if (energy > 0.05) {
+          if (energy >= 0.28) {
+            // Full Open Viseme (Loud vowels: A, E, O, stressed syllables)
+            const sY = 0.90 + (energy - 0.28) * 0.35;
+            const sX = 1.0 + (energy - 0.28) * 0.06;
+            $mouthOpen.style.opacity = '1';
+            $mouthOpen.style.transform = `scale(${sX.toFixed(2)}, ${sY.toFixed(2)})`;
+            $mouthHalf.style.opacity = '0';
           } else {
-            el.style.zIndex = '1';
-            el.style.opacity = '0';
+            // Half Open Viseme (Consonants, transitions, soft syllables)
+            const sY = 0.88 + (energy - 0.05) * 0.42;
+            $mouthHalf.style.opacity = '1';
+            $mouthHalf.style.transform = `scaleY(${sY.toFixed(2)})`;
+            $mouthOpen.style.opacity = '0';
           }
         } else {
-          el.style.zIndex = '1';
-          el.style.opacity = '0';
+          // Closed Smile (Resting face on pauses, bilabials: M, B, P)
+          $mouthHalf.style.opacity = '0';
+          $mouthOpen.style.opacity = '0';
         }
+      } else {
+        $mouthHalf.style.opacity = '0';
+        $mouthOpen.style.opacity = '0';
       }
     }
 
-    // 7. Check Eye Blink Schedule
+    // 6. Check Eye Blink Schedule
     if (ts >= _nextBlinkTime && !_isBlinking) {
       _executeBlink();
     }
@@ -383,53 +291,15 @@ export const Mo = (() => {
   function setState(state) {
     _curState = state;
     if (state !== 'talking') {
-      _rawAperture     = 0;
-      _smoothAperture  = 0;
-      _rawSpread       = 0;
-      _smoothSpread    = 0;
-      _primaryViseme   = 'rest';
-      _secondaryViseme = 'rest';
-      _morphAlpha      = 1.0;
-      _cadence         = 0;
-      _smoothCadence   = 0;
-      if ($mouthGroup) $mouthGroup.style.transform = 'translateY(0px)';
-      for (let i = 0; i < VISEME_KEYS.length; i++) {
-        const el = $visemeEls[VISEME_KEYS[i]];
-        if (el) {
-          el.style.opacity = '0';
-          el.style.zIndex = '1';
-        }
-      }
-    }
-  }
-
-  function setViseme({ viseme = 'rest', aperture = 0, spread = 0, cadence = 0 } = {}) {
-    _rawAperture = Math.max(0, Math.min(1, aperture));
-    _rawSpread   = Math.max(-1, Math.min(1, spread));
-    _cadence     = Math.max(0, Math.min(1, cadence));
-
-    if (viseme !== _primaryViseme) {
-      if (_primaryViseme !== 'rest') {
-        _secondaryViseme = _primaryViseme;
-        _morphAlpha = 0.0;
-      } else {
-        _secondaryViseme = 'rest';
-        _morphAlpha = 0.0;
-      }
-      _primaryViseme = viseme;
+      _rawMouthOpen    = 0;
+      _smoothMouthOpen = 0;
+      if ($mouthHalf) $mouthHalf.style.opacity = '0';
+      if ($mouthOpen) $mouthOpen.style.opacity = '0';
     }
   }
 
   function setMouthOpen(v) {
-    _rawAperture = Math.max(0, Math.min(1, v));
-    if (_curState === 'talking' && _primaryViseme === 'rest' && _rawAperture > 0.04) {
-      setViseme({
-        viseme: _rawAperture > 0.35 ? 'aa' : 'dental',
-        aperture: _rawAperture,
-        spread: 0,
-        cadence: _cadence,
-      });
-    }
+    _rawMouthOpen = Math.max(0, Math.min(1, v));
   }
 
   function setSpeechCadence(v) {
@@ -465,7 +335,6 @@ export const Mo = (() => {
     setState,
     setPose,
     setExpression,
-    setViseme,
     setMouthOpen,
     setSpeechCadence,
     triggerLaugh,
