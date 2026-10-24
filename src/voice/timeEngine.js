@@ -51,9 +51,9 @@ export function getCampusTimeContext(date = new Date()) {
     recommendedPick = 'Lamb or Chicken Gyro Wrap ($7.99) — one-handed, zero-utensils, sprint-to-class aerodynamic.';
     budgetHack = '$7.99 Gyro Wrap is the most portable protein bomb under eight bucks.';
     greetingHooks = [
-      `It is ${formattedTime} on a ${dayOfWeek}. Greet the student asking what brutal morning class they're surviving today in Mo's punchy 1-sentence wit!`,
-      `It's ${formattedTime} morning. A student just walked up half-asleep. Give a warm, hilarious classmate greeting asking if an 8 AM lecture took their soul!`,
-      `Morning rush at ${formattedTime}! Welcome your fellow student asking what major has them awake this early and what hot wrap can rescue them in 1 sentence!`,
+      `It is ${formattedTime} on ${dayOfWeek}. A classmate just walked up half-asleep. Greet them like a funny friend asking what brutal morning class took their soul — NO food pitch, 1 punchy sentence!`,
+      `Morning at ${formattedTime}! Welcome the student like a campus buddy asking what major had them dragging their feet in the cold this early — 1 funny sentence, no food talk yet!`,
+      `It's ${formattedTime} morning. Hit them with a warm laugh asking if they're actually awake or sleepwalking from an 8 AM lecture — 1 punchy line, zero food pitch!`,
     ];
   } else if (timeDec >= 10.5 && timeDec < 14.5) {
     slot = TIME_SLOTS.LUNCH_RUSH;
@@ -62,9 +62,9 @@ export function getCampusTimeContext(date = new Date()) {
     recommendedPick = 'Chicken or Mix Combo Platter ($9.99) or Gyro Wrap ($7.99) ready in 2 minutes.';
     budgetHack = 'The $9.99 Platter Two-Meal Hack: eat half for lunch, save half in foil for late study session = $5 per meal.';
     greetingHooks = [
-      `It is ${formattedTime} lunch rush on a ${dayOfWeek}! Greet the student asking if they're sprinting between classes and what major they're in — 1 punchy sentence!`,
-      `Peak lunch at ${formattedTime}! Welcome your classmate with fast-talking Mo charm asking what class they just escaped from — 1 sentence!`,
-      `It's ${formattedTime}. Ask what they're studying on campus and whether they need a speed-run gyro or a loaded rice platter today!`,
+      `It is ${formattedTime} lunch time on ${dayOfWeek}. A student walked up. Greet them like a real friend asking what craziness is going on between classes today — 1 punchy sentence, no food talk yet!`,
+      `Midday rush at ${formattedTime}! Welcome your classmate with fast Mo charm asking what professor gave a surprise pop quiz or what's going on — 1 punchy sentence, zero food pitch!`,
+      `It's ${formattedTime}. Greet them like your favorite campus homie asking what major they're grinding in and how their day is going — 1 funny line, no food talk!`,
     ];
   } else if (timeDec >= 14.5 && timeDec < 17.5) {
     slot = TIME_SLOTS.AFTERNOON_SLUMP;
@@ -73,9 +73,9 @@ export function getCampusTimeContext(date = new Date()) {
     recommendedPick = 'Crispy Sauced Wings ($9.99) or Chicken Dose Platter ($9.99) with Extra White Sauce.';
     budgetHack = 'Upgrade any order with +$2.99 Combo for seasoned waffle fries and soda to power through the afternoon.';
     greetingHooks = [
-      `It is ${formattedTime} in the afternoon on ${dayOfWeek}. Greet the student asking what lecture or lab just melted their brain — 1 punchy sentence!`,
-      `Afternoon study slump at ${formattedTime}! Welcome your fellow student with Mo's witty charm asking what major they're grinding in!`,
-      `It's ${formattedTime}. Hit them with a quick laugh about surviving afternoon classes and ask what fuel they need to reboot their brain!`,
+      `It is ${formattedTime} in the afternoon on ${dayOfWeek}. Greet the student like a true friend asking what lecture or lab just melted their brain — 1 punchy line, zero food pitch!`,
+      `Afternoon slump at ${formattedTime}! Welcome your classmate asking what is going on with them and whether they just escaped from Bird Library — 1 funny sentence, no food talk!`,
+      `It's ${formattedTime}. Hit them with Mo's witty charm asking how their day was and what campus chaos went down today — 1 punchy line, zero food talk!`,
     ];
   } else if (timeDec >= 17.5 && timeDec < 21.5) {
     slot = TIME_SLOTS.DINNER_RUSH;
@@ -86,9 +86,9 @@ export function getCampusTimeContext(date = new Date()) {
     recommendedPick = 'The Legendary HolicBucket ($15.99) for the crew or Mix Combo Platter ($9.99) with double meat.';
     budgetHack = 'The $15.99 HolicBucket Squad Hack: feeds 3 students with 4 pitas and a mountain of fries & rice = $5.33 per person, crushing dining hall prices.';
     greetingHooks = [
-      `It is ${formattedTime} dinner time on ${dayOfWeek}! Greet the student warmly asking if they're rolling solo or with the squad — 1 punchy sentence!`,
-      `Dinner rush at ${formattedTime}! Welcome your fellow classmate asking what major they conquered today and what feast they earned!`,
-      `It's ${formattedTime} evening. Greet them like a true campus homie asking if they're ready for loaded rice platters or wings tonight!`,
+      `It is ${formattedTime} evening on ${dayOfWeek}. Greet the student like a close friend asking what's the move tonight and what's going on with the squad — 1 punchy sentence, no food pitch!`,
+      `Dinner time at ${formattedTime}! Welcome your classmate asking how they survived classes today and what's the latest story — 1 funny sentence, zero food talk!`,
+      `It's ${formattedTime}. Greet them like a campus homie asking what is going on and if they finally escaped the lecture halls — 1 punchy line, no food pitch!`,
     ];
   } else if (timeDec >= 21.5 || timeDec < 2) {
     slot = TIME_SLOTS.LATE_NIGHT_CRAMMING;
@@ -99,9 +99,9 @@ export function getCampusTimeContext(date = new Date()) {
     recommendedPick = 'Loaded Chicken Dose Platter ($9.99) with Extra Holic (+$3.00) or 12 Pieces Wings ($15.99).';
     budgetHack = 'Late-night calorie efficiency: The $9.99 loaded platter delivers basmati rice, protein, fries, and salad to power an all-nighter till sunrise.';
     greetingHooks = [
-      `It is ${formattedTime} late night on ${dayOfWeek}! Greet the student asking what crazy exam or project has them up, or if they have midnight cravings — 1 punchy sentence!`,
-      `Midnight munchies at ${formattedTime}! Welcome your classmate with fast Mo humor asking what major keeps them grinding this late!`,
-      `It's ${formattedTime} night. Hit them with Mo's late-night energy: ask what class took their sleep and offer comfort carbs!`,
+      `It is ${formattedTime} late night on ${dayOfWeek}. Greet the student with brotherly hype asking what crazy homework or project crisis has them up right now — 1 punchy sentence, no food pitch!`,
+      `Late night at ${formattedTime}! Welcome your classmate asking what is going on and what insane deadline they're battling tonight — 1 funny sentence, zero food talk!`,
+      `It's ${formattedTime} night. Hit them with Mo's witty energy asking what professor had the audacity to assign work due at midnight — 1 punchy line, zero food pitch!`,
     ];
   } else {
     // 02:00 - 05:00
@@ -111,8 +111,8 @@ export function getCampusTimeContext(date = new Date()) {
     recommendedPick = 'Warm Gyro Wrap ($7.99) or Chicken Platter ($9.99) with extra garlic white sauce.';
     budgetHack = 'Save your wallet from $25 third-party delivery apps: get real hot halal food on Marshall St for eight bucks.';
     greetingHooks = [
-      `It is ${formattedTime} in the dead of night on ${dayOfWeek}! Greet this true warrior student with Mo's brotherly humor asking what all-nighter they're surviving — 1 punchy sentence!`,
-      `Graveyard shift at ${formattedTime}! Welcome your fellow night owl asking what major or thesis is keeping them awake in 1 sentence!`,
+      `It is ${formattedTime} in the dead of night on ${dayOfWeek}. Salute this fellow student warrior asking what crazy all-nighter or thesis drama is going on — 1 punchy sentence, no food pitch!`,
+      `Graveyard shift at ${formattedTime}! Greet your fellow night owl asking what's going on and what crisis kept them awake till now — 1 funny line, zero food talk!`,
     ];
   }
 

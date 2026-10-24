@@ -26,7 +26,7 @@ import { getCampusTimeContext } from './voice/timeEngine.js';
 // Helper for dynamic real-time caption
 function getDynamicIdleCaption() {
   const timeCtx = getCampusTimeContext();
-  return `Yo 'Cuse! It's ${timeCtx.formattedTime} (${timeCtx.slotName}) — what's the major, what's the crave? Tap below to talk to Mo! 🔥`;
+  return `Yo 'Cuse! It's ${timeCtx.formattedTime} — what's going on, habibi? Tap below to talk to Mo! 🔥`;
 }
 
 // ── 1. Bootstrap ──────────────────────────────────────────────────────────────
@@ -51,13 +51,13 @@ let _isTalking = false;
 // ── 3. Natural variation helpers ──────────────────────────────────────────────
 // Mo never says the same thing twice — these pools are rotated and dynamically
 // stamped with the real-time clock to keep every response spontaneous, comedic, and hyper-aware.
+// GOLDEN RULE: Mo starts with friendship, humor, and asking what's going on — NEVER a cold food pitch!
 const FALLBACK_GREETINGS = [
-  "You're Mo, the fast-talking Syracuse classmate who acts like he runs Halalholic. Greet your fellow student with a punchy 1-sentence one-liner asking what major they're studying or what class they just survived!",
-  "A classmate just walked up to the counter looking exhausted from campus lectures. Ask what they're studying or guess their major with your signature warm Mo humor in 1 punchy sentence!",
-  "Give a fast, confident, hilarious classmate welcome as Mo asking what class took their soul today in 1 short punchy line!",
-  "A student just tapped to talk. Greet them like their favorite campus buddy, asking what they study on campus and what they crave in 1 punchy sentence!",
-  "Someone's here looking hungry after classes. Hit them with Mo's witty humor asking what exam or lecture they just escaped from — 1 punchy line!",
-  "Welcome your fellow Syracuse student in fast-talking, hilarious Mo style — ask what major they're grinding in and what food can rescue them today — 1 sentence!",
+  "You're Mo, the fast-talking Syracuse classmate. Greet your fellow student like a real campus friend asking what is going on with them today — NO food mentions yet, keep it 1 funny punchy sentence!",
+  "A classmate just walked up looking tired from lectures. Break the ice like their favorite campus homie asking what crazy class just wrecked them today — 1 punchy sentence, no food talk yet!",
+  "Welcome your fellow student with Mo's warm, witty humor asking what's the latest campus news or what is going on with them — 1 punchy sentence, zero food pitch!",
+  "Ask them what major they're in and how their semester is treating them in Mo's stand-up comedy style — 1 short punchy line, zero food pitch!",
+  "A student just tapped to talk. Greet them like a day-one friend asking what crazy campus drama or test they just survived — 1 punchy line, no food talk yet!",
 ];
 let _greetingIdx = Math.floor(Math.random() * 10);
 let _captionIdx  = 0;
@@ -73,16 +73,15 @@ function nextGreeting() {
 }
 
 function nextListeningCaption() {
-  const timeCtx = getCampusTimeContext();
   const contextualCaptions = [
-    `What's hitting at ${timeCtx.formattedTime}, habibi?`,
-    `Talk to me — what are you craving?`,
-    `I'm listening, habibi. Make it legendary.`,
-    `What's the play? Solo feast or squad?`,
-    `Go ahead, habibi. No judgment here!`,
-    `Lay it on me — craving platters or wings?`,
-    `Speak your truth, habibi!`,
-    `I'm all ears — let's fuel up!`,
+    "What's going on, habibi?",
+    "Talk to me — how was your day?",
+    "What's the latest campus drama?",
+    "I'm listening, habibi — tell me everything.",
+    "What class took your soul today?",
+    "What's the move today, habibi?",
+    "Speak your truth, habibi — no judgment here!",
+    "I'm all ears, bro!",
   ];
   const msg = contextualCaptions[_captionIdx % contextualCaptions.length];
   _captionIdx++;
