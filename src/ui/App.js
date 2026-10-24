@@ -235,37 +235,38 @@ function injectStyles(colors) {
       100% { transform: translateY(-105vh) scale(0.2); opacity: 0; }
     }
 
-    /* ── Header: Unified Kiosk Navigation Bar ── */
+    /* ── Header: Unified Executive Kiosk Navigation Bar ── */
     #header {
       position: relative; z-index: 30;
       width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 32px 0;
+      gap: 14px;
+      padding: 12px 28px 0;
       flex-shrink: 0;
     }
 
     #header-campus-pill {
       display: flex;
       align-items: center;
-      gap: 9px;
-      padding: 8px 18px;
+      gap: 8px;
+      padding: 6px 16px;
       border-radius: 99px;
       background: rgba(14, 32, 28, 0.90);
       border: 1.5px solid rgba(255, 120, 40, 0.38);
       backdrop-filter: blur(16px);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.4);
       flex-shrink: 0;
     }
     #header-campus-pill .flame-icon {
-      font-size: 15px;
-      filter: drop-shadow(0 0 8px #FF6A00);
+      font-size: 14px;
+      filter: drop-shadow(0 0 7px #FF6A00);
     }
     #header-campus-pill .campus-text {
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 900;
-      letter-spacing: 1.4px;
+      letter-spacing: 1.2px;
       color: #FFF;
       text-transform: uppercase;
       font-family: var(--font-display);
@@ -273,40 +274,22 @@ function injectStyles(colors) {
     #header-campus-pill .sub-tag {
       color: #FFA044;
       font-weight: 800;
-      font-size: 10px;
+      font-size: 9.5px;
     }
-
-    #header-center-emblem {
-      display: flex;
+    .purity-mini-badge {
+      display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 7px 18px;
+      gap: 4px;
+      padding: 2.5px 8px;
       border-radius: 99px;
-      background: rgba(14, 32, 28, 0.80);
-      border: 1px solid rgba(255, 140, 50, 0.32);
-      backdrop-filter: blur(16px);
-      box-shadow: 0 4px 18px rgba(0,0,0,0.3);
-      pointer-events: none;
-    }
-    #header-center-emblem .emblem-bolt {
-      color: #FFA044;
-      font-size: 12px;
-      filter: drop-shadow(0 0 6px rgba(255, 160, 68, 0.9));
-    }
-    #header-center-emblem .emblem-text {
+      background: rgba(114, 204, 56, 0.16);
+      border: 1px solid rgba(114, 204, 56, 0.48);
+      color: #9EE44D;
+      font-size: 8.5px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
       font-family: var(--font-display);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 2px;
-      color: #FFF;
-      text-transform: uppercase;
-    }
-    #header-center-emblem .emblem-tag {
-      font-size: 9px;
-      font-weight: 800;
-      letter-spacing: 1px;
-      color: #72CC38;
-      text-transform: uppercase;
     }
 
     #header-nav {
@@ -450,244 +433,166 @@ function injectStyles(colors) {
       50%       { transform: scale(0.4); opacity: 0.25; }
     }
 
-    /* ── "Meet Mo" Hero Identity Banner (Adapted from "Meet Alex") ── */
-    #kiosk-hero-banner {
-      position: relative;
-      z-index: 20;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: 6px 20px 0;
-      pointer-events: none;
-    }
-    .hero-live-badge {
+    /* ── Combined Mo Hero & Alumni Companion Capsule (Center Jewel in Header) ── */
+    .mo-story-capsule {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      padding: 4px 14px;
+      justify-content: center;
+      gap: 9px;
+      padding: 5px 16px;
       border-radius: 99px;
-      background: rgba(14, 34, 28, 0.92);
-      border: 1px solid rgba(255, 120, 40, 0.4);
-      margin-bottom: 6px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+      background: rgba(12, 28, 24, 0.92);
+      border: 1.5px solid rgba(255, 140, 50, 0.45);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 16px rgba(255, 120, 30, 0.16);
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      cursor: pointer;
+      pointer-events: auto;
+      max-width: 580px;
+      flex-shrink: 1;
     }
-    .hero-live-badge .badge-dot {
-      width: 6px; height: 6px;
+    .mo-story-capsule:hover {
+      transform: translateY(-1.5px);
+      background: rgba(16, 36, 30, 0.96);
+      border-color: rgba(255, 160, 60, 0.75);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6), 0 0 24px rgba(255, 120, 30, 0.32);
+    }
+    .mo-story-capsule:active {
+      transform: translateY(0) scale(0.99);
+    }
+    .mo-hero-id {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .mo-live-dot {
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: #72CC38;
       box-shadow: 0 0 8px #72CC38;
       animation: dot-pulse 1s infinite alternate;
     }
-    .hero-live-badge span {
-      font-size: 9.5px;
-      font-weight: 800;
-      letter-spacing: 1.8px;
-      color: #FFA044;
-      text-transform: uppercase;
+    .mo-hero-name {
       font-family: var(--font-display);
-    }
-
-    .hero-title {
-      font-family: var(--font-display);
-      font-size: clamp(34px, 4.4vw, 54px);
+      font-size: 13px;
       font-weight: 900;
       letter-spacing: -0.01em;
-      line-height: 1.05;
       color: #FFF;
-      text-shadow: 0 2px 20px rgba(0,0,0,0.8), 0 0 35px rgba(255, 106, 0, 0.35);
-      margin-bottom: 4px;
+      line-height: 1;
+      white-space: nowrap;
     }
-    .hero-title .title-accent {
+    .mo-name-accent {
       color: #FF7B1A;
-      background: linear-gradient(135deg, #FF9944 0%, #FF6A00 100%);
+      background: linear-gradient(135deg, #FFA044 0%, #FF6A00 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    /* ── Catchy Premium Alumni Story Capsule ("I am Mo...") ── */
-    .mo-story-capsule {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 6px 18px;
-      margin-top: 3px;
-      border-radius: 99px;
-      background: rgba(12, 28, 24, 0.90);
-      border: 1px solid rgba(255, 140, 50, 0.40);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45), 0 0 14px rgba(255, 120, 30, 0.14);
-      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-      cursor: pointer;
-      pointer-events: auto;
-      max-width: 94%;
-    }
-    .mo-story-capsule:hover {
-      transform: translateY(-1.5px);
-      background: rgba(16, 36, 30, 0.94);
-      border-color: rgba(255, 160, 60, 0.70);
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.55), 0 0 22px rgba(255, 120, 30, 0.28);
-    }
-    .mo-story-capsule:active {
-      transform: translateY(0) scale(0.99);
+    .capsule-sep {
+      color: rgba(255, 160, 68, 0.4);
+      font-size: 10px;
+      line-height: 1;
     }
     .story-tag-pill {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      padding: 3px 10px;
+      gap: 4px;
+      padding: 2px 7px;
       border-radius: 99px;
-      background: linear-gradient(135deg, rgba(255, 140, 50, 0.26) 0%, rgba(255, 100, 20, 0.16) 100%);
+      background: linear-gradient(135deg, rgba(255, 140, 50, 0.28) 0%, rgba(255, 100, 20, 0.16) 100%);
       border: 1px solid rgba(255, 150, 60, 0.48);
       flex-shrink: 0;
     }
     .story-grad-icon {
-      font-size: 11.5px;
+      font-size: 10.5px;
       line-height: 1;
     }
     .story-tag-text {
       font-family: var(--font-display);
-      font-size: 9.5px;
+      font-size: 8.5px;
       font-weight: 800;
-      letter-spacing: 1.2px;
+      letter-spacing: 0.8px;
       color: #FFB366;
       text-transform: uppercase;
     }
     .mo-story-text {
       font-family: var(--font-ui);
-      font-size: clamp(12px, 1.25vw, 14.5px);
+      font-size: 11.5px;
       font-weight: 600;
       color: #F7F3E9;
-      line-height: 1.35;
+      line-height: 1.25;
       letter-spacing: 0.1px;
       margin: 0;
-      text-shadow: 0 1px 8px rgba(0,0,0,0.6);
-    }
-    .mo-story-text .story-name-highlight {
-      color: #FF9944;
-      font-weight: 800;
-      font-family: var(--font-display);
-    }
-    .hero-subtitle {
-      display: none;
-    }
-
-    /* ── 100% Pure Halal Purity & Modern University Craft Guarantee Capsule ── */
-    #halal-purity-capsule {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 4px 14px;
-      margin-top: 4px;
-      border-radius: 99px;
-      background: rgba(10, 28, 20, 0.88);
-      border: 1px solid rgba(114, 204, 56, 0.45);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), 0 0 14px rgba(114, 204, 56, 0.18);
-      pointer-events: auto;
-      max-width: 95%;
-    }
-    .purity-badge-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 2.5px 9px;
-      border-radius: 99px;
-      background: linear-gradient(135deg, rgba(114, 204, 56, 0.35) 0%, rgba(70, 160, 40, 0.22) 100%);
-      border: 1px solid rgba(114, 204, 56, 0.65);
-      flex-shrink: 0;
-    }
-    .purity-badge-pill .purity-icon {
-      font-size: 11px;
-      line-height: 1;
-    }
-    .purity-badge-pill .purity-title {
-      font-family: var(--font-display);
-      font-size: 9.5px;
-      font-weight: 800;
-      letter-spacing: 1px;
-      color: #9EE44D;
-      text-transform: uppercase;
-      line-height: 1;
-    }
-    .purity-desc {
-      font-family: var(--font-ui);
-      font-size: clamp(10.5px, 1.1vw, 12px);
-      font-weight: 600;
-      color: rgba(247, 243, 233, 0.92);
-      letter-spacing: 0.2px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .purity-bullet {
-      color: #FF8C32;
-      font-weight: bold;
-      opacity: 0.85;
-    }
 
-    /* ── Syracuse Live Social Proof Ticker ── */
+    /* ── Sleek Compact Live Campus Ticker (Docked cleanly below header, off Mo's head) ── */
     #kiosk-live-ticker {
       display: flex;
       justify-content: center;
       width: 100%;
-      margin-top: 6px;
-      margin-bottom: 2px;
+      margin-top: 3px;
+      margin-bottom: 0;
       z-index: 20;
       pointer-events: none;
+      flex-shrink: 0;
     }
     .ticker-pill {
       display: inline-flex;
       align-items: center;
-      gap: 9px;
-      padding: 5px 18px;
+      gap: 8px;
+      padding: 3px 14px;
       border-radius: 99px;
       background: rgba(10, 26, 22, 0.88);
-      border: 1.5px solid rgba(255, 140, 50, 0.45);
+      border: 1px solid rgba(255, 140, 50, 0.38);
       backdrop-filter: blur(14px);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.55), 0 0 16px rgba(255, 106, 0, 0.22);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.45);
     }
     .ticker-fire {
-      font-size: 13px;
-      filter: drop-shadow(0 0 6px #FF6A00);
+      font-size: 11px;
+      filter: drop-shadow(0 0 5px #FF6A00);
       animation: flame-flicker 1.8s infinite alternate;
     }
     .ticker-text {
-      font-size: 11px;
+      font-size: 9.5px;
       font-weight: 800;
-      letter-spacing: 1.2px;
+      letter-spacing: 1px;
       text-transform: uppercase;
       color: #FFF;
       font-family: var(--font-display);
+      white-space: nowrap;
     }
     .ticker-text strong {
       color: #FFA044;
       font-weight: 900;
     }
     .ticker-sep {
-      color: rgba(255, 160, 68, 0.45);
-      font-size: 9px;
+      color: rgba(255, 160, 68, 0.4);
+      font-size: 8px;
     }
     .ticker-tag {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 800;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       color: #72CC38;
       text-transform: uppercase;
+      white-space: nowrap;
     }
     .ticker-perk {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 800;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       color: #FFB055;
       text-transform: uppercase;
-      background: rgba(255, 160, 68, 0.18);
-      border: 1px solid rgba(255, 160, 68, 0.5);
-      padding: 1.5px 7px;
+      background: rgba(255, 160, 68, 0.16);
+      border: 1px solid rgba(255, 160, 68, 0.45);
+      padding: 1.5px 6px;
       border-radius: 99px;
+      white-space: nowrap;
     }
 
     /* ── Main Stage Area: Side Wings + 3D Holographic Stage Pedestal ── */
@@ -1497,78 +1402,71 @@ function injectStyles(colors) {
 
       /* Unified Header scaled for standing eye-level readability */
       #header {
-        padding: clamp(16px, 2.2vh, 32px) clamp(20px, 3.8vw, 44px) 0;
+        padding: clamp(14px, 2vh, 26px) clamp(18px, 3.5vw, 36px) 0;
         width: 100%;
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
+        row-gap: 8px;
       }
       #header-campus-pill {
-        padding: 10px 22px;
-        gap: 10px;
+        order: 1;
+        padding: 8px 18px;
+        gap: 9px;
       }
       #header-campus-pill .flame-icon {
-        font-size: 18px;
+        font-size: 16px;
       }
       #header-campus-pill .campus-text {
-        font-size: clamp(12.5px, 1.4vw, 15px);
-        letter-spacing: 1.6px;
+        font-size: clamp(12px, 1.3vw, 14px);
+        letter-spacing: 1.4px;
       }
       #header-campus-pill .sub-tag {
-        font-size: clamp(10.5px, 1.2vw, 12.5px);
+        font-size: clamp(10px, 1.1vw, 12px);
       }
-
-      /* Streamline portrait header by hiding center emblem for clean dual-anchor luxury layout */
-      #header-center-emblem {
-        display: none !important;
+      #header-nav {
+        order: 2;
       }
 
       #feedback-kiosk-btn {
-        padding: 10px 20px;
+        padding: 8px 18px;
         font-size: clamp(11px, 1.2vw, 13px);
       }
       #menu-board-btn {
-        padding: 10px 24px;
-        font-size: clamp(12px, 1.3vw, 14px);
+        padding: 8px 20px;
+        font-size: clamp(11.5px, 1.2vw, 13.5px);
       }
       #status-pill {
-        padding: 10px 22px;
-        font-size: clamp(12px, 1.3vw, 13.5px);
+        padding: 8px 18px;
+        font-size: clamp(11.5px, 1.2vw, 13px);
       }
 
-      /* Hero Greeting Banner ("Meet Mo") */
-      #kiosk-hero-banner {
-        padding: clamp(8px, 1.4vh, 20px) 24px 0;
-        margin-top: 2px;
-      }
-      .hero-live-badge {
-        padding: 5px 16px;
-        margin-bottom: 8px;
-      }
-      .hero-live-badge span {
-        font-size: clamp(10px, 1.1vw, 12px);
-        letter-spacing: 2px;
-      }
-      .hero-title {
-        font-size: clamp(44px, 5.2vw, 68px);
-        letter-spacing: -0.01em;
-        margin-bottom: 6px;
-      }
+      /* Combined Mo Hero & Alumni Capsule in Portrait View */
       .mo-story-capsule {
-        padding: clamp(7px, 1vh, 12px) 24px;
-        gap: 12px;
-        margin-top: 4px;
+        order: 3;
+        width: 100%;
+        max-width: min(94vw, 600px);
+        margin: 4px auto 0;
+        padding: clamp(6px, 1vh, 10px) 18px;
+        justify-content: center;
       }
       .story-tag-pill {
-        padding: 4px 12px;
+        padding: 3px 9px;
       }
       .story-tag-text {
-        font-size: clamp(10px, 1.1vw, 12px);
-        letter-spacing: 1.4px;
+        font-size: clamp(9px, 1vw, 11px);
+        letter-spacing: 1.2px;
       }
       .mo-story-text {
-        font-size: clamp(14px, 1.6vw, 18px);
-        line-height: 1.4;
+        font-size: clamp(12px, 1.35vw, 14.5px);
+        line-height: 1.35;
+      }
+
+      #kiosk-live-ticker {
+        order: 4;
+        margin-top: 4px;
+        margin-bottom: 2px;
       }
 
       /* Main Stage Area: Full Vertical Scale */
@@ -1832,85 +1730,47 @@ function injectStyles(colors) {
         padding: 1.5px 6px;
       }
 
-      /* Streamlined Horizontal Command HUD: Side-by-side capsules eliminate vertical clutter */
-      #kiosk-hero-banner {
-        display: grid;
-        grid-template-columns: auto auto;
-        grid-template-rows: auto auto;
-        align-items: center;
-        justify-content: center;
-        gap: 3px 14px;
-        padding: 2px 24px 0;
-        margin: 0 auto;
-        max-width: 1240px;
-        z-index: 20;
-      }
-      .hero-live-badge {
-        grid-column: 1 / -1;
-        justify-self: center;
-        padding: 2px 10px;
+      /* Streamlined Unified Executive Header Bar */
+      #header {
+        padding: 10px 32px 0;
         margin-bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
       }
-      .hero-live-badge span {
-        font-size: 8px;
-        letter-spacing: 1.4px;
-      }
-      .hero-title {
-        grid-column: 1 / -1;
-        justify-self: center;
-        font-size: 22px;
-        margin-bottom: 2px;
-        line-height: 1;
+      #header-campus-pill {
+        order: 1;
       }
       #mo-story-capsule {
-        grid-column: 1 / 2;
-        justify-self: end;
-        padding: 4px 14px;
+        order: 2;
+        padding: 5px 18px;
+        max-width: 600px;
         margin: 0;
-        max-width: 480px;
-        height: 28px;
+      }
+      .mo-hero-name {
+        font-size: 13.5px;
       }
       .story-tag-pill {
-        padding: 2px 7px;
+        padding: 2.5px 8px;
       }
       .story-tag-text {
-        font-size: 8px;
-        letter-spacing: 0.8px;
+        font-size: 9px;
       }
       .mo-story-text {
-        font-size: 11px;
-        line-height: 1.25;
-        white-space: nowrap;
+        font-size: 12px;
       }
-      #halal-purity-capsule {
-        grid-column: 2 / 3;
-        justify-self: start;
-        padding: 4px 14px;
-        margin: 0;
-        max-width: 500px;
-        height: 28px;
-      }
-      .purity-badge-pill {
-        padding: 2px 7px;
-      }
-      .purity-title {
-        font-size: 8px;
-        letter-spacing: 0.8px;
-      }
-      .purity-desc {
-        font-size: 11px;
-        line-height: 1.25;
-        white-space: nowrap;
+      #header-nav {
+        order: 3;
       }
 
-      /* Sleek live ticker: elegant horizontal pill with ample breathing room */
+      /* Sleek live ticker: elegant horizontal pill docked directly under header, leaving Mo 100% free */
       #kiosk-live-ticker {
-        margin-top: 4px;
-        margin-bottom: 2px;
+        margin-top: 3px;
+        margin-bottom: 0;
         z-index: 10;
       }
       .ticker-pill {
-        padding: 3px 18px;
+        padding: 3px 16px;
         gap: 8px;
         background: rgba(8, 26, 20, 0.9);
       }
@@ -2047,7 +1907,7 @@ function injectStyles(colors) {
 
       /* Speech Bubble: Cleanly elevated above Mo's head with ZERO overlap and 100% visibility */
       #mo-speech-bubble {
-        top: -46px;
+        top: -24px;
         left: 50%;
         transform: translateX(-50%);
         padding: 9px 24px;
@@ -2105,44 +1965,46 @@ function injectStyles(colors) {
     @media (min-width: 901px) and (min-aspect-ratio: 1.05/1) and (max-height: 850px) {
       #header {
         padding-top: 8px;
+        gap: 10px;
       }
-      #kiosk-hero-banner {
-        padding-top: 1px;
-        gap: 2px 12px;
-      }
-      .hero-title {
-        font-size: 20px;
+      #header-campus-pill {
+        padding: 5px 12px;
       }
       #mo-story-capsule {
         padding: 3px 12px;
-        height: 26px;
+        max-width: 500px;
+      }
+      .mo-hero-name {
+        font-size: 12px;
       }
       .mo-story-text {
-        font-size: 10px;
+        font-size: 10.5px;
       }
-      #halal-purity-capsule {
-        padding: 3px 12px;
-        height: 26px;
+      #kiosk-live-ticker {
+        margin-top: 2px;
       }
-      .purity-desc {
-        font-size: 10px;
+      .ticker-pill {
+        padding: 2px 10px;
+      }
+      .ticker-text {
+        font-size: 8.5px;
       }
       #mo-stage-wrapper {
-        width: min(74vh, 580px);
-        height: min(74vh, 580px);
-        margin-top: 8px;
+        width: min(72vh, 560px);
+        height: min(72vh, 560px);
+        margin-top: 4px;
       }
       #mo-container {
-        transform: scale(1.22);
+        transform: scale(1.20);
         transform-origin: 50% 86%;
       }
       #mo-speech-bubble {
-        top: -42px;
-        padding: 7px 18px;
+        top: -18px;
+        padding: 6px 18px;
         z-index: 40;
       }
       #speech-text {
-        font-size: 13px;
+        font-size: 12.5px;
       }
       .orb-plate {
         width: 80px;
@@ -2674,18 +2536,29 @@ function buildHTML(config) {
       <div id="bg-spotlight"></div>
       ${embers}
 
-      <!-- Unified Kiosk Navigation Header -->
+      <!-- Unified Executive Navigation & Mo Hero Bar (Single Master Top Bar) -->
       <header id="header">
         <div id="header-campus-pill">
           <span class="flame-icon">🔥</span>
           <span class="campus-text">HALALHOLIC</span>
           <span class="sub-tag">• SYRACUSE CAMPUS</span>
+          <span class="purity-mini-badge">✨ 100% PURE ZABIHA HALAL</span>
         </div>
 
-        <div id="header-center-emblem">
-          <span class="emblem-bolt">✨</span>
-          <span class="emblem-text">100% PURE HALAL MEAT</span>
-          <span class="emblem-tag">• MODERN CAMPUS STREET FOOD</span>
+        <!-- Unified Mo Hero & Alumni Companion Capsule (Combines Meet Mo + Alumni Story) -->
+        <div id="mo-story-capsule" class="mo-story-capsule" role="button" tabindex="0" title="Tap to hear Mo's backstory">
+          <div class="mo-hero-id">
+            <span class="mo-live-dot"></span>
+            <span class="mo-hero-name">Meet <span class="mo-name-accent">Mo</span></span>
+          </div>
+          <span class="capsule-sep">•</span>
+          <div class="story-tag-pill">
+            <span class="story-grad-icon">🎓</span>
+            <span class="story-tag-text">ALUMNI</span>
+          </div>
+          <p class="mo-story-text">
+            “Former Syracuse student — now here for the love of food!”
+          </p>
         </div>
 
         <div id="header-nav">
@@ -2701,46 +2574,13 @@ function buildHTML(config) {
         </div>
       </header>
 
-      <!-- "Meet Mo" Hero Identity Banner (Adapted from "Meet Alex") -->
-      <div id="kiosk-hero-banner">
-        <div class="hero-live-badge">
-          <span class="badge-dot"></span>
-          <span>● LIVE AI HOST • SYRACUSE UNIVERSITY FLAGSHIP</span>
-        </div>
-        <h1 class="hero-title">Meet <span class="title-accent">Mo</span></h1>
-        
-        <!-- Catchy Premium Story Capsule (Ex-Student Backstory) -->
-        <div id="mo-story-capsule" class="mo-story-capsule" role="button" tabindex="0" title="Tap to hear Mo's backstory">
-          <div class="story-tag-pill">
-            <span class="story-grad-icon">🎓</span>
-            <span class="story-tag-text">ALUMNI STORY</span>
-          </div>
-          <p class="mo-story-text">
-            “I am <strong class="story-name-highlight">Mo</strong>. I was a student earlier — now I work here because of my love for food.”
-          </p>
-        </div>
-
-        <!-- 100% Pure Halal Purity & Modern University Craft Guarantee -->
-        <div id="halal-purity-capsule">
-          <div class="purity-badge-pill">
-            <span class="purity-icon">✨</span>
-            <span class="purity-title">100% PURE HALAL</span>
-          </div>
-          <span class="purity-desc">Zero Mystery Meat <span class="purity-bullet">•</span> Clean Fuel <span class="purity-bullet">•</span> Modern Campus Comfort Loved by Students</span>
-        </div>
-      </div>
-
-      <!-- Syracuse Live Social Proof Ticker -->
+      <!-- Sleek Campus Live Social Ticker (Docked cleanly below header, completely off Mo's head) -->
       <div id="kiosk-live-ticker">
         <div class="ticker-pill">
           <span class="ticker-fire">🔥</span>
           <span class="ticker-text"><strong>1,840+ PLATTERS</strong> ORDERED TODAY ON 'CUSE CAMPUS</span>
           <span class="ticker-sep">•</span>
           <span class="ticker-tag">⚡ 2-MIN SPEED RUSH</span>
-          <span class="ticker-sep">•</span>
-          <span class="ticker-tag">✨ 100% PURE ZABIHA HALAL</span>
-          <span class="ticker-sep">•</span>
-          <span class="ticker-tag">🍗 ZERO MYSTERY MEAT • CLEAN GAINS</span>
           <span class="ticker-sep">•</span>
           <span class="ticker-perk">⭐ FREE SAUCE W/ STUDENT ID</span>
         </div>
