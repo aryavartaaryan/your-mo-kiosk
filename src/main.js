@@ -84,11 +84,15 @@ function nextListeningCaption() {
     `Where did you just walk in from?`,
     `What should I call you, if you're cool sharing?`,
     `Lecture, gym, dorm, or somewhere else?`,
+    `Be 100% real — how was the food today?`,
     `I'm listening, habibi — how was your day?`,
+    `Any complaints or feedback for Mo?`,
     `Courts, studio, or some other place? Talk to me!`,
+    `You're always family here — come back soon!`,
     `What name do you go by, habibi?`,
     `What's good, habibi?`,
     `I'm all ears — tell me what's happening!`,
+    `Promise you'll come back through, habibi!`,
     `Recharge zone is open — what's the news?`,
   ];
   const msg = contextualCaptions[_captionIdx % contextualCaptions.length];

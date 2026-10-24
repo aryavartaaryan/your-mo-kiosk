@@ -1934,6 +1934,69 @@ function injectStyles(colors) {
       font-size: 13.5px;
     }
 
+    /* ── Mo's Student Feedback & Revisit Card ── */
+    .menu-feedback-card {
+      position: relative;
+      margin-top: 10px;
+      margin-bottom: 6px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(14, 38, 32, 0.95) 0%, rgba(20, 48, 40, 0.90) 100%);
+      border: 1.5px solid rgba(255, 140, 50, 0.45);
+      padding: 14px 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 20px rgba(255, 120, 30, 0.12);
+      overflow: hidden;
+    }
+    .feedback-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .feedback-icon {
+      font-size: 20px;
+      line-height: 1;
+    }
+    .feedback-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .feedback-title {
+      font-family: var(--font-display);
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #FFB366;
+      letter-spacing: 0.3px;
+    }
+    .feedback-sub {
+      font-size: 10.5px;
+      color: rgba(247, 243, 233, 0.78);
+      line-height: 1.3;
+    }
+    .feedback-action-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 14px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(255, 140, 50, 0.28) 0%, rgba(255, 100, 20, 0.18) 100%);
+      border: 1px solid rgba(255, 150, 60, 0.50);
+      color: #FFF;
+      font-family: var(--font-display);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .feedback-action-btn:hover {
+      background: linear-gradient(135deg, rgba(255, 150, 60, 0.45) 0%, rgba(255, 110, 30, 0.30) 100%);
+      border-color: #FF7B1A;
+      box-shadow: 0 0 16px rgba(255, 120, 30, 0.3);
+      transform: translateY(-1px);
+    }
+
     /* ── Studio Debug Panel (Press 'D') ── */
     #debug-panel {
       position: fixed; top: 16px; right: 16px;
@@ -2702,6 +2765,20 @@ function buildHTML(config) {
             <span class="item-price-tag">$9.99</span>
           </div>
         </div>
+      </div>
+
+      <!-- Mo's Student Feedback & Revisit Card -->
+      <div class="menu-feedback-card">
+        <div class="feedback-card-header">
+          <span class="feedback-icon">💬</span>
+          <div class="feedback-title-group">
+            <span class="feedback-title">Tell Mo How Your Food Was</span>
+            <span class="feedback-sub">Good vibes, real complaints, or honest suggestions — Mo cares!</span>
+          </div>
+        </div>
+        <button class="feedback-action-btn menu-item-row" data-prompt="Mo, here is my honest feedback and experience with the food and restaurant today:">
+          <span>🎤 Tell Mo Your Feedback & Complaints</span>
+        </button>
       </div>
     </div>
 
