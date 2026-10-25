@@ -9,7 +9,7 @@ import { Mo }  from './character/Mo.js';
 import { App } from './ui/App.js';
 import { CONFIG } from './config.js';
 import { GeminiVoiceSession } from './voice/gemini.js';
-import { startMic, stopMic }  from './voice/audioInput.js';
+import { startMic, stopMic, setMicMuted } from './voice/audioInput.js';
 import {
   initOutputAudio,
   resumeOutputAudio,
@@ -49,9 +49,10 @@ initOutputAudio();
 
 // ── 2. Session state ──────────────────────────────────────────────────────────
 /** @type {GeminiVoiceSession|null} */
-let _session   = null;
-let _isActive  = false;
-let _isTalking = false;
+let _session          = null;
+let _isActive         = false;
+let _isTalking        = false;
+let _echoGuardActive  = false; // Blocks mic during post-playback room echo
 
 // ── 3. Natural variation helpers ──────────────────────────────────────────────
 // Mo never says the same thing twice — these pools are rotated and dynamically
@@ -192,7 +193,14 @@ async function startVoiceSession(initialPrompt = null) {
     onOpen: async () => {
       try {
         await startMic((chunk) => {
-          if (_isActive) _session?.sendAudioChunk(chunk);
+          // ANTI-BARGE-IN NOISE SHIELD:
+          // If Mo is actively speaking or the post-speech echo guard is active,
+          // do NOT stream mic audio to Gemini. This prevents cafeteria sounds (clattering plates,
+          // laughing students, music) from accidentally interrupting Mo mid-sentence!
+          const antiBargeIn = CONFIG.noiseManagement?.antiBargeIn ?? true;
+          if (_isActive && (!antiBargeIn || (!_isTalking && !_echoGuardActive))) {
+            _session?.sendAudioChunk(chunk);
+          }
         });
 
         resetIdleTimer();
@@ -247,6 +255,7 @@ async function startVoiceSession(initialPrompt = null) {
       enqueueAudioChunk(int16);
       if (!_isTalking) {
         _isTalking = true;
+        setMicMuted(true); // Mute mic worklet while Mo is vocalizing
         goState('talking');
         Mo.setPose('talking');
         startLipSync(getAnalyserNode());
@@ -343,6 +352,14 @@ async function startVoiceSession(initialPrompt = null) {
         goState('listening');
         app.setCaption(listeningCaption);
         resetIdleTimer();
+
+        // Acoustic Echo Guard: Mute mic for 280ms after Mo finishes speaking so room reverberations
+        // and speaker echo do not bounce into the mic and falsely re-trigger Mo!
+        _echoGuardActive = true;
+        setTimeout(() => {
+          _echoGuardActive = false;
+          setMicMuted(false);
+        }, 280);
       });
 
       // Fallback timer if audio has already finished or queue was empty
@@ -354,6 +371,8 @@ async function startVoiceSession(initialPrompt = null) {
           goState('listening');
           app.setCaption(listeningCaption);
           resetIdleTimer();
+          _echoGuardActive = false;
+          setMicMuted(false);
         }, waitMs);
       }
     },
@@ -408,8 +427,10 @@ async function startVoiceSession(initialPrompt = null) {
 
 // ── 6. Stop session ───────────────────────────────────────────────────────────
 async function stopVoiceSession() {
-  _isActive  = false;
-  _isTalking = false;
+  _isActive         = false;
+  _isTalking        = false;
+  _echoGuardActive  = false;
+  setMicMuted(false);
   clearIdleTimers();
 
   stopMic();

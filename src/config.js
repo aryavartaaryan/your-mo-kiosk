@@ -41,20 +41,26 @@ export const CONFIG = {
   VOICE_NAME: 'Puck',
 
   // ── VAD (Voice Activity Detection) ───────────────────────────────────────
+  // TUNED FOR NOISY CAMPUS KIOSK:
+  // 'START_SENSITIVITY_LOW' requires high-confidence, direct close-mic energy
+  // and completely ignores distant dining hall voices and background murmurs.
   VAD: {
-    startOfSpeechSensitivity: 'START_SENSITIVITY_HIGH',
+    startOfSpeechSensitivity: 'START_SENSITIVITY_LOW',
     endOfSpeechSensitivity:   'END_SENSITIVITY_HIGH',
-    prefixPaddingMs:           200,
-    silenceDurationMs:         500,
+    prefixPaddingMs:           250,
+    silenceDurationMs:         600,
   },
 
   // ── Acoustic Noise Management (Kiosk & Campus Environment) ───────────────
   noiseManagement: {
-    enabled:           true,
-    lowCutFilterHz:    85,     // High-pass cutoff removes mechanical rumble, table thumps & 60Hz hum
-    gateOpenThreshold: 0.012,  // Instant-attack speech threshold (captures all soft consonants)
-    gateCloseThreshold: 0.007, // Hysteresis close threshold (prevents gate jitter)
-    gateHoldMs:        400,    // Hangover hold time in ms so pauses between words are never clipped
+    enabled:             true,
+    lowCutFilterHz:      85,     // High-pass cutoff removes mechanical rumble, table thumps & 60Hz hum
+    gateOpenThreshold:   0.016,  // Near-field speech threshold (requires direct close-range vocal energy)
+    gateCloseThreshold:  0.009,  // Hysteresis close threshold (prevents gate jitter)
+    gateHoldMs:          400,    // Hangover hold time in ms so pauses between words are never clipped
+    adaptiveNoiseFloor:  true,   // Continuously tracks ambient room noise and shifts gate dynamically
+    snrMultiplier:       2.8,    // User voice must be ~9dB (2.8x) higher than room background to open
+    antiBargeIn:         true,   // Suppresses mic streaming while Mo speaks so background sound cannot interrupt
   },
 
   // ── Add-on pricing ───────────────────────────────────────────────────────

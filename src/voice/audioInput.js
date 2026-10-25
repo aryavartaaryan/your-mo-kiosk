@@ -22,21 +22,31 @@ class PcmProcessor extends AudioWorkletProcessor {
     this._chunkFrames = 320;
     this._buf = [];
 
-    // Noise gate configuration
+    // Acoustic noise gate & dynamic ambient tracker
     this._enabled        = true;
-    this._openThreshold  = 0.012; // Instant speech detection threshold
-    this._closeThreshold = 0.007; // Hysteresis close threshold
+    this._openThreshold  = 0.016; // Static minimum open threshold
+    this._closeThreshold = 0.009; // Static minimum close threshold
     this._holdFrames     = 20;    // ~400ms hangover (20 chunks * 20ms) for natural pauses
     this._holdCount      = 0;
     this._isOpen         = false;
     this._gain           = 0.0;   // Smoothed multiplier (0.0 to 1.0)
+    this._isMuted        = false; // External mute state
+
+    // Adaptive noise floor tracking (dynamically calibrates to loud cafeterias)
+    this._adaptive       = true;
+    this._noiseFloor     = 0.005; // Running baseline ambient energy
+    this._snrMultiplier  = 2.8;   // Voice must be ~9dB (2.8x) above ambient room floor
 
     this.port.onmessage = (e) => {
       if (e.data?.type === 'config') {
-        if (typeof e.data.enabled === 'boolean') this._enabled = e.data.enabled;
-        if (e.data.openThreshold)  this._openThreshold  = e.data.openThreshold;
-        if (e.data.closeThreshold) this._closeThreshold = e.data.closeThreshold;
-        if (e.data.holdFrames)     this._holdFrames     = e.data.holdFrames;
+        if (typeof e.data.enabled === 'boolean')  this._enabled        = e.data.enabled;
+        if (typeof e.data.adaptive === 'boolean') this._adaptive       = e.data.adaptive;
+        if (e.data.openThreshold)                 this._openThreshold  = e.data.openThreshold;
+        if (e.data.closeThreshold)                this._closeThreshold = e.data.closeThreshold;
+        if (e.data.holdFrames)                    this._holdFrames     = e.data.holdFrames;
+        if (e.data.snrMultiplier)                 this._snrMultiplier  = e.data.snrMultiplier;
+      } else if (e.data?.type === 'mute') {
+        this._isMuted = !!e.data.value;
       }
     };
   }
@@ -53,24 +63,40 @@ class PcmProcessor extends AudioWorkletProcessor {
     }
     const rms = Math.sqrt(sumSq / channel.length);
 
-    // 2. Hysteresis & Hangover Hold logic
-    if (rms >= this._openThreshold) {
+    // 2. Adaptive Room Noise Floor Tracker
+    // When the speech gate is closed and mic is unmuted, continuously calibrate to background room noise
+    if (!this._isOpen && !this._isMuted) {
+      // Gentle leaky filter (adapts to changing lunch rush noise levels over ~2 seconds)
+      this._noiseFloor += (rms - this._noiseFloor) * 0.015;
+      if (this._noiseFloor < 0.001) this._noiseFloor = 0.001;
+    }
+
+    // Dynamic thresholds: requires the voice to stand out above room baseline
+    const effectiveOpen = this._adaptive
+      ? Math.max(this._openThreshold, this._noiseFloor * this._snrMultiplier)
+      : this._openThreshold;
+    const effectiveClose = this._adaptive
+      ? Math.max(this._closeThreshold, this._noiseFloor * 1.5)
+      : this._closeThreshold;
+
+    // 3. Hysteresis & Hangover Hold logic
+    if (!this._isMuted && rms >= effectiveOpen) {
       this._isOpen = true;
-      this._holdCount = this._holdFrames; // reset hangover timer
-    } else if (this._holdCount > 0) {
+      this._holdCount = this._holdFrames; // Reset hangover timer
+    } else if (this._holdCount > 0 && !this._isMuted) {
       this._holdCount--;
-      this._isOpen = true; // keep gate open during conversational pauses
-    } else if (rms < this._closeThreshold) {
+      this._isOpen = true; // Keep gate open during natural conversational pauses
+    } else if (rms < effectiveClose || this._isMuted) {
       this._isOpen = false;
     }
 
-    // 3. Smooth gain application (instant attack, gentle release)
-    const targetGain = (!this._enabled || this._isOpen) ? 1.0 : 0.0;
+    // 4. Smooth gain application (instant attack, gentle release, zero clicks)
+    const targetGain = (!this._enabled || this._isOpen) && !this._isMuted ? 1.0 : 0.0;
     const alpha = this._isOpen ? 0.95 : 0.22;
     this._gain += (targetGain - this._gain) * alpha;
     if (this._gain < 0.001) this._gain = 0;
 
-    // 4. Scale to 16-bit PCM with gate applied
+    // 5. Scale to 16-bit PCM with gate applied
     for (let i = 0; i < channel.length; i++) {
       const gSample = channel[i] * this._gain;
       const s = Math.max(-1, Math.min(1, gSample));
@@ -110,15 +136,18 @@ export async function startMic(onChunk, options = {}) {
   );
   await _ctx.audioWorklet.addModule(_blobUrl);
 
+  // Kiosk Noise Hardening:
+  // Disable AGC (Auto Gain Control). When AGC is true, pauses between words cause
+  // the hardware to aggressively amplify distant dining hall chatter into the microphone.
   _stream = await navigator.mediaDevices.getUserMedia({
     audio: {
       echoCancellation:     true,
       noiseSuppression:     true,
-      autoGainControl:      true,
+      autoGainControl:      false, // DISABLED: Prevents auto-amplifying room noise
       channelCount:         1,
       sampleRate:           16_000,
       googEchoCancellation: true,
-      googAutoGainControl:  true,
+      googAutoGainControl:  false, // DISABLED in Google WebRTC engine
       googNoiseSuppression: true,
       googHighpassFilter:   true,
     },
@@ -138,17 +167,21 @@ export async function startMic(onChunk, options = {}) {
   _highPassFilter.Q.setValueAtTime(0.707, _ctx.currentTime);
 
   // Configure worklet noise gate settings
-  const openThresh  = options.gateOpenThreshold  ?? nmConfig.gateOpenThreshold  ?? 0.012;
-  const closeThresh = options.gateCloseThreshold ?? nmConfig.gateCloseThreshold ?? 0.007;
-  const holdMs      = options.gateHoldMs         ?? nmConfig.gateHoldMs         ?? 400;
-  const holdFrames  = Math.round(holdMs / 20); // 20ms chunks
+  const openThresh    = options.gateOpenThreshold   ?? nmConfig.gateOpenThreshold  ?? 0.016;
+  const closeThresh   = options.gateCloseThreshold  ?? nmConfig.gateCloseThreshold ?? 0.009;
+  const holdMs        = options.gateHoldMs          ?? nmConfig.gateHoldMs         ?? 400;
+  const holdFrames    = Math.round(holdMs / 20); // 20ms chunks
+  const adaptive      = options.adaptiveNoiseFloor  ?? nmConfig.adaptiveNoiseFloor ?? true;
+  const snrMultiplier = options.snrMultiplier       ?? nmConfig.snrMultiplier      ?? 2.8;
 
   _workletNode.port.postMessage({
-    type: 'config',
+    type:           'config',
     enabled:        nmConfig.enabled ?? true,
+    adaptive:       adaptive,
     openThreshold:  openThresh,
     closeThreshold: closeThresh,
     holdFrames:     holdFrames,
+    snrMultiplier:  snrMultiplier,
   });
 
   _workletNode.port.onmessage = (e) => onChunk(new Int16Array(e.data));
@@ -156,6 +189,17 @@ export async function startMic(onChunk, options = {}) {
   // mic → highPassFilter → workletNode (NOT to destination — prevents feedback loop)
   _sourceNode.connect(_highPassFilter);
   _highPassFilter.connect(_workletNode);
+}
+
+/**
+ * Programmatically mute or unmute the microphone stream in the worklet.
+ * Used during Mo's playback to guarantee 100% anti-barge-in noise protection.
+ * @param {boolean} muted
+ */
+export function setMicMuted(muted) {
+  try {
+    _workletNode?.port.postMessage({ type: 'mute', value: !!muted });
+  } catch {}
 }
 
 export function stopMic() {
