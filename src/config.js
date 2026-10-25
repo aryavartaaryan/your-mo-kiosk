@@ -48,6 +48,15 @@ export const CONFIG = {
     silenceDurationMs:         500,
   },
 
+  // ── Acoustic Noise Management (Kiosk & Campus Environment) ───────────────
+  noiseManagement: {
+    enabled:           true,
+    lowCutFilterHz:    85,     // High-pass cutoff removes mechanical rumble, table thumps & 60Hz hum
+    gateOpenThreshold: 0.012,  // Instant-attack speech threshold (captures all soft consonants)
+    gateCloseThreshold: 0.007, // Hysteresis close threshold (prevents gate jitter)
+    gateHoldMs:        400,    // Hangover hold time in ms so pauses between words are never clipped
+  },
+
   // ── Add-on pricing ───────────────────────────────────────────────────────
   EXTRA_HOLIC_PRICE: 3.00,   // "Make it Extra Holic" add-on
 
