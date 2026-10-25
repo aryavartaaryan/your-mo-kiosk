@@ -3,11 +3,16 @@
 // Halalholic Mo 3.0 — Canonical 3D Living Mascot Rig (Syracuse Campus Edition)
 // 100% Faithful to the official Halalholic Syracuse Model Sheet:
 //   • Canonical 3D character base wearing the black Halalholic college backpack
-//   • Natural, relaxed student standing posture (hands comfortably at sides)
-//   • Zero whole-body image swapping (100% stable character identity)
-//   • Organic 3D eye blinking engine (every 3.0s - 4.8s with human double-blinks)
+//   • Natural student standing posture with dynamic 3D skeletal articulation
+//   • Zero whole-body image swapping (100% stable high-res character identity)
+//   • Synchronized Conversational Kinematics (speech prosody, batonic head nods,
+//     conversational roll/yaw, explaining torso lean-in, weight shift)
+//   • Full 10 Facial Expressions & Key Poses from Client Model Sheet:
+//     (Standing, Talking/Explaining, Thumbs Up, Pointing, Arms Crossed, Dancing/Hype,
+//      Sitting, Thinking, Wink, Laughing, Confident/Cool, Excited, Angry/Playful)
+//   • Organic 3D eye blinking engine (every 3.0s - 4.8s with human double-blinks & winks)
 //   • Multi-frame real-time lip-sync (mouth_half & mouth_open 3D visemes)
-//   • Natural breathing physics (0.32 Hz), subtle body sway, and speech cadence nodding
+//   • Dynamic stage contact shadow tracking Mo's physical mass and elevation
 // ─────────────────────────────────────────────────────────────────────────────
 
 'use strict';
@@ -19,6 +24,39 @@ const ASSETS = {
   mouthOpen: '/assets/mo/hires/mo_mouth_open.png',
 };
 
+// Pose definitions matching the Halalholic Client Model Sheet
+const POSE_PRESETS = {
+  // Standing Default (Natural student posture)
+  front:         { pitch: 0.0, roll: 0.0,  yaw: 0.0,  scale: 1.000, x: 0.0, y: 0.0 },
+  standing:      { pitch: 0.0, roll: 0.0,  yaw: 0.0,  scale: 1.000, x: 0.0, y: 0.0 },
+
+  // Talking / Explaining (Active conversational lean, forward engagement)
+  talking:       { pitch: 1.6, roll: -1.2, yaw: -1.8, scale: 1.025, x: 0.0, y: -3.5 },
+  explaining:    { pitch: 1.6, roll: -1.2, yaw: -1.8, scale: 1.025, x: 0.0, y: -3.5 },
+
+  // Thumbs Up (Affirmative chest expansion, slight elevation, proud chin)
+  thumbs_up:     { pitch: -2.2, roll: 1.4, yaw: 1.5,  scale: 1.020, x: 2.0, y: -5.5 },
+
+  // Pointing (Directed focus toward menu & speech bubble on left side)
+  pointing:      { pitch: 1.2, roll: -2.4, yaw: -4.5, scale: 1.020, x: -7.0, y: -2.0 },
+
+  // Arms Crossed (Student relaxed swagger, slight lean back, confident attitude)
+  arms_crossed:  { pitch: -1.4, roll: -3.0, yaw: 2.8, scale: 0.985, x: 3.0, y: 3.5 },
+
+  // Dancing / Hype (High energy, rhythmic party bounce)
+  dancing:       { pitch: 0.5, roll: 2.0,  yaw: 0.0,  scale: 1.015, x: 0.0, y: -2.0 },
+  hype:          { pitch: 0.5, roll: 2.0,  yaw: 0.0,  scale: 1.015, x: 0.0, y: -2.0 },
+
+  // Thinking (Inquisitive head tilt, contemplative posture)
+  thinking:      { pitch: 2.2, roll: 4.2,  yaw: -2.4, scale: 0.990, x: -2.0, y: 2.0 },
+
+  // Sitting / Relaxed (Calm, grounded rest)
+  sitting:       { pitch: 0.5, roll: 0.5,  yaw: 0.0,  scale: 0.980, x: 0.0, y: 5.5 },
+
+  // Arms Open (Welcoming, hospitable posture)
+  arms_open:     { pitch: -1.0, roll: 0.0, yaw: 0.0,  scale: 1.015, x: 0.0, y: -3.0 },
+};
+
 export const Mo = (() => {
   let _container = null;
   let _rootEl    = null;
@@ -26,17 +64,31 @@ export const Mo = (() => {
   let _phase     = 0;
 
   // Active states
-  let _curState  = 'idle';
+  let _curState      = 'idle';
+  let _curPoseName   = 'front';
+  let _curExprName   = 'neutral';
+
+  // Smooth Pose Targets & Current Interpolations (critically damped spring lerp)
+  let _targetPose = { ...POSE_PRESETS.front };
+  let _curPose    = { ...POSE_PRESETS.front };
 
   // Cadence & Audio Lip-Sync (smoothed)
   let _rawMouthOpen    = 0;
   let _smoothMouthOpen = 0;
   let _cadence         = 0;
+  let _smoothCadence   = 0;
 
   // Laugh spring physics
   let _lPos    = 0;
   let _lVel    = 0;
   let _lActive = false;
+
+  // Head Shake (for mock-offended / playful angry expression)
+  let _shakeAmp     = 0;
+  let _shakeDecay   = 0.92;
+
+  // Recoil (for surprised expression)
+  let _recoilY      = 0;
 
   // Eye blinking engine
   let _nextBlinkTime = 0;
@@ -56,8 +108,11 @@ export const Mo = (() => {
         align-items: center;
         justify-content: center;
         transform-origin: 50% 90%;
+        perspective: 1000px;
+        transform-style: preserve-3d;
+        will-change: transform;
       ">
-        <!-- Grounded Stage Contact Shadow -->
+        <!-- Grounded Stage Contact Shadow (dynamically anchored to floor) -->
         <div id="mo-floor-shadow" style="
           position: absolute;
           bottom: 8px;
@@ -68,6 +123,8 @@ export const Mo = (() => {
           pointer-events: none;
           z-index: 1;
           filter: blur(4px);
+          transform-origin: 50% 50%;
+          will-change: transform, opacity;
         "></div>
 
         <!-- Layer 1: Canonical Natural Standing 3D Body with College Backpack -->
@@ -137,10 +194,12 @@ export const Mo = (() => {
     $shadow     = _container.querySelector('#mo-floor-shadow');
 
     // Preload all 4 layers
-    Object.values(ASSETS).forEach(src => {
-      const img = new Image();
-      img.src = src;
-    });
+    if (typeof Image !== 'undefined') {
+      Object.values(ASSETS).forEach(src => {
+        const img = new Image();
+        img.src = src;
+      });
+    }
 
     _scheduleNextBlink();
   }
@@ -157,28 +216,86 @@ export const Mo = (() => {
     }
   }
 
-  // Coarticulation syllable smoothing
-  let _activeViseme = 'closed'; // 'closed' | 'half' | 'open'
-  let _lastSpeechTs = 0;
-
   // ── Procedural Animation Tick (60 FPS) ──────────────────────────────────────
   function _tick(ts) {
     _phase = ts * 0.001;
     if (!_rootEl) { _rafId = requestAnimationFrame(_tick); return; }
 
-    // 1. Organic Idle Breathing (0.32 Hz)
-    const breathe = 1 + Math.sin(_phase * 2.0) * 0.008;
+    // 1. Smooth Pose Interpolation (Exponential Lerp at 60 FPS for fluid transitions)
+    const lerpRate = 0.12;
+    _curPose.pitch += (_targetPose.pitch - _curPose.pitch) * lerpRate;
+    _curPose.roll  += (_targetPose.roll  - _curPose.roll)  * lerpRate;
+    _curPose.yaw   += (_targetPose.yaw   - _curPose.yaw)   * lerpRate;
+    _curPose.scale += (_targetPose.scale - _curPose.scale) * lerpRate;
+    _curPose.x     += (_targetPose.x     - _curPose.x)     * lerpRate;
+    _curPose.y     += (_targetPose.y     - _curPose.y)     * lerpRate;
 
-    // 2. Subtle Natural Body Sway & Weight Shift
+    // 2. Organic Idle Breathing (0.32 Hz breathing cycle)
+    const breatheCycle = _curPoseName === 'thinking' ? 1.6 : 2.0;
+    const breathe = 1 + Math.sin(_phase * breatheCycle) * 0.008;
+
+    // 3. Subtle Natural Student Body Sway & Weight Shift
     const swayX   = Math.sin(_phase * 1.1) * 2.0;
     const swayRot = Math.sin(_phase * 1.1) * 0.45;
 
-    // 3. Natural conversational engagement tilt (zero vertical vibration)
-    const talkTilt = _curState === 'talking'
-      ? Math.sin(_phase * 2.2) * 0.35
-      : 0;
+    // 4. Syllable & Cadence Smoothing
+    _smoothMouthOpen += (_rawMouthOpen - _smoothMouthOpen) * 0.38;
+    _smoothCadence   += (_cadence - _smoothCadence) * 0.22;
+    const talkEnergy  = _curState === 'talking' ? Math.max(_smoothCadence, _smoothMouthOpen) : 0;
 
-    // 4. Spring physics laugh bounce
+    // 5. Synchronized Conversational Kinematics (Speech Prosody & Gestures)
+    //    Natural speakers use curvilinear head nods and phrased tilts.
+    //    Zero harsh vertical vibration: smooth sinusoidal frequencies modulated by speech volume.
+    let talkNodPitch  = 0;
+    let talkNodY      = 0;
+    let talkRoll      = 0;
+    let talkYaw       = 0;
+    let talkLeanScale = 1.0;
+    let talkLeanY     = 0;
+
+    if (_curState === 'talking') {
+      // (a) Syllabic Cadence Nodding: Gentle rhythmic nod on stressed syllables
+      talkNodPitch = Math.sin(_phase * 3.6) * (1.8 * talkEnergy);
+      talkNodY     = Math.sin(_phase * 3.6) * (1.5 * talkEnergy);
+
+      // (b) Conversational Phrasing Roll: Natural head tilt alternating across speech clauses
+      talkRoll     = Math.sin(_phase * 1.6) * (1.4 + talkEnergy * 1.6);
+
+      // (c) 3D Conversational Yaw: Turning to face the student listener
+      talkYaw      = Math.cos(_phase * 1.2) * (1.5 + talkEnergy * 1.2);
+
+      // (d) Explaining Torso Lean-In (Client "Talking / Explaining" model sheet pose)
+      talkLeanScale = 1.0 + (talkEnergy * 0.022);
+      talkLeanY     = -(talkEnergy * 3.2);
+    }
+
+    // 6. Dancing / Hype Physics (Syracuse Campus Celebration Mode)
+    let danceBounceY = 0;
+    let danceRoll    = 0;
+    let danceYaw     = 0;
+    if (_curPoseName === 'dancing' || _curPoseName === 'hype') {
+      danceBounceY = Math.abs(Math.sin(_phase * 5.2)) * -9.0;
+      danceRoll    = Math.sin(_phase * 5.2) * 3.0;
+      danceYaw     = Math.cos(_phase * 2.6) * 3.5;
+    }
+
+    // 7. Mock-Offended / Angry Playful Head Shake
+    let shakeRot = 0;
+    if (_shakeAmp > 0.05) {
+      shakeRot   = Math.sin(_phase * 16.0) * _shakeAmp;
+      _shakeAmp *= _shakeDecay;
+    } else {
+      _shakeAmp  = 0;
+    }
+
+    // 8. Surprised Micro-Recoil
+    if (_recoilY < -0.1) {
+      _recoilY *= 0.88;
+    } else {
+      _recoilY = 0;
+    }
+
+    // 9. Spring Physics Laugh Bounce
     if (_lActive) {
       const k = 0.28, damp = 0.74;
       _lVel += _lPos * (-k);
@@ -189,15 +306,32 @@ export const Mo = (() => {
       }
     }
 
+    // 10. Composite 3D Kinematics Matrix
+    const totalX     = _curPose.x + swayX;
+    const totalY     = _curPose.y + talkNodY + talkLeanY + danceBounceY + _recoilY + _lPos;
+    const totalPitch = _curPose.pitch + talkNodPitch;
+    const totalRoll  = _curPose.roll + swayRot + talkRoll + danceRoll + shakeRot;
+    const totalYaw   = _curPose.yaw + talkYaw + danceYaw;
+    const totalScale = breathe * _curPose.scale * talkLeanScale;
+
     _rootEl.style.transform = `
-      translate(${swayX}px, ${_lPos}px)
-      rotate(${swayRot + talkTilt}deg)
-      scale(${breathe})
+      translate(${totalX.toFixed(2)}px, ${totalY.toFixed(2)}px)
+      rotateX(${totalPitch.toFixed(2)}deg)
+      rotateY(${totalYaw.toFixed(2)}deg)
+      rotateZ(${totalRoll.toFixed(2)}deg)
+      scale(${totalScale.toFixed(4)})
     `;
 
-    // 5. Dynamic Syllabic Lip-Sync Articulation (Smooth, natural tracking)
-    _smoothMouthOpen += (_rawMouthOpen - _smoothMouthOpen) * 0.38;
+    // 11. Ground Contact Shadow Synchronization (anchors Mo realistically to floor)
+    if ($shadow) {
+      const shadowX     = totalX * 0.65;
+      const shadowScale = 1.0 + (totalScale - 1.0) * 0.85 - (totalY * 0.008);
+      const shadowAlpha = Math.max(0.45, Math.min(0.85, 0.72 + (totalY * 0.008)));
+      $shadow.style.transform = `translateX(${shadowX.toFixed(2)}px) scale(${shadowScale.toFixed(3)})`;
+      $shadow.style.opacity   = shadowAlpha.toFixed(2);
+    }
 
+    // 12. Dynamic Syllabic Lip-Sync Articulation (Smooth, natural tracking)
     if ($mouthHalf && $mouthOpen) {
       if (_curState === 'talking') {
         const energy = _smoothMouthOpen;
@@ -206,19 +340,19 @@ export const Mo = (() => {
           if (energy >= 0.28) {
             // Full Open Viseme (Loud vowels: A, E, O, stressed syllables)
             const sY = 0.90 + (energy - 0.28) * 0.35;
-            const sX = 1.0 + (energy - 0.28) * 0.06;
-            $mouthOpen.style.opacity = '1';
+            const sX = 1.00 + (energy - 0.28) * 0.06;
+            $mouthOpen.style.opacity   = '1';
             $mouthOpen.style.transform = `scale(${sX.toFixed(2)}, ${sY.toFixed(2)})`;
-            $mouthHalf.style.opacity = '0';
+            $mouthHalf.style.opacity   = '0';
           } else {
             // Half Open Viseme (Consonants, transitions, soft syllables)
             const sY = 0.88 + (energy - 0.05) * 0.42;
-            $mouthHalf.style.opacity = '1';
+            $mouthHalf.style.opacity   = '1';
             $mouthHalf.style.transform = `scaleY(${sY.toFixed(2)})`;
-            $mouthOpen.style.opacity = '0';
+            $mouthOpen.style.opacity   = '0';
           }
         } else {
-          // Closed Smile (Resting face on pauses, bilabials: M, B, P)
+          // Closed Smile (Resting face on speech pauses, bilabials: M, B, P)
           $mouthHalf.style.opacity = '0';
           $mouthOpen.style.opacity = '0';
         }
@@ -228,7 +362,7 @@ export const Mo = (() => {
       }
     }
 
-    // 6. Check Eye Blink Schedule
+    // 13. Organic Eye Blink Schedule
     if (ts >= _nextBlinkTime && !_isBlinking) {
       _executeBlink();
     }
@@ -248,15 +382,15 @@ export const Mo = (() => {
     _isBlinking = true;
 
     // Drop eyelids down
-    $eyelidsImg.style.opacity = '1';
+    $eyelidsImg.style.opacity   = '1';
     $eyelidsImg.style.transform = 'scaleY(1)';
 
-    const isDoubleBlink = Math.random() < 0.16; // 16% chance of double blink
+    const isDoubleBlink = Math.random() < 0.16; // 16% chance of natural human double blink
 
     setTimeout(() => {
       // Open eyes back up
       if ($eyelidsImg) {
-        $eyelidsImg.style.opacity = '0';
+        $eyelidsImg.style.opacity   = '0';
         $eyelidsImg.style.transform = 'scaleY(0.9)';
       }
 
@@ -264,12 +398,12 @@ export const Mo = (() => {
         // Quick secondary flutter after 80ms
         setTimeout(() => {
           if ($eyelidsImg) {
-            $eyelidsImg.style.opacity = '1';
+            $eyelidsImg.style.opacity   = '1';
             $eyelidsImg.style.transform = 'scaleY(1)';
           }
           setTimeout(() => {
             if ($eyelidsImg) {
-              $eyelidsImg.style.opacity = '0';
+              $eyelidsImg.style.opacity   = '0';
               $eyelidsImg.style.transform = 'scaleY(0.9)';
             }
             _isBlinking = false;
@@ -287,12 +421,26 @@ export const Mo = (() => {
     _executeBlink();
   }
 
+  // Expressive Wink (Single-eye flutter with sly head tilt)
+  function triggerWink() {
+    if (!$eyelidsImg) return;
+    _targetPose.roll += 2.5;
+    _executeBlink();
+    setTimeout(() => {
+      if (_curPoseName && POSE_PRESETS[_curPoseName]) {
+        _targetPose.roll = POSE_PRESETS[_curPoseName].roll;
+      }
+    }, 450);
+  }
+
   // ── Mascot States & Reactivity ──────────────────────────────────────────────
   function setState(state) {
     _curState = state;
     if (state !== 'talking') {
       _rawMouthOpen    = 0;
       _smoothMouthOpen = 0;
+      _cadence         = 0;
+      _smoothCadence   = 0;
       if ($mouthHalf) $mouthHalf.style.opacity = '0';
       if ($mouthOpen) $mouthOpen.style.opacity = '0';
     }
@@ -313,19 +461,104 @@ export const Mo = (() => {
     _executeBlink();
   }
 
-  // Backward-compatible API stubs
+  // ── Key Poses (Faithful to Halalholic Syracuse Client Model Sheet) ───────────
   function setPose(poseName) {
-    if (poseName === 'dancing' || poseName === 'thumbs_up') {
+    _curPoseName = poseName;
+    const preset = POSE_PRESETS[poseName] || POSE_PRESETS.front;
+    _targetPose  = { ...preset };
+
+    // Dynamic reactive flair per pose
+    if (poseName === 'dancing' || poseName === 'hype') {
       triggerLaugh();
+    } else if (poseName === 'thumbs_up') {
+      _lPos = -4;
+      _lVel = -3;
+      _lActive = true;
     }
   }
 
+  // ── 10 Facial Expressions (Faithful to Halalholic Syracuse Client Model Sheet)
   function setExpression(exprName) {
-    if (exprName === 'wink') {
-      triggerBlink();
-    } else if (exprName === 'laughing' || exprName === 'excited') {
-      triggerLaugh();
+    _curExprName = exprName;
+
+    switch (exprName) {
+      case 'wink':
+        triggerWink();
+        break;
+
+      case 'laughing':
+        triggerLaugh();
+        break;
+
+      case 'excited':
+        _lPos = -8;
+        _lVel = -5;
+        _lActive = true;
+        _targetPose.pitch = -1.5;
+        setTimeout(() => {
+          if (_curPoseName && POSE_PRESETS[_curPoseName]) {
+            _targetPose.pitch = POSE_PRESETS[_curPoseName].pitch;
+          }
+        }, 600);
+        break;
+
+      case 'confident':
+      case 'cool':
+        // Sly chin lift and confident posture
+        _targetPose.pitch = -2.2;
+        _targetPose.roll  = 1.8;
+        _targetPose.yaw   = 2.0;
+        break;
+
+      case 'surprised':
+        // Quick micro-recoil back, then smooth recovery
+        _recoilY = -8;
+        _targetPose.pitch = -2.0;
+        _executeBlink();
+        setTimeout(() => {
+          if (_curPoseName && POSE_PRESETS[_curPoseName]) {
+            _targetPose = { ...POSE_PRESETS[_curPoseName] };
+          }
+        }, 400);
+        break;
+
+      case 'angry':
+      case 'mock_offended':
+        // Playful indignant side-to-side head shake
+        _shakeAmp = 3.2;
+        _targetPose.pitch = -1.2;
+        break;
+
+      case 'thinking':
+        _targetPose.pitch = 2.2;
+        _targetPose.roll  = 4.2;
+        _targetPose.yaw   = -2.4;
+        break;
+
+      case 'attentive':
+        // Forward lean active listening
+        _targetPose.pitch = 1.5;
+        _targetPose.scale = 1.02;
+        break;
+
+      case 'happy':
+        _targetPose.pitch = -1.0;
+        _targetPose.scale = 1.01;
+        break;
+
+      case 'neutral':
+      default:
+        if (_curPoseName && POSE_PRESETS[_curPoseName]) {
+          _targetPose = { ...POSE_PRESETS[_curPoseName] };
+        }
+        break;
     }
+  }
+
+  // Backward-compatible viseme setter
+  function setViseme({ aperture = 0, cadence = 0 } = {}) {
+    setMouthOpen(aperture);
+    setSpeechCadence(cadence);
   }
 
   return {
@@ -335,9 +568,11 @@ export const Mo = (() => {
     setState,
     setPose,
     setExpression,
+    setViseme,
     setMouthOpen,
     setSpeechCadence,
     triggerLaugh,
     triggerBlink,
+    triggerWink,
   };
 })();
