@@ -160,25 +160,6 @@ app.onChipClick(async (prompt) => {
 async function startVoiceSession(initialPrompt = null) {
   if (_isActive) return;
 
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-  if (!apiKey?.trim()) {
-    if (initialPrompt) {
-      const lower = initialPrompt.toLowerCase();
-      if (lower.includes('feedback') || lower.includes('issue') || lower.includes('complaint')) {
-        app.setCaption("“Talk to me, habibi! How was your food and your visit today? Tell me what went wrong or what complaint you have — I'm right here to fix it for you!”");
-        Mo.setExpression('attentive');
-        Mo.setPose('arms_open');
-        return;
-      } else if (lower.includes('suggest') || lower.includes('wishlist') || lower.includes('dish')) {
-        app.setCaption("“Ayy, I love this! What new dish, crave item, or sauce do you want us to add to the menu? Tell your boy Mo — I pitch ideas straight to the kitchen!”");
-        Mo.setExpression('excited');
-        Mo.setPose('talking');
-        return;
-      }
-    }
-    app.setCaption('No API key found. Add VITE_GEMINI_API_KEY to your .env file to enable live voice.');
-    return;
-  }
 
   await resumeOutputAudio();
 

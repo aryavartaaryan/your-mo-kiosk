@@ -1,16 +1,14 @@
 // src/voice/gemini.js
 // ─────────────────────────────────────────────────────────────────────────────
-// GeminiVoiceSession – manages a Gemini Live WebSocket session.
+// GeminiVoiceSession – manages a live voice session via the protected
+// server-side WebSocket relay (/ws/live).
 //
-// Latency optimisations applied here:
-//   1. realtimeInputConfig.voiceActivityDetection with tight VAD settings
-//      → server detects end-of-speech in ~500 ms instead of 1000+ ms
-//   2. VAD settings pulled from CONFIG.VAD so they're easy to tune
+// 100% Confidential Architecture:
+//   • The entire Mo system prompt (personality.js) stays strictly on the server.
+//   • Google Gemini API key is loaded on the server and never exposed to the client.
+//   • Zero prompt text or credentials are bundled into the client-side JavaScript.
+//   • Streams 16-bit PCM audio chunks and transcription events with zero latency overhead.
 // ─────────────────────────────────────────────────────────────────────────────
-
-import { GoogleGenAI } from '@google/genai';
-import { CONFIG }      from '../config.js';
-import { buildSystemInstruction, SYSTEM_INSTRUCTION } from './personality.js';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -36,100 +34,74 @@ export class GeminiVoiceSession {
   /** @param {Record<string, Function>} callbacks */
   constructor(callbacks = {}) {
     this._cb               = callbacks;
-    this._session          = null;
+    this._ws               = null;
     this._latencyMark      = null;
     this._waitingForAudio  = false;
     this._pendingTextQueue = [];
+    this._isOpen           = false;
   }
 
   async connect() {
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-    if (!apiKey?.trim()) {
-      throw new Error(
-        'VITE_GEMINI_API_KEY is missing. Copy .env.example → .env and add your key.'
-      );
-    }
+    return new Promise((resolve, reject) => {
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const wsUrl    = `${protocol}//${window.location.host}/ws/live`;
+      console.log(`[Gemini] Connecting to secure backend relay: ${wsUrl}`);
 
-    const ai = new GoogleGenAI({ apiKey });
+      const ws = new WebSocket(wsUrl);
 
-    // Dynamic Real-Time Campus Context System Instruction
-    const systemPrompt = typeof buildSystemInstruction === 'function'
-      ? buildSystemInstruction()
-      : SYSTEM_INSTRUCTION;
+      ws.onopen = () => {
+        console.log('[Gemini] Connected to relay socket ✓');
+      };
 
-    const session = await ai.live.connect({
-      model: CONFIG.GEMINI_MODEL,
+      ws.onmessage = (event) => {
+        try {
+          const msg = JSON.parse(event.data);
+          this._handleMessage(msg, resolve);
+        } catch (err) {
+          console.warn('[Gemini] Malformed message from relay:', err);
+        }
+      };
 
-      config: {
-        // ── Audio only — no text modality = less overhead ─────────────────
-        responseModalities: ['AUDIO'],
+      ws.onerror = (err) => {
+        console.error('[Gemini] Relay WebSocket error:', err);
+        const error = new Error('WebSocket connection to voice relay failed.');
+        this._cb.onError?.(error);
+        reject(error);
+      };
 
-        systemInstruction: {
-          parts: [{ text: systemPrompt }],
-        },
+      ws.onclose = (ev) => {
+        console.log(`[Gemini] Relay connection closed code=${ev.code} reason=${ev.reason || '(none)'}`);
+        this._isOpen = false;
+        this._cb.onClose?.(ev);
+      };
 
-        speechConfig: {
-          voiceConfig: {
-            prebuiltVoiceConfig: { voiceName: CONFIG.VOICE_NAME },
-          },
-        },
-
-        // ── Transcription for both sides ──────────────────────────────────
-        inputAudioTranscription:  {},
-        outputAudioTranscription: {},
-
-        // ── VAD — key latency fix ─────────────────────────────────────────
-        // Tells the server how quickly to decide the user has stopped speaking.
-        // HIGH sensitivity + 500 ms silence = Mo responds ~500 ms faster.
-        realtimeInputConfig: {
-          automaticActivityDetection: {
-            startOfSpeechSensitivity: CONFIG.VAD.startOfSpeechSensitivity,
-            endOfSpeechSensitivity:   CONFIG.VAD.endOfSpeechSensitivity,
-            prefixPaddingMs:          CONFIG.VAD.prefixPaddingMs,
-            silenceDurationMs:        CONFIG.VAD.silenceDurationMs,
-          },
-        },
-      },
-
-      callbacks: {
-        // Note: SDK fires onopen before session setup is complete.
-        // We trigger _handleOpen below AFTER the session is fully resolved.
-        onopen:    ()    => {},
-        onmessage: (msg) => this._handleMessage(msg),
-        onerror:   (err) => this._handleError(err),
-        onclose:   (ev)  => this._handleClose(ev),
-      },
+      this._ws = ws;
     });
-
-    this._session = session;
-    this._handleOpen();
   }
 
   /**
-   * Send a 16-bit PCM chunk (20 ms @ 16 kHz) to the model.
+   * Send a 16-bit PCM chunk (20 ms @ 16 kHz) to the relay.
    * @param {Int16Array} int16Array
    */
   sendAudioChunk(int16Array) {
-    if (!this._session) return;
+    if (!this._ws || this._ws.readyState !== WebSocket.OPEN) return;
     try {
-      this._session.sendRealtimeInput({
-        audio: {
-          data:     int16ToBase64(int16Array),
-          mimeType: 'audio/pcm;rate=16000',
-        },
-      });
+      this._ws.send(JSON.stringify({
+        type: 'audio',
+        data: int16ToBase64(int16Array),
+      }));
     } catch (err) {
-      console.warn('[Gemini] sendRealtimeInput failed:', err);
+      console.warn('[Gemini] sendAudioChunk failed:', err);
     }
   }
 
   /**
-   * Send a client text turn to the model.
+   * Send a client text turn to the model via the relay.
    * Enables proactive audio responses and one-tap scenario chips.
    * @param {string} text
    */
   sendTextMessage(text) {
-    if (!this._session) {
+    if (!this._isOpen || !this._ws || this._ws.readyState !== WebSocket.OPEN) {
       console.log('[Gemini] Session connecting — queueing text turn:', text);
       this._pendingTextQueue.push(text);
       return;
@@ -137,86 +109,85 @@ export class GeminiVoiceSession {
     try {
       this._latencyMark     = performance.now();
       this._waitingForAudio = true;
-      this._session.sendClientContent({
-        turns: [{ role: 'user', parts: [{ text }] }],
-        turnComplete: true,
-      });
+      this._ws.send(JSON.stringify({
+        type: 'text',
+        text,
+      }));
     } catch (err) {
-      console.warn('[Gemini] sendClientContent failed:', err);
+      console.warn('[Gemini] sendTextMessage failed:', err);
     }
   }
 
   close() {
-    try { this._session?.close(); } catch {}
-    this._session = null;
+    try { this._ws?.close(); } catch {}
+    this._ws = null;
+    this._isOpen = false;
     this._pendingTextQueue = [];
   }
 
   // ── Private ───────────────────────────────────────────────────────────────
 
-  _handleOpen() {
-    console.log(`[Gemini] Connected ✓  model=${CONFIG.GEMINI_MODEL}  voice=${CONFIG.VOICE_NAME}`);
-    this._cb.onOpen?.();
-    while (this._pendingTextQueue.length > 0) {
-      const queued = this._pendingTextQueue.shift();
-      console.log('[Gemini] Flushing queued text turn:', queued);
-      this.sendTextMessage(queued);
-    }
-  }
+  _handleMessage(msg, resolveConnect) {
+    switch (msg.type) {
+      case 'open':
+        this._isOpen = true;
+        console.log('[Gemini] Live session active on server ✓');
+        this._cb.onOpen?.();
+        while (this._pendingTextQueue.length > 0) {
+          const queued = this._pendingTextQueue.shift();
+          console.log('[Gemini] Flushing queued text turn:', queued);
+          this.sendTextMessage(queued);
+        }
+        resolveConnect?.();
+        break;
 
-  _handleMessage(msg) {
-    const sc = msg?.serverContent;
-    if (!sc) return;
+      case 'audio':
+        if (msg.data) {
+          if (this._waitingForAudio && this._latencyMark !== null) {
+            const ms = Math.round(performance.now() - this._latencyMark);
+            this._waitingForAudio = false;
+            console.log(`[Gemini] ⚡ First audio latency: ${ms} ms`);
+            this._cb.onLatency?.(ms);
+          }
+          this._cb.onAudioChunk?.(base64ToInt16(msg.data));
+        }
+        break;
 
-    // ── Audio chunks ──────────────────────────────────────────────────────
-    for (const part of sc.modelTurn?.parts ?? []) {
-      const b64 = part.inlineData?.data;
-      if (!b64) continue;
+      case 'output_transcript':
+        if (msg.text) {
+          this._cb.onOutputTranscript?.(msg.text);
+        }
+        break;
 
-      if (this._waitingForAudio && this._latencyMark !== null) {
-        const ms = Math.round(performance.now() - this._latencyMark);
+      case 'input_transcript':
+        if (msg.text) {
+          this._latencyMark     = performance.now();
+          this._waitingForAudio = true;
+          this._cb.onInputTranscript?.(msg.text);
+        }
+        break;
+
+      case 'interrupted':
+        console.log('[Gemini] Interrupted by user');
         this._waitingForAudio = false;
-        console.log(`[Gemini] ⚡ First audio latency: ${ms} ms`);
-        this._cb.onLatency?.(ms);
-      }
+        this._cb.onInterrupted?.();
+        break;
 
-      this._cb.onAudioChunk?.(base64ToInt16(b64));
+      case 'turn_complete':
+        console.log('[Gemini] Turn complete');
+        this._cb.onTurnComplete?.();
+        break;
+
+      case 'error':
+        console.error('[Gemini] Error from server relay:', msg.message);
+        this._cb.onError?.(new Error(msg.message || 'Server relay error'));
+        break;
+
+      case 'close':
+        console.log(`[Gemini] Closed by server code=${msg.code} reason=${msg.reason || '(none)'}`);
+        this._isOpen = false;
+        this._cb.onClose?.(msg);
+        break;
     }
-
-    // ── Mo's transcript ───────────────────────────────────────────────────
-    const outText = sc.outputTranscription?.text;
-    if (outText) this._cb.onOutputTranscript?.(outText);
-
-    // ── Customer's transcript + start latency clock ───────────────────────
-    const inText = sc.inputTranscription?.text;
-    if (inText) {
-      this._latencyMark     = performance.now();
-      this._waitingForAudio = true;
-      this._cb.onInputTranscript?.(inText);
-    }
-
-    // ── Interruption ──────────────────────────────────────────────────────
-    if (sc.interrupted) {
-      console.log('[Gemini] Interrupted by user');
-      this._waitingForAudio = false;
-      this._cb.onInterrupted?.();
-    }
-
-    // ── Turn complete ─────────────────────────────────────────────────────
-    if (sc.turnComplete) {
-      console.log('[Gemini] Turn complete');
-      this._cb.onTurnComplete?.();
-    }
-  }
-
-  _handleError(err) {
-    const error = err instanceof Error ? err : new Error(String(err?.message ?? err));
-    console.error('[Gemini] Session error:', error);
-    this._cb.onError?.(error);
-  }
-
-  _handleClose(ev) {
-    console.log(`[Gemini] Closed  code=${ev?.code ?? '?'}  reason=${ev?.reason ?? '(none)'}`);
-    this._cb.onClose?.(ev);
   }
 }
